@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Créditos por UDN - Explicación Visual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flow-arrow {
+            position: relative;
+            padding: 20px 0;
+        }
+        .flow-arrow::after {
+            content: '↓';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #8CC63F;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .highlight { background: #fef3c7; padding: 2px 4px; border-radius: 3px; }
+        .table-visual {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #eff6ff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-green-500 text-white p-8 rounded-lg shadow-lg mb-8">
+            <h1 class="text-4xl font-bold mb-2">🏦 Sistema de Créditos por UDN</h1>
+            <p class="text-xl">Explicación Visual del Flujo de Datos</p>
+        </header>
+
+        <!-- Sección 1: Arquitectura -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">📐 Arquitectura del Sistema</h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <div class="font-bold text-lg">1️⃣ ctrl-sobres.php</div>
+                    <p class="text-gray-600">Punto de entrada - Recibe la petición inicial</p>
+                </div>
+                
+                <div class="flow-arrow"></div>
+                
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
+                    <div class="font-bold text-lg">2️⃣ _Contabilidad.php</div>
+                    <p class="text-gray-600">Router - Decide qué clase usar según el módulo</p>
+                </div>
+                
+                <div class="flow-arrow"></div>
+                
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <div class="font-bold text-lg">3️⃣ _Clientes.php</div>
+                    <p class="text-gray-600">Controlador - Ejecuta la lógica de negocio</p>
+                </div>
+                
+                <div class="flow-arrow"></div>
+                
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
+                    <div class="font-bold text-lg">4️⃣ mdl-clientes.php</div>
+                    <p class="text-gray-600">Modelo - Realiza las consultas SQL a la base de datos</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 2: Base de Datos -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🗄️ Estructura de Base de Datos</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="table-visual">
+                    <h3 class="font-bold text-blue-700 mb-2">📋 creditos</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>🔑 <span class="font-mono">id_Credito</span> (PK)</li>
+                        <li>👤 <span class="font-mono">Nombre</span></li>
+                        <li>✅ <span class="font-mono">Stado</span> (1=Activo)</li>
+                    </ul>
+                    <p class="text-xs text-gray-600 mt-2">Información básica del cliente</p>
+                </div>
+
+                <div class="table-visual">
+                    <h3 class="font-bold text-blue-700 mb-2">🏢 creditos_udn</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>🔗 <span class="font-mono">id_Credito</span> (FK)</li>
+                        <li>🔗 <span class="font-mono">id_UDN</span> (FK)</li>
+                        <li>✅ <span class="font-mono">Stado</span></li>
+                    </ul>
+                    <p class="text-xs text-gray-600 mt-2">Relación Cliente-UDN</p>
+                </div>
+
+                <div class="table-visual">
+                    <h3 class="font-bold text-blue-700 mb-2">💰 creditos_consumo</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>🔗 <span class="font-mono">id_Credito</span> (FK)</li>
+                        <li>💵 <span class="font-mono">Monto</span></li>
+                        <li>📅 <span class="font-mono">Fecha_Credito</span></li>
+                        <li>✅ <span class="font-mono">Stado</span></li>
+                    </ul>
+                    <p class="text-xs text-gray-600 mt-2">Consumos pendientes</p>
+                </div>
+
+                <div class="table-visual">
+                    <h3 class="font-bold text-blue-700 mb-2">📝 creditos_bitacora</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>🔗 <span class="font-mono">id_Credito</span> (FK)</li>
+                        <li>💵 <span class="font-mono">Monto</span></li>
+                        <li>🏷️ <span class="font-mono">Tipo</span> (Pago/Consumo)</li>
+                        <li>📅 <span class="font-mono">Fecha_Credito</span></li>
+                        <li>✅ <span class="font-mono">Stado</span></li>
+                    </ul>
+                    <p class="text-xs text-gray-600 mt-2">Historial de movimientos</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 3: Método Principal -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">⚙️ Método payDebtUDN()</h2>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <h3 class="font-bold text-lg mb-2">📥 Entrada</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-3 rounded shadow">
+                        <div class="text-sm text-gray-600">UDN</div>
+                        <div class="font-mono text-lg">$this->udn</div>
+                        <div class="text-xs text-gray-500">ID de la unidad de negocio</div>
+                    </div>
+                    <div class="bg-white p-3 rounded shadow">
+                        <div class="text-sm text-gray-600">Fecha Inicial</div>
+                        <div class="font-mono text-lg">$this->date1</div>
+                        <div class="text-xs text-gray-500">2024-01-01</div>
+                    </div>
+                    <div class="bg-white p-3 rounded shadow">
+                        <div class="text-sm text-gray-600">Fecha Final</div>
+                        <div class="font-mono text-lg">$this->date2</div>
+                        <div class="text-xs text-gray-500">2024-12-31</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+                <h3 class="font-bold text-lg mb-2">🔄 Proceso</h3>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>Llama a <span class="font-mono bg-white px-2 py-1 rounded">payUDN()</span> para obtener pagos y consumos de bitácora</li>
+                    <li>Llama a <span class="font-mono bg-white px-2 py-1 rounded">debtUDN()</span> para obtener consumos pendientes</li>
+                    <li>Calcula: <span class="highlight font-bold">Deuda Total = debtUDN + payUDN['consumo']</span></li>
+                    <li>Formatea los montos con <span class="font-mono bg-white px-2 py-1 rounded">evaluar()</span></li>
+                </ol>
+            </div>
+
+            <div class="bg-green-50 p-4 rounded-lg">
+                <h3 class="font-bold text-lg mb-2">📤 Salida</h3>
+                <div class="code-block">
+<pre>[
+    'debt' => "$ 5,000.00",  // Deuda total
+    'pay'  => "$ 3,000.00"   // Pagos totales
+]</pre>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 4: Consultas SQL -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🔍 Consultas SQL</h2>
+            
+            <div class="mb-6">
+                <h3 class="font-bold text-lg mb-2 text-purple-700">1️⃣ payUDN() - Pagos y Consumos en Bitácora</h3>
+                <div class="code-block text-sm">
+<pre>SELECT 
+    SUM(CASE WHEN Tipo = 'Pago' THEN Monto ELSE 0 END) AS pago,
+    SUM(CASE WHEN Tipo = 'Consumo' THEN Monto ELSE 0 END) AS consumo
+FROM creditos_bitacora cb
+INNER JOIN creditos_udn cu ON cb.id_Credito = cu.id_Credito
+WHERE cu.id_UDN = <span class="text-yellow-300">?</span>
+AND cb.Fecha_Credito BETWEEN <span class="text-yellow-300">?</span> AND <span class="text-yellow-300">?</span>
+AND cb.Stado = 1</pre>
+                </div>
+                <div class="mt-2 bg-purple-50 p-3 rounded">
+                    <p class="text-sm"><strong>Retorna:</strong></p>
+                    <ul class="text-sm list-disc list-inside">
+                        <li><span class="font-mono">pago</span>: Total de pagos realizados</li>
+                        <li><span class="font-mono">consumo</span>: Total de consumos registrados en bitácora</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg mb-2 text-orange-700">2️⃣ debtUDN() - Consumos Pendientes</h3>
+                <div class="code-block text-sm">
+<pre>SELECT SUM(cc.Monto) AS deuda
+FROM creditos_consumo cc
+INNER JOIN creditos_udn cu ON cc.id_Credito = cu.id_Credito
+WHERE cu.id_UDN = <span class="text-yellow-300">?</span>
+AND cc.Fecha_Credito BETWEEN <span class="text-yellow-300">?</span> AND <span class="text-yellow-300">?</span>
+AND cc.Stado = 1</pre>
+                </div>
+                <div class="mt-2 bg-orange-50 p-3 rounded">
+                    <p class="text-sm"><strong>Retorna:</strong></p>
+                    <ul class="text-sm list-disc list-inside">
+                        <li><span class="font-mono">deuda</span>: Total de consumos pendientes de pago</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 5: Fórmula de Cálculo -->
+        <section class="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg shadow-md p-6 mb-8 border-2 border-red-300">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🧮 Fórmula de Cálculo</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-inner">
+                <div class="text-center mb-4">
+                    <div class="text-3xl font-bold text-red-600 mb-2">Deuda Total</div>
+                    <div class="text-xl text-gray-600">=</div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <div class="bg-orange-100 p-4 rounded-lg text-center">
+                        <div class="text-sm text-gray-600 mb-1">Consumos Pendientes</div>
+                        <div class="font-mono text-lg font-bold">debtUDN()</div>
+                        <div class="text-xs text-gray-500 mt-1">Tabla: creditos_consumo</div>
+                    </div>
+                    
+                    <div class="text-center text-3xl font-bold text-green-600">+</div>
+                    
+                    <div class="bg-purple-100 p-4 rounded-lg text-center">
+                        <div class="text-sm text-gray-600 mb-1">Consumos en Bitácora</div>
+                        <div class="font-mono text-lg font-bold">payUDN()['consumo']</div>
+                        <div class="text-xs text-gray-500 mt-1">Tabla: creditos_bitacora</div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                    <p class="text-sm"><strong>💡 Ejemplo:</strong></p>
+                    <ul class="text-sm space-y-1 mt-2">
+                        <li>Consumos Pendientes: <span class="font-bold">$3,000.00</span></li>
+                        <li>Consumos en Bitácora: <span class="font-bold">$2,000.00</span></li>
+                        <li class="border-t pt-2 mt-2">Deuda Total: <span class="font-bold text-red-600">$5,000.00</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 6: Ejemplo Práctico -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Ejemplo Práctico</h2>
+            
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                <h3 class="font-bold mb-2">Escenario: UDN "Restaurante Centro" - Enero 2024</h3>
+                <p class="text-sm text-gray-600">Cliente: Juan Pérez (id_Credito: 123)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="bg-orange-50 border-2 border-orange-300 p-4 rounded-lg">
+                    <h4 class="font-bold text-orange-700 mb-2">📋 creditos_consumo</h4>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-200">
+                            <tr>
+                                <th class="p-2 text-left">Fecha</th>
+                                <th class="p-2 text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-05</td>
+                                <td class="p-2 text-right font-mono">$1,500.00</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-15</td>
+                                <td class="p-2 text-right font-mono">$1,000.00</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-25</td>
+                                <td class="p-2 text-right font-mono">$500.00</td>
+                            </tr>
+                            <tr class="bg-orange-100 font-bold">
+                                <td class="p-2">TOTAL</td>
+                                <td class="p-2 text-right font-mono">$3,000.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-purple-50 border-2 border-purple-300 p-4 rounded-lg">
+                    <h4 class="font-bold text-purple-700 mb-2">📝 creditos_bitacora</h4>
+                    <table class="w-full text-sm">
+                        <thead class="bg-purple-200">
+                            <tr>
+                                <th class="p-2 text-left">Fecha</th>
+                                <th class="p-2 text-left">Tipo</th>
+                                <th class="p-2 text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-10</td>
+                                <td class="p-2"><span class="bg-red-200 px-2 py-1 rounded text-xs">Consumo</span></td>
+                                <td class="p-2 text-right font-mono">$2,000.00</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-20</td>
+                                <td class="p-2"><span class="bg-green-200 px-2 py-1 rounded text-xs">Pago</span></td>
+                                <td class="p-2 text-right font-mono">$1,500.00</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2">2024-01-28</td>
+                                <td class="p-2"><span class="bg-green-200 px-2 py-1 rounded text-xs">Pago</span></td>
+                                <td class="p-2 text-right font-mono">$1,500.00</td>
+                            </tr>
+                            <tr class="bg-purple-100 font-bold">
+                                <td class="p-2" colspan="2">PAGOS</td>
+                                <td class="p-2 text-right font-mono">$3,000.00</td>
+                            </tr>
+                            <tr class="bg-red-100 font-bold">
+                                <td class="p-2" colspan="2">CONSUMOS</td>
+                                <td class="p-2 text-right font-mono">$2,000.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg border-2 border-green-400">
+                <h4 class="font-bold text-lg mb-3">🎯 Resultado Final</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <div class="text-sm text-gray-600 mb-1">💰 Deuda Total</div>
+                        <div class="text-3xl font-bold text-red-600">$5,000.00</div>
+                        <div class="text-xs text-gray-500 mt-2">($3,000 + $2,000)</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <div class="text-sm text-gray-600 mb-1">💵 Pagos Realizados</div>
+                        <div class="text-3xl font-bold text-green-600">$3,000.00</div>
+                        <div class="text-xs text-gray-500 mt-2">Total de pagos en bitácora</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 7: Reglas de Negocio -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">📜 Reglas de Negocio</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <h3 class="font-bold text-blue-700 mb-2">✅ Filtrado de Datos</h3>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Solo registros con <span class="font-mono bg-white px-2 py-1 rounded">Stado = 1</span> (activos)</li>
+                        <li>Filtrar por UDN específica mediante tabla <span class="font-mono bg-white px-2 py-1 rounded">creditos_udn</span></li>
+                        <li>Filtrar por rango de fechas en <span class="font-mono bg-white px-2 py-1 rounded">Fecha_Credito</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h3 class="font-bold text-green-700 mb-2">💵 Formato de Salida</h3>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Todos los montos se formatean con <span class="font-mono bg-white px-2 py-1 rounded">evaluar()</span></li>
+                        <li>Formato: <span class="font-mono bg-white px-2 py-1 rounded">"$ X,XXX.XX"</span></li>
+                        <li>Siempre retornar estructura con claves <span class="font-mono bg-white px-2 py-1 rounded">debt</span> y <span class="font-mono bg-white px-2 py-1 rounded">pay</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
+                    <h3 class="font-bold text-purple-700 mb-2">🔗 Relaciones de Tablas</h3>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Usar <span class="font-mono bg-white px-2 py-1 rounded">INNER JOIN</span> para relacionar clientes con UDN</li>
+                        <li>Agregar datos con <span class="font-mono bg-white px-2 py-1 rounded">SUM()</span> en SQL (no en PHP)</li>
+                        <li>Usar <span class="font-mono bg-white px-2 py-1 rounded">CASE WHEN</span> para separar tipos en bitácora</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 8: Diagrama de Flujo -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🔄 Diagrama de Flujo Completo</h2>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-blue-500 text-white px-4 py-2 rounded-lg font-bold min-w-[200px] text-center">
+                            Usuario solicita datos
+                        </div>
+                        <div class="text-2xl">→</div>
+                        <div class="text-sm text-gray-600">POST: opc=payDebtUDN</div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="bg-purple-500 text-white px-4 py-2 rounded-lg font-bold min-w-[200px] text-center">
+                            ctrl-sobres.php
+                        </div>
+                        <div class="text-2xl">→</div>
+                        <div class="text-sm text-gray-600">Delega a _Contabilidad</div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold min-w-[200px] text-center">
+                            _Clientes.php
+                        </div>
+                        <div class="text-2xl">→</div>
+                        <div class="text-sm text-gray-600">Ejecuta payDebtUDN()</div>
+                    </div>
+
+                    <div class="ml-8 space-y-2">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-orange-400 text-white px-4 py-2 rounded-lg font-bold min-w-[180px] text-center text-sm">
+                                payUDN()
+                            </div>
+                            <div class="text-xl">→</div>
+                            <div class="text-xs text-gray-600">Consulta creditos_bitacora</div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="bg-orange-400 text-white px-4 py-2 rounded-lg font-bold min-w-[180px] text-center text-sm">
+                                debtUDN()
+                            </div>
+                            <div class="text-xl">→</div>
+                            <div class="text-xs text-gray-600">Consulta creditos_consumo</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold min-w-[200px] text-center">
+                            Calcula Deuda Total
+                        </div>
+                        <div class="text-2xl">→</div>
+                        <div class="text-sm text-gray-600">debtUDN + payUDN['consumo']</div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold min-w-[200px] text-center">
+                            Retorna JSON
+                        </div>
+                        <div class="text-2xl">→</div>
+                        <div class="text-sm text-gray-600">{ debt: "$5,000.00", pay: "$3,000.00" }</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Sección 9: Código PHP -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">💻 Código PHP Simplificado</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-bold text-lg mb-2">📄 _Clientes.php - payDebtUDN()</h3>
+                    <div class="code-block">
+<pre>function payDebtUDN() {
+    // 1. Obtener pagos y consumos de bitácora
+    $payUDN = $this->payUDN([
+        $this->udn,
+        $this->date1,
+        $this->date2
+    ]);
+
+    // 2. Obtener consumos pendientes
+    $debtUDN = $this->debtUDN([
+        $this->udn,
+        $this->date1,
+        $this->date2
+    ]);
+
+    // 3. Calcular deuda total
+    $totalDebt = $debtUDN + $payUDN['consumo'];
+
+    // 4. Formatear y retornar
+    return [
+        'debt' => evaluar($totalDebt),
+        'pay'  => evaluar($payUDN['pago'])
+    ];
+}</pre>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-2">📄 mdl-clientes.php - payUDN()</h3>
+                    <div class="code-block">
+<pre>function payUDN($array) {
+    $query = "
+        SELECT 
+            SUM(CASE WHEN Tipo = 'Pago' THEN Monto ELSE 0 END) AS pago,
+            SUM(CASE WHEN Tipo = 'Consumo' THEN Monto ELSE 0 END) AS consumo
+        FROM creditos_bitacora cb
+        INNER JOIN creditos_udn cu ON cb.id_Credito = cu.id_Credito
+        WHERE cu.id_UDN = ?
+        AND cb.Fecha_Credito BETWEEN ? AND ?
+        AND cb.Stado = 1
+    ";
+    
+    $result = $this->_Read($query, $array);
+    return $result[0];
+}</pre>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-2">📄 mdl-clientes.php - debtUDN()</h3>
+                    <div class="code-block">
+<pre>function debtUDN($array) {
+    $query = "
+        SELECT SUM(cc.Monto) AS deuda
+        FROM creditos_consumo cc
+        INNER JOIN creditos_udn cu ON cc.id_Credito = cu.id_Credito
+        WHERE cu.id_UDN = ?
+        AND cc.Fecha_Credito BETWEEN ? AND ?
+        AND cc.Stado = 1
+    ";
+    
+    $result = $this->_Read($query, $array);
+    return floatval($result[0]['deuda']);
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6 rounded-lg text-center">
+            <p class="text-lg font-bold mb-2">☕ Documentación generada por CoffeeIA</p>
+            <p class="text-sm text-gray-400">Sistema de Créditos por UDN - Versión 1.0</p>
+            <p class="text-xs text-gray-500 mt-2">Fecha: 2025-01-02</p>
+        </footer>
+
+    </div>
+</body>
+</html>

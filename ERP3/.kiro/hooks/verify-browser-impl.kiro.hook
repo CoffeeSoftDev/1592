@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Verificar implementación en browser",
+  "description": "Después de que el agente termine una tarea, abre el browser MCP para verificar visualmente que los cambios se implementaron correctamente en la UI",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Si la última tarea involucró cambios en archivos frontend (.js, .php, .css, .html), usa el browser MCP para navegar a la URL del módulo modificado y toma un screenshot para verificar que la implementación se ve correctamente. Si no hubo cambios frontend, ignora esta verificación."
+  }
+}

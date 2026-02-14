@@ -1,0 +1,5 @@
+[ 2026-02-14 11:17:30 ]
+[ UNIX_USR ] :: nt authority\system
+[ WINDOWS_USR ] :: DESKTOP-FHJB2CN$
+[ ERROR CONECT ] :: SQLSTATE[HY000] [1045] Access denied for user 'hgpqgijw_desarrollo'@'localhost' (using password: YES)
+

@@ -1,0 +1,114 @@
+# Implementation Plan
+
+- [ ] 1. Crear estructura base del módulo
+  - [ ] 1.1 Crear archivo mdl-clientes.php con métodos de consulta base
+    - Implementar métodos: `lsCustomers()`, `lsMovementTypes()`, `lsPaymentMethods()`
+    - Implementar método `listMovements()` para listar movimientos con filtros
+    - Implementar método `getMovementCounts()` para totales de InfoCards
+    - _Requirements: 6.1, 7.1_
+  - [ ] 1.2 Crear archivo ctrl-clientes.php con operaciones iniciales
+    - Implementar método `init()` para cargar catálogos
+    - Implementar método `ls()` para listar movimientos
+    - Implementar método `showCustomers()` para totales de InfoCards
+    - _Requirements: 6.1, 7.1_
+  - [ ] 1.3 Crear archivo clientes.js con clase Customers base
+    - Crear clase `Customers` que extiende `Templates`
+    - Implementar métodos `render()`, `layout()`, `filterBar()`
+    - Implementar método `showCards()` para InfoCards
+    - Implementar método `lsCustomers()` para tabla de movimientos
+    - _Requirements: 6.1, 7.1_
+
+- [ ] 2. Implementar CRUD de movimientos
+  - [ ] 2.1 Implementar registro de nuevo movimiento
+    - Crear método `addMovement()` con modal form en JS
+    - Crear método `jsonMovement()` para estructura del formulario
+    - Implementar `togglePaymentMethod()` para deshabilitar método de pago en consumos
+    - Crear método `addMovement()` en controlador
+    - Crear método `createMovement()` en modelo
+    - _Requirements: 1.1, 1.2, 1.3, 1.4_
+  - [ ]* 2.2 Write property test for payment method disabled
+    - **Property 1: Payment method disabled for credit consumption**
+    - **Validates: Requirements 1.2**
+  - [ ] 2.3 Implementar visualización de movimiento
+    - Crear método `viewMovement(id)` con modal de detalle en JS
+    - Crear método `getMovement()` en controlador
+    - Crear método `getMovementById()` en modelo
+    - Crear método `getCustomerDebt()` para mostrar deuda actual
+    - _Requirements: 2.1, 2.2, 2.3_
+  - [ ] 2.4 Implementar edición de movimiento
+    - Crear método `editMovement(id)` con modal form pre-poblado en JS
+    - Crear método `jsonMovementEdit()` para estructura del formulario de edición
+    - Crear método `editMovement()` en controlador
+    - Crear método `updateMovement()` en modelo
+    - _Requirements: 3.1, 3.2, 3.3, 3.4_
+  - [ ]* 2.5 Write property test for edit form pre-population
+    - **Property 5: Edit form pre-population**
+    - **Validates: Requirements 3.1**
+  - [ ] 2.6 Implementar eliminación de movimiento
+    - Crear método `deleteMovement(id)` con confirmación swalQuestion en JS
+    - Crear método `deleteMovement()` en controlador
+    - Crear método `deleteMovementById()` en modelo (soft delete)
+    - _Requirements: 4.1, 4.2, 4.3, 4.4_
+  - [ ]* 2.7 Write property test for soft delete
+    - **Property 6: Soft delete preserves data**
+    - **Validates: Requirements 4.2**
+
+- [ ] 3. Checkpoint - Verificar CRUD funcional
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 4. Implementar filtros y actualización de InfoCards
+  - [ ] 4.1 Implementar filtro por tipo de movimiento
+    - Agregar select de filtro en filterBar con opciones: Todos, Consumos, Pagos
+    - Modificar `lsCustomers()` para aplicar filtro
+    - Modificar `ls()` en controlador para filtrar por movement_type_id
+    - _Requirements: 7.1, 7.2, 7.3_
+  - [ ]* 4.2 Write property test for filter functionality
+    - **Property 9: Filter functionality**
+    - **Validates: Requirements 7.2, 7.3**
+  - [ ] 4.3 Implementar actualización automática de InfoCards
+    - Llamar `showCards()` después de cada operación CRUD
+    - Verificar que totales se recalculan correctamente
+    - _Requirements: 1.4, 3.4, 4.3, 6.2, 6.3_
+  - [ ]* 4.4 Write property test for InfoCards update
+    - **Property 2: InfoCards update after CRUD operations**
+    - **Validates: Requirements 1.4, 3.4, 4.3, 6.2**
+
+- [ ] 5. Implementar vista Concentrado
+  - [ ] 5.1 Crear clase CustomersConsolidated
+    - Crear clase `CustomersConsolidated` que extiende `Templates`
+    - Implementar métodos `render()`, `layoutConsolidated()`, `filterBarConsolidated()`
+    - Implementar método `toggleView()` en clase Customers para cambiar vistas
+    - _Requirements: 5.1, 5.5_
+  - [ ] 5.2 Implementar generación de tabla dinámica por fechas
+    - Crear método `lsConsolidated()` en JS
+    - Crear método `lsConsolidated()` en controlador
+    - Crear métodos en modelo: `listCustomersWithMovements()`, `getMovementsByDate()`
+    - Generar columnas dinámicas por cada fecha del rango
+    - _Requirements: 5.2, 5.3, 5.4_
+  - [ ]* 5.3 Write property test for dynamic columns
+    - **Property 7: Consolidated table dynamic columns**
+    - **Validates: Requirements 5.2, 5.3**
+  - [ ] 5.4 Implementar cálculo de deuda por cliente
+    - Crear método `getCustomerDebt()` que calcula consumos - pagos
+    - Mostrar deuda en columna "DEUDA" del concentrado
+    - _Requirements: 5.4_
+  - [ ]* 5.5 Write property test for debt calculation
+    - **Property 8: Client debt calculation**
+    - **Validates: Requirements 5.4**
+  - [ ] 5.6 Implementar exportación a Excel
+    - Crear método `exportToExcel()` usando `createExcel()` de CoffeeSoft
+    - _Requirements: 5.2_
+
+- [ ] 6. Integrar módulo con sistema de contabilidad
+  - [ ] 6.1 Actualizar contabilidad.js para cargar módulo de clientes
+    - Agregar variables globales: `api_clientes`, `customers`, `customersConsolidated`
+    - Instanciar clases en el init del módulo
+    - Actualizar onClick del tab "clientes" para llamar `customers.render()`
+    - _Requirements: 6.1_
+  - [ ] 6.2 Configurar permisos por nivel de usuario
+    - Verificar userLevel para mostrar/ocultar funcionalidades
+    - Aplicar restricciones según rol (Gerente, Auxiliar, Contabilidad, Developer)
+    - _Requirements: Roles y permisos del SPEC_
+
+- [ ] 7. Checkpoint final - Verificar integración completa
+  - Ensure all tests pass, ask the user if questions arise.

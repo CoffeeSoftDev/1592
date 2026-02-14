@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "name": "CoffeeIA Ha terminado !",
+  "description": "Envía una notificación a Telegram cuando el agente de Kiro termina una tarea",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Envía un mensaje a Telegram usando el MCP de Telegram con el siguiente formato: \"✅ Tarea completada en Kiro. El agente ha terminado de ejecutar la solicitud.\""
+  },
+  "workspaceFolderName": "DEV",
+  "shortName": "telegram-task-complete"
+}

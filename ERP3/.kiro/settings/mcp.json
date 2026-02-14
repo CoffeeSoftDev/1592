@@ -1,0 +1,106 @@
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "C:/wamp64/www/ERP-GV/ERP-GV/DEV/mcp-mysql-server",
+        "mcp-mysql-server"
+      ],
+      "env": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "",
+        "MYSQL_DATABASE": "hgpqgijw_finanzas"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "mysql_query",
+        "mysql_list_databases",
+        "mysql_list_tables",
+        "mysql_describe_table",
+        "mysql_current_database",
+        "mysql_table_info",
+        "mysql_execute"
+      ]
+    },
+    "browsermcp": {
+      "command": "npx",
+      "args": [
+        "@browsermcp/mcp@latest"
+      ],
+      "autoApprove": [
+        "browser_navigate",
+        "browser_click",
+        "browser_wait",
+        "browser_screenshot",
+        "browser_console_logs",
+        "browser_get_content",
+        "browser_evaluate",
+        "browser_type",
+        "browser_scroll",
+        "browser_select"
+      ]
+    },
+    "telegram": {
+      "command": "telegram-notifier",
+      "env": {
+        "TELEGRAM_BOT_TOKEN": "8277163437:AAFwroKQbjsCPjhO6ey2GIL4HsStF1AK-7E",
+        "TELEGRAM_CHAT_ID": "8127823676"
+      },
+      "autoApprove": [
+        "send_markdown_message_as_telegram_bot"
+      ],
+      "disabled": true
+    },
+    "mysql2": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "C:/wamp64/www/GrupoVaroch/ERP-GV/DEV/mcp-mysql-server",
+        "mcp-mysql-server"
+      ],
+      "env": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "",
+        "MYSQL_DATABASE": "hgpqgijw_finanzas"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "mysql_query",
+        "mysql_list_databases",
+        "mysql_list_tables",
+        "mysql_describe_table",
+        "mysql_current_database",
+        "mysql_table_info",
+        "mysql_execute"
+      ]
+    },
+    "telegram-bridge": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "C:/wamp64/www/ERP-GV/ERP-GV/DEV/mcp-telegram-bridge",
+        "mcp-telegram-bridge"
+      ],
+      "env": {
+        "TELEGRAM_BOT_TOKEN": "8277163437:AAFwroKQbjsCPjhO6ey2GIL4HsStF1AK-7E",
+        "TELEGRAM_CHAT_ID": "8127823676"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "telegram_get_pending_commands",
+        "telegram_mark_command_processed",
+        "telegram_send_response",
+        "telegram_get_command_history",
+        "telegram_clear_processed_commands"
+      ]
+    }
+  }
+}
