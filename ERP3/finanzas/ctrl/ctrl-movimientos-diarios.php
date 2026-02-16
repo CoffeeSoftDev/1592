@@ -704,7 +704,7 @@ function rptGeneral($obj){
 
     #   -- Formas de pago  -- 
 
-    $lsfolio = $obj-> lsFolio([$_POST['folio']]);
+    $lsfolio = $obj-> lsFolio([$_POST['idFolio']]);
     
     $total_formaspago = 0;
     $formas           = $obj -> VER_FORMAS_PAGO();
@@ -726,11 +726,13 @@ function rptGeneral($obj){
         );
     }
 
+    $observacion = isset($lsfolio['Observacion']) ? $lsfolio['Observacion'] : '';
+    
     $__row_fp[] = array(
         'id'            => '',
         'Categoria'     => '<b>TOTAL</b>',
         'SubTotal'      => evaluar($total_formaspago),
-        'OBSERVACIONES' => '<span id="Obs">'.$lsfolio['Observacion'].'</span>',            
+        'OBSERVACIONES' => '<span id="Obs">'.$observacion.'</span>',            
         "opc"           => 1
     );
 

@@ -21,7 +21,7 @@ class Ingresos extends CRUD
         FROM
         hgpqgijw_finanzas.categoria
         WHERE
-        id_UDN = ? and idCategoria <> 12 and idCategoria <> 13";
+        id_UDN = ?  and idCategoria <> 13";
         return $this->_Read($sql, $array);
     }
 
@@ -48,6 +48,22 @@ class Ingresos extends CRUD
         ";
 
         return $this->_Read($sql, $array);
+    }
+
+    public function getFechasRegistros($array){
+        $query = "
+            SELECT DISTINCT
+                DATE_FORMAT(folio.Fecha, '%Y-%m-%d') as fecha
+            FROM
+                {$this->bd}folio
+                INNER JOIN {$this->bd}bitacora_ventas ON bitacora_ventas.id_Folio = folio.idFolio
+                INNER JOIN {$this->bd}bitacora_formaspago ON bitacora_formaspago.id_Bitacora = bitacora_ventas.idVentasBit
+            WHERE
+                folio.Fecha BETWEEN ? AND ?
+                AND bitacora_ventas.id_Subcategoria = ?
+            ORDER BY folio.Fecha ASC
+        ";
+        return $this->_Read($query, $array);
     }
 
     public function Select_Subcategoria_x_grupo($array){

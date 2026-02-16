@@ -211,10 +211,12 @@ class rpt_gral extends CRUD{
 
 
         $sql = $this->_Read($query,$array);
-        foreach($sql as $row2);
-        if ( !isset($row2['subtotal']) ) { $row2['subtotal'] = 0; }
-
-        return $row2['subtotal'];
+        
+        if (!empty($sql)) {
+            return $sql[0]['subtotal'];
+        }
+        
+        return 0;
 
     }
 
@@ -314,9 +316,12 @@ class rpt_gral extends CRUD{
         WHERE id_Folio = ? and id_Subcategoria = ? and id_FormasPago = ?
         ";
         $sql = $this->_Read($query, $array);
-        foreach ($sql as $row3);
-        if ( !isset($row3['Monto']) ) { $row3['Monto'] = 0; }
-        return $row3['Monto'];
+        
+        if (!empty($sql)) {
+            return $sql[0]['Monto'];
+        }
+        
+        return 0;
     }
 
 
@@ -402,7 +407,7 @@ class rpt_gral extends CRUD{
         ";
 
         $sql =  $this->_Read($query, $array);
-        foreach($sql as $row);
+        
         return $sql;
     }
 
@@ -555,8 +560,11 @@ class RptGral extends CRUD {
         ";
         $sql = $this->_Read($query, $array);
 
-        foreach ($sql as $row);
-        return $row;
+        if (!empty($sql)) {
+            return $sql[0];
+        }
+        
+        return [];
     }
 
     function VER_CATEGORIAS($array){
@@ -1147,8 +1155,12 @@ class Movimientosdiarios extends CRUD{
     function Ayer(){
         $query = "SELECT DATE_SUB(CURDATE() , INTERVAL 1 DAY) as ayer";
         $sql = $this->_Read($query,null);
-        foreach($sql as $row);
-        return $row['ayer'];
+        
+        if (!empty($sql)) {
+            return $sql[0]['ayer'];
+        }
+        
+        return date('Y-m-d', strtotime('-1 day'));
     }
 
    
@@ -1161,23 +1173,30 @@ class Movimientosdiarios extends CRUD{
         $array = array($date);
         $query = "SELECT idFolio FROM hgpqgijw_finanzas.folio WHERE Fecha = ?";
         $sql = $this->_Read($query,$array);
-        foreach ($sql as $row);
-        if ( !isset($row['idFolio']) ) { $row['idFolio'] = 0; }
-        $idF = $row['idFolio'];
+        
+        $idF = 0;
+        if (!empty($sql)) {
+            $idF = $sql[0]['idFolio'];
+        }
 
         $array = array($idF,$idS);
         $query = "SELECT idVentasBit FROM hgpqgijw_finanzas.bitacora_ventas WHERE id_Folio = ? AND id_Subcategoria = ?";
         $sql = $this->_Read($query,$array);
-        foreach ($sql as $row2);
-        if ( !isset($row2['idVentasBit']) ) { $row2['idVentasBit'] = 0; }
-        $idSBit = $row2['idVentasBit'];
+        
+        $idSBit = 0;
+        if (!empty($sql)) {
+            $idSBit = $sql[0]['idVentasBit'];
+        }
 
         $array = array($idSBit);
         $query = "SELECT SUM(Monto) as monto FROM hgpqgijw_finanzas.bitacora_formaspago WHERE id_Bitacora = ?";
         $sql = $this->_Read($query,$array);
-        foreach($sql as $row3);
-        if ( !isset($row3['monto']) ) { $row3['monto'] = 0; }
-        return $row3['monto'];
+        
+        if (!empty($sql)) {
+            return $sql[0]['monto'];
+        }
+        
+        return 0;
     }
 
     function Select_MontoSubtotal($date1,$date2,$idS){
@@ -1195,10 +1214,12 @@ class Movimientosdiarios extends CRUD{
 
 
         $sql = $this->_Read($query,$array);
-        foreach($sql as $row2);
-        if ( !isset($row2['subtotal']) ) { $row2['subtotal'] = 0; }
-
-        return $row2['subtotal'];
+        
+        if (!empty($sql)) {
+            return $sql[0]['subtotal'];
+        }
+        
+        return 0;
 
     }
 

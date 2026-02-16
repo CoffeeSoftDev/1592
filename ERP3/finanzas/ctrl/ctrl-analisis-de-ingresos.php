@@ -35,6 +35,7 @@ class ctrl extends Ingresos{
                 $__row[] = array(
                     'id' => '',
                     'Categoria' => $key['gruponombre'],
+                    'Fechas'=> '',
                     'Ocup.' => '',
                     'Monto' => '',
                     'opc' => 1,
@@ -58,6 +59,7 @@ class ctrl extends Ingresos{
                     $row = array(
                         'id' => $value['idSubcategoria'],
                         'Categoria' => $value['Subcategoria'],
+                        'Fechas' => $this->obtenerFechasStr($fi, $ff, $value['idSubcategoria']),
                         'Ocup.' => evaluar2($paxID),
                         'Monto' => evaluar($tar, '$'),
                     );
@@ -70,6 +72,8 @@ class ctrl extends Ingresos{
             }
 
         }
+
+        $th = ['Categoria', 'Fechas', 'Ocup.', 'Monto'];
 
         #encapsular datos
         return [
@@ -310,6 +314,21 @@ class ctrl extends Ingresos{
         return $m;
     }
 
+    private function obtenerFechasStr($fi, $ff, $idSubcategoria) {
+        $fechasRegistros = $this->getFechasRegistros([$fi, $ff, $idSubcategoria]);
+        
+        if (empty($fechasRegistros)) {
+            return '-';
+        }
+        
+        $fechasArray = array_map(function($item) {
+            $timestamp = strtotime($item['fecha']);
+            return date('d/M', $timestamp);
+        }, $fechasRegistros);
+        
+        return implode(', ', $fechasArray);
+    }
+
     public function SubCategoria($idGrupo){
 
         $__row = [];
@@ -439,13 +458,13 @@ class ctrl extends Ingresos{
         }
 
         $__row[] = array(
-            'id' => $_key['id'],
-            'Ingresos' => 'TOTAL',
-            'Año actual' => evaluar($total),
+            'id'           => $_key['id'],
+            'Ingresos'     => 'TOTAL',
+            'Año actual'   => evaluar($total),
             "Año anterior" => evaluar($totalComparativo),
-            "Diferencia" => evaluar($totalDif),
-            "Crecimiento" => '',
-            "opc" => 1,
+            "Diferencia"   => evaluar($totalDif),
+            "Crecimiento"  => '',
+            "opc"          => 1,
         );
 
         // Encapsular arreglos

@@ -199,19 +199,10 @@ class AnalisisIngresos extends Templates{
                 id: 'Anio',
                 class: 'col-12 col-sm-3',
                 onchange: 'analisis.ChequePromedio()',
-                data: [
-                     { id: 2025, valor: '2025' },
-                     { id: 2024, valor: '2024' },
-                     { id: 2023, valor: '2023' }, 
-                     { id: 2022, valor: '2022' },
-                     { id: 2021, valor: '2021' },
-                     { id: 2020, valor: '2020' },
-                     { id: 2019, valor: '2019' },
-                     { id: 2018, valor: '2018' },
-                     { id: 2017, valor: '2017' },
-
-                    
-                    ]
+                data: Array.from({ length: 7 }, (_, i) => {
+                    const year = new Date().getFullYear() - i;
+                    return { id: year, valor: year.toString() };
+                })
             }
         ];
 

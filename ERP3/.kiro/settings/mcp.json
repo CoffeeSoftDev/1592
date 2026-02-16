@@ -42,7 +42,8 @@
         "browser_type",
         "browser_scroll",
         "browser_select"
-      ]
+      ],
+      "disabled": true
     },
     "telegram": {
       "command": "telegram-notifier",
