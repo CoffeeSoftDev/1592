@@ -25,7 +25,14 @@
       "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/ctrl/ctrl-logout.php)",
       "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/mdl/mdl-login.php)",
       "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/index.php)",
-      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/layout/head.php)"
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/layout/head.php)",
+      "Bash(git verify-pack:*)",
+      "Bash(git diff:*)",
+      "Bash(git rev-list:*)",
+      "Bash(git cat-file:*)",
+      "Bash(sort -k3 -n -r)",
+      "Bash(git rm:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }
