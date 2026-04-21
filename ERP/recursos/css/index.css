@@ -1,0 +1,29 @@
+*{
+  margin:0px;
+  padding: 0px;
+}
+
+body{
+  background: #e8e8e8;
+}
+
+header {
+  padding: 0px;
+  margin: 0px;
+  background: #fff;
+}
+
+.navbar-info {
+  background: #a3a3a3;
+}
+
+.example4 {
+  padding: 0px;
+}
+.example4 .navbar-brand>img {
+  /* padding: 7px 14px; */
+  border: 1px solid red;
+  display: flex;
+  overflow: hidden;
+  margin-top: -20px;
+}

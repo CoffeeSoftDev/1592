@@ -1,0 +1,35 @@
+Options +FollowSymLinks
+RewriteEngine on
+#RewriteBase /ERP/
+
+# Login & Logout
+RewriteRule ^/$ index.php [L]
+RewriteRule ^salir$ controlador/logout.php [L]
+
+#NIVEL GERENTE
+RewriteRule ^movimientos$ vista/finanzas/cliente/submenu.php [L]
+#ADMINISTRACION
+RewriteRule ^retiros_rembolsos$ vista/finanzas/cliente/retiros.php [L]
+
+
+#CATÁLOGO FINANZAS
+RewriteRule ^catalogo$ vista/finanzas/admin/catalogo.php [L]
+
+
+#SERGIO
+#NIVEL ADMIN
+RewriteRule ^admin$ vista/direccion/menu-00.php [L]
+RewriteRule ^administracion$ vista/direccion/administracion.php [L]
+RewriteRule ^finanzas$ vista/finanzas/admin/finanzas_admin.php [L]
+
+#NIVEL MTTO
+RewriteRule ^mtto$ vista/mtto/mtto_admin.php [L]
+RewriteRule ^inventario$ vista/mtto/inventario.php [L]
+RewriteRule ^mtto_catalogo$ vista/mtto/catalogo_mtto.php [L]
+RewriteRule ^requisicion$ vista/mtto/requisicion.php [L]
+
+RewriteRule ^productos_admin$  vista/direccion/productos_admin.php [L]
+RewriteRule ^materiales_admin$ vista/direccion/materiales_admin.php [L]
+RewriteRule ^mtto_folios$      vista/mtto/mtto_folios.php [L]
+RewriteRule ^inventario_productos$       vista/mtto/inventario_productos.php [L]
+RewriteRule ^lista_inv_productos$       vista/mtto/lista_inventario_pro.php [L]

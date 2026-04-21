@@ -1,0 +1,47 @@
+/* titulo  */
+
+.t_1 {
+  font-size: .8em;
+  font-weight: 600;
+}
+
+table {
+  border-spacing: none;
+}
+
+/* .table>thead>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+  padding: 0px;
+
+} */
+
+.cell {
+  border: none;
+  font-size: 14px;
+  width: 100%;
+  height: auto;
+  padding: none;
+}
+
+input[type="number"].cell {
+  border: none;
+  text-align: right;
+  box-shadow: none;
+  font-size: 1em;
+  font-weight: 500;
+  width: 100%;
+
+}
+
+.input-xs {
+  padding: 4px 8px;
+  font-size: 14px;
+  height: 26px;
+  line-height: 1.32857143;
+}
+
+button[disabled], html input[disabled] {
+    cursor: pointer;
+    /* background: white; */
+}

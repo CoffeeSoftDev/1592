@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Cobros CxC - CoffeeSoft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f3f4f6; color: #1f2937; min-height: 100vh; }
+
+        /* Overlay */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 50; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+
+        /* Inputs */
+        .input-modal { background: #fff; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #374151; width: 100%; }
+        .input-modal:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+
+        /* Cards */
+        .card-demo { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; transition: .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+        .card-demo:hover { border-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+
+        /* Badges */
+        .badge-base { font-size: 11px; padding: 2px 10px; border-radius: 9999px; font-weight: 500; }
+
+        /* Table */
+        .tbl-row:hover { background: #f9fafb; }
+        .tbl-head th { position: sticky; top: 0; z-index: 10; }
+
+        /* Tabs */
+        .tab-btn { padding: 8px 20px; font-size: 12px; font-weight: 600; border-radius: 8px 8px 0 0; cursor: pointer; transition: .15s; border: 1px solid transparent; border-bottom: none; }
+        .tab-btn.active { background: #fff; color: #1f2937; border-color: #e5e7eb; }
+        .tab-btn:not(.active) { background: transparent; color: #9ca3af; }
+        .tab-btn:not(.active):hover { color: #6b7280; }
+
+        /* Panel cobro */
+        .panel-cobro { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+        .panel-cobro.open { max-height: 600px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        /* Checkbox custom */
+        .chk-custom { appearance: none; width: 16px; height: 16px; border: 1px solid #d1d5db; border-radius: 4px; background: #fff; cursor: pointer; position: relative; }
+        .chk-custom:checked { background: #3b82f6; border-color: #3b82f6; }
+        .chk-custom:checked::after { content: ''; position: absolute; left: 4.5px; top: 1.5px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+    </style>
+</head>
+<body>
+
+<!-- ========== MODAL OVERLAY ========== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div style="width: 960px; max-height: 92vh;" class="bg-white rounded-2xl border border-gray-200 shadow-2xl flex flex-col overflow-hidden">
+
+        <!-- ===== HEADER ===== -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-2xl">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <i class='bx bx-money-withdraw text-blue-600 text-xl'></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-gray-800">Captura de Cobros CxC</h2>
+                    <p class="text-[11px] text-gray-400">Cuentas por Cobrar &mdash; Finanzas</p>
+                </div>
+            </div>
+            <button onclick="window.close()" class="w-8 h-8 rounded-lg hover:bg-gray-200 flex items-center justify-center transition text-gray-400 hover:text-gray-700">
+                <i class='bx bx-x text-xl'></i>
+            </button>
+        </div>
+
+        <!-- ===== BODY SCROLLABLE ===== -->
+        <div class="flex-1 overflow-y-auto px-6 py-5 space-y-5 bg-gray-50/50">
+
+            <!-- ===== SECCION 1: RESUMEN KPI ===== -->
+            <div class="grid grid-cols-3 gap-4">
+                <!-- Total CxC Pendiente -->
+                <div class="card-demo flex flex-col items-center justify-center text-center py-5">
+                    <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-3">
+                        <i class='bx bx-error-circle text-red-500 text-xl'></i>
+                    </div>
+                    <p class="text-[11px] text-gray-400 uppercase tracking-wider mb-1">Total CxC Pendiente</p>
+                    <p class="text-2xl font-bold text-red-500">$12,847.50</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Acumulado al corte</p>
+                </div>
+                <!-- Registros Pendientes -->
+                <div class="card-demo flex flex-col items-center justify-center text-center py-5">
+                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center mb-3">
+                        <i class='bx bx-time-five text-amber-500 text-xl'></i>
+                    </div>
+                    <p class="text-[11px] text-gray-400 uppercase tracking-wider mb-1">Registros Pendientes</p>
+                    <p class="text-2xl font-bold text-amber-500">6</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Folios sin liquidar</p>
+                </div>
+                <!-- Cobrado del Mes -->
+                <div class="card-demo flex flex-col items-center justify-center text-center py-5">
+                    <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center mb-3">
+                        <i class='bx bx-check-circle text-emerald-500 text-xl'></i>
+                    </div>
+                    <p class="text-[11px] text-gray-400 uppercase tracking-wider mb-1">Cobrado del Mes</p>
+                    <p class="text-2xl font-bold text-emerald-500">$8,320.00</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Abril 2026</p>
+                </div>
+            </div>
+
+            <!-- ===== TABS ===== -->
+            <div class="flex items-end gap-0 -mb-[1px] relative z-10">
+                <button class="tab-btn active" id="tabPendientes" onclick="switchTab('pendientes')">
+                    <i class='bx bx-list-ul mr-1'></i> Pendientes
+                    <span class="ml-1.5 badge-base bg-amber-50 text-amber-600 border border-amber-200">6</span>
+                </button>
+                <button class="tab-btn" id="tabHistorial" onclick="switchTab('historial')">
+                    <i class='bx bx-history mr-1'></i> Historial de Cobros
+                </button>
+            </div>
+
+            <!-- ===== TAB: PENDIENTES ===== -->
+            <div id="panelPendientes" class="border border-gray-200 rounded-b-xl rounded-tr-xl bg-white overflow-hidden">
+
+                <!-- Filtros -->
+                <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <label class="text-[11px] text-gray-400 font-medium">Desde</label>
+                        <input type="date" value="2026-04-01" class="input-modal" style="width:140px;">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-[11px] text-gray-400 font-medium">Hasta</label>
+                        <input type="date" value="2026-04-19" class="input-modal" style="width:140px;">
+                    </div>
+                    <div class="flex-1"></div>
+                    <div class="relative">
+                        <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm'></i>
+                        <input type="text" placeholder="Buscar folio o descripcion..." class="input-modal pl-8" style="width:240px;">
+                    </div>
+                </div>
+
+                <!-- Tabla Pendientes -->
+                <div class="overflow-x-auto" style="max-height:320px; overflow-y:auto;">
+                    <table class="w-full text-left">
+                        <thead class="tbl-head">
+                            <tr class="bg-gray-50 text-[11px] text-gray-400 uppercase tracking-wider">
+                                <th class="px-4 py-3 w-10"><input type="checkbox" class="chk-custom"></th>
+                                <th class="px-4 py-3">Folio</th>
+                                <th class="px-4 py-3">Fecha</th>
+                                <th class="px-4 py-3">Descripcion</th>
+                                <th class="px-4 py-3 text-right">Monto CxC</th>
+                                <th class="px-4 py-3 text-center">Estado</th>
+                                <th class="px-4 py-3 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[12px]">
+                            <!-- Fila 1 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44665</td>
+                                <td class="px-4 py-3 text-gray-500">19/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">TURNO A (3) - Habitacion 204</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$2,150.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-amber-50 text-amber-600 border border-amber-200">Pendiente</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Fila 2 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44670</td>
+                                <td class="px-4 py-3 text-gray-500">18/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">CAPPUCINO (3) - Restaurante</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$780.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-amber-50 text-amber-600 border border-amber-200">Pendiente</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Fila 3 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44678</td>
+                                <td class="px-4 py-3 text-gray-500">17/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">TURNO B (2) - Habitacion 112</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$3,420.50</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-orange-50 text-orange-600 border border-orange-200">Parcial</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Fila 4 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44690</td>
+                                <td class="px-4 py-3 text-gray-500">15/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">SERV. LAVANDERIA - Hab. 308</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$1,250.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-amber-50 text-amber-600 border border-amber-200">Pendiente</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Fila 5 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44695</td>
+                                <td class="px-4 py-3 text-gray-500">12/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">ROOM SERVICE (5) - Hab. 501</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$4,747.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-amber-50 text-amber-600 border border-amber-200">Pendiente</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Fila 6 -->
+                            <tr class="tbl-row">
+                                <td class="px-4 py-3"><input type="checkbox" class="chk-custom"></td>
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44701</td>
+                                <td class="px-4 py-3 text-gray-500">10/04/2026</td>
+                                <td class="px-4 py-3 text-gray-700">MINIBAR (2) - Habitacion 115</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-800">$500.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-amber-50 text-amber-600 border border-amber-200">Pendiente</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <button onclick="togglePanel()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium rounded-lg transition flex items-center gap-1 mx-auto">
+                                        <i class='bx bx-dollar-circle text-sm'></i> Cobrar
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginacion -->
+                <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50">
+                    <p class="text-[11px] text-gray-400">Mostrando 1-6 de 6 registros</p>
+                    <div class="flex items-center gap-1">
+                        <button class="w-7 h-7 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center text-[11px] hover:bg-gray-200 transition">
+                            <i class='bx bx-chevron-left'></i>
+                        </button>
+                        <button class="w-7 h-7 rounded-md bg-blue-600 text-white flex items-center justify-center text-[11px] font-medium">1</button>
+                        <button class="w-7 h-7 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center text-[11px] hover:bg-gray-200 transition">
+                            <i class='bx bx-chevron-right'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PANEL CAPTURA DE COBRO (toggle) ===== -->
+            <div class="panel-cobro open" id="panelCobro">
+                <div class="border border-blue-200 rounded-xl bg-blue-50/50 overflow-hidden">
+                    <!-- Header del panel -->
+                    <div class="flex items-center justify-between px-5 py-3 border-b border-blue-100 bg-blue-50">
+                        <div class="flex items-center gap-2">
+                            <i class='bx bx-receipt text-blue-600'></i>
+                            <span class="text-[12px] font-semibold text-blue-700">Registrar Cobro</span>
+                        </div>
+                        <button onclick="togglePanel()" class="text-gray-400 hover:text-gray-700 transition">
+                            <i class='bx bx-x text-lg'></i>
+                        </button>
+                    </div>
+
+                    <!-- Detalle CxC seleccionado -->
+                    <div class="px-5 py-3 border-b border-blue-100/60 bg-white">
+                        <div class="flex items-center gap-6">
+                            <div>
+                                <p class="text-[11px] text-gray-400">Folio</p>
+                                <p class="text-[13px] font-semibold text-blue-600">4011/44665</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-gray-400">Descripcion</p>
+                                <p class="text-[13px] text-gray-700">TURNO A (3) - Habitacion 204</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-gray-400">Monto Original</p>
+                                <p class="text-[13px] font-bold text-gray-800">$2,150.00</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-gray-400">Saldo Pendiente</p>
+                                <p class="text-[13px] font-bold text-red-500">$2,150.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="px-5 py-4 bg-white">
+                        <div class="grid grid-cols-4 gap-4">
+                            <!-- Monto a cobrar -->
+                            <div>
+                                <label class="text-[11px] text-gray-500 font-medium block mb-1.5">Monto a Cobrar *</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[12px]">$</span>
+                                    <input type="number" value="2150.00" step="0.01" class="input-modal pl-7" placeholder="0.00">
+                                </div>
+                            </div>
+                            <!-- Forma de pago -->
+                            <div>
+                                <label class="text-[11px] text-gray-500 font-medium block mb-1.5">Forma de Pago *</label>
+                                <select class="input-modal">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="tarjeta" selected>Tarjeta</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="anticipo">Anticipo</option>
+                                </select>
+                            </div>
+                            <!-- Fecha de cobro -->
+                            <div>
+                                <label class="text-[11px] text-gray-500 font-medium block mb-1.5">Fecha de Cobro *</label>
+                                <input type="date" value="2026-04-19" class="input-modal">
+                            </div>
+                            <!-- Observacion -->
+                            <div>
+                                <label class="text-[11px] text-gray-500 font-medium block mb-1.5">Observacion</label>
+                                <input type="text" class="input-modal" placeholder="Nota opcional...">
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="flex items-center justify-end gap-3 mt-4 pt-3 border-t border-gray-100">
+                            <button onclick="togglePanel()" class="px-4 py-2 text-[12px] font-medium text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:border-gray-400 transition bg-white">
+                                Cancelar
+                            </button>
+                            <button class="px-5 py-2 text-[12px] font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                                <i class='bx bx-check text-base'></i> Registrar Cobro
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB: HISTORIAL ===== -->
+            <div id="panelHistorial" class="hidden border border-gray-200 rounded-b-xl rounded-tr-xl bg-white overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="tbl-head">
+                            <tr class="bg-gray-50 text-[11px] text-gray-400 uppercase tracking-wider">
+                                <th class="px-4 py-3">Folio</th>
+                                <th class="px-4 py-3">Descripcion</th>
+                                <th class="px-4 py-3 text-right">Monto Original</th>
+                                <th class="px-4 py-3 text-right">Monto Cobrado</th>
+                                <th class="px-4 py-3 text-center">Forma Pago</th>
+                                <th class="px-4 py-3">Fecha Cobro</th>
+                                <th class="px-4 py-3">Usuario</th>
+                                <th class="px-4 py-3">Observacion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[12px]">
+                            <!-- Historial 1 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44650</td>
+                                <td class="px-4 py-3 text-gray-700">TURNO C (2) - Hab. 102</td>
+                                <td class="px-4 py-3 text-right text-gray-400">$1,800.00</td>
+                                <td class="px-4 py-3 text-right font-semibold text-emerald-600">$1,800.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-blue-50 text-blue-600 border border-blue-200">Tarjeta</span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500">08/04/2026</td>
+                                <td class="px-4 py-3 text-gray-500">admin</td>
+                                <td class="px-4 py-3 text-gray-400 italic">Pago total con TDC</td>
+                            </tr>
+                            <!-- Historial 2 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44638</td>
+                                <td class="px-4 py-3 text-gray-700">ROOM SERVICE (3) - Hab. 410</td>
+                                <td class="px-4 py-3 text-right text-gray-400">$2,500.00</td>
+                                <td class="px-4 py-3 text-right font-semibold text-emerald-600">$2,500.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-emerald-50 text-emerald-600 border border-emerald-200">Efectivo</span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500">05/04/2026</td>
+                                <td class="px-4 py-3 text-gray-500">cajero01</td>
+                                <td class="px-4 py-3 text-gray-400 italic">-</td>
+                            </tr>
+                            <!-- Historial 3 -->
+                            <tr class="tbl-row border-b border-gray-100">
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44620</td>
+                                <td class="px-4 py-3 text-gray-700">CAPPUCINO (5) - Restaurante</td>
+                                <td class="px-4 py-3 text-right text-gray-400">$1,520.00</td>
+                                <td class="px-4 py-3 text-right font-semibold text-emerald-600">$1,520.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-violet-50 text-violet-600 border border-violet-200">Transferencia</span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500">03/04/2026</td>
+                                <td class="px-4 py-3 text-gray-500">admin</td>
+                                <td class="px-4 py-3 text-gray-400 italic">Transf. SPEI ref. 882341</td>
+                            </tr>
+                            <!-- Historial 4 -->
+                            <tr class="tbl-row">
+                                <td class="px-4 py-3 font-medium text-blue-600">4011/44605</td>
+                                <td class="px-4 py-3 text-gray-700">TURNO A (4) - Hab. 305</td>
+                                <td class="px-4 py-3 text-right text-gray-400">$3,200.00</td>
+                                <td class="px-4 py-3 text-right font-semibold text-emerald-600">$2,500.00</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge-base bg-orange-50 text-orange-600 border border-orange-200">Anticipo</span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-500">01/04/2026</td>
+                                <td class="px-4 py-3 text-gray-500">cajero02</td>
+                                <td class="px-4 py-3 text-gray-400 italic">Abono parcial, resta $700</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Paginacion Historial -->
+                <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50">
+                    <p class="text-[11px] text-gray-400">Mostrando 1-4 de 4 registros</p>
+                    <div class="flex items-center gap-1">
+                        <button class="w-7 h-7 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center text-[11px] hover:bg-gray-200 transition"><i class='bx bx-chevron-left'></i></button>
+                        <button class="w-7 h-7 rounded-md bg-blue-600 text-white flex items-center justify-center text-[11px] font-medium">1</button>
+                        <button class="w-7 h-7 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center text-[11px] hover:bg-gray-200 transition"><i class='bx bx-chevron-right'></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /body scrollable -->
+
+        <!-- ===== FOOTER MODAL ===== -->
+        <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <p class="text-[11px] text-gray-400">
+                <i class='bx bx-info-circle mr-1'></i> Los cobros registrados se reflejan en el corte de caja
+            </p>
+            <button onclick="window.close()" class="px-4 py-2 text-[12px] font-medium text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:border-gray-400 transition bg-white">
+                Cerrar
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Tab switching
+    function switchTab(tab) {
+        const pendientes = document.getElementById('panelPendientes');
+        const historial = document.getElementById('panelHistorial');
+        const tabP = document.getElementById('tabPendientes');
+        const tabH = document.getElementById('tabHistorial');
+        const panelCobro = document.getElementById('panelCobro');
+
+        if (tab === 'pendientes') {
+            pendientes.classList.remove('hidden');
+            historial.classList.add('hidden');
+            panelCobro.classList.remove('hidden');
+            tabP.classList.add('active');
+            tabH.classList.remove('active');
+        } else {
+            pendientes.classList.add('hidden');
+            historial.classList.remove('hidden');
+            panelCobro.classList.add('hidden');
+            tabP.classList.remove('active');
+            tabH.classList.add('active');
+        }
+    }
+
+    // Toggle panel cobro
+    function togglePanel() {
+        const panel = document.getElementById('panelCobro');
+        panel.classList.toggle('open');
+    }
+</script>
+
+</body>
+</html>

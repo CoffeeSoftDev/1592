@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Usuario | CoffeeSoft 1592</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../utils/styles-base.css">
+    <style>
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-base);
+            font-size: 12px;
+        }
+        .field-row:last-child { border-bottom: none; }
+        .field-label { color: var(--text-secondary); }
+        .field-value { color: var(--text-primary); font-weight: 500; }
+
+        thead.sticky-thead th {
+            position: sticky; top: 0;
+            background: var(--bg-header);
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-base);
+            text-align: left;
+        }
+        tbody td {
+            padding: 12px 14px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-base);
+        }
+        tbody tr:hover { background: rgba(124,58,237,.04); }
+
+        .icon-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px;
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+        .icon-btn:hover { background: rgba(124,58,237,.12); color: #a78bfa; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+
+    <!-- SIDEBAR (mismo del index) -->
+    <aside class="w-56 bg-sidebar border-r border-base flex flex-col flex-shrink-0">
+        <div class="p-5 border-b border-base">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">15</span>
+                </div>
+                <div>
+                    <div class="text-sm font-bold">CoffeeSoft</div>
+                    <div class="text-[10px] text-secondary">ERP 1592</div>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-3 py-4 space-y-1">
+            <div class="text-[10px] uppercase tracking-wider text-secondary px-3 mb-2">Modulos</div>
+            <a class="flex items-center gap-3 px-3 py-2 text-[13px] text-secondary rounded-lg hover:bg-purple-500/10">Dashboard</a>
+            <a class="flex items-center gap-3 px-3 py-2 text-[13px] text-secondary rounded-lg hover:bg-purple-500/10">Finanzas</a>
+            <a class="flex items-center gap-3 px-3 py-2 text-[13px] text-purple-400 rounded-lg bg-purple-500/15">Usuarios</a>
+            <a class="flex items-center gap-3 px-3 py-2 text-[13px] text-secondary rounded-lg hover:bg-purple-500/10">Reportes</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- HEADER -->
+        <header class="bg-header border-b border-base px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="usuarios-index.html" class="icon-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </a>
+                <div>
+                    <div class="text-[11px] text-secondary uppercase tracking-wider">Usuarios / Detalle</div>
+                    <h1 class="text-base font-bold">Juan Doe Hernandez</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="themeToggle" class="icon-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENIDO SPLIT -->
+        <main class="flex-1 overflow-auto p-6">
+            <div class="flex gap-6">
+
+                <!-- IZQUIERDA: Tabla de actividad -->
+                <div class="flex-1 min-w-0">
+                    <div class="bg-card border border-base rounded-xl overflow-hidden">
+                        <div class="px-5 py-3 border-b border-base">
+                            <h3 class="text-sm font-bold">Actividad reciente</h3>
+                            <p class="text-[11px] text-secondary mt-0.5">Ultimos accesos y operaciones del usuario</p>
+                        </div>
+
+                        <div class="overflow-auto" style="max-height: calc(100vh - 280px);">
+                            <table class="w-full">
+                                <thead class="sticky-thead">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Modulo</th>
+                                        <th>Accion</th>
+                                        <th>IP</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-secondary">11/04/2026 09:14</td>
+                                        <td>Finanzas</td>
+                                        <td>Crear ingreso #4521</td>
+                                        <td class="text-secondary">192.168.1.45</td>
+                                        <td><span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">OK</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-secondary">11/04/2026 08:52</td>
+                                        <td>Login</td>
+                                        <td>Inicio de sesion</td>
+                                        <td class="text-secondary">192.168.1.45</td>
+                                        <td><span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">OK</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-secondary">10/04/2026 18:21</td>
+                                        <td>Usuarios</td>
+                                        <td>Editar usuario #0014</td>
+                                        <td class="text-secondary">192.168.1.45</td>
+                                        <td><span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">OK</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-secondary">10/04/2026 16:08</td>
+                                        <td>Reportes</td>
+                                        <td>Exportar nomina abril</td>
+                                        <td class="text-secondary">192.168.1.45</td>
+                                        <td><span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">OK</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-secondary">10/04/2026 12:33</td>
+                                        <td>Login</td>
+                                        <td>Intento fallido</td>
+                                        <td class="text-secondary">200.42.18.99</td>
+                                        <td><span class="badge-base bg-red-500/15 text-red-400 border border-red-500/30">Fallo</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-secondary">09/04/2026 17:50</td>
+                                        <td>Finanzas</td>
+                                        <td>Aprobar compra #1209</td>
+                                        <td class="text-secondary">192.168.1.45</td>
+                                        <td><span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">OK</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DERECHA: Panel detalle -->
+                <aside class="w-[420px] flex-shrink-0">
+                    <div class="bg-card border border-base rounded-xl overflow-hidden">
+
+                        <!-- Header del panel -->
+                        <div class="px-5 py-5 border-b border-base flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-xl font-bold text-white">JD</div>
+                            <div class="flex-1 min-w-0">
+                                <h2 class="text-base font-bold truncate">Juan Doe Hernandez</h2>
+                                <div class="text-[12px] text-secondary truncate">@juandoe</div>
+                                <div class="mt-2 flex gap-2">
+                                    <span class="badge-base bg-purple-500/15 text-purple-400">Administrador</span>
+                                    <span class="badge-base bg-green-500/15 text-green-400 border border-green-500/30">Activo</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datos -->
+                        <div class="px-5 py-2">
+                            <div class="text-[11px] uppercase tracking-wider text-secondary py-3 font-semibold">Informacion</div>
+                            <div class="field-row">
+                                <span class="field-label">ID</span>
+                                <span class="field-value">#0001</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Email</span>
+                                <span class="field-value">juan.doe@1592.com</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Telefono</span>
+                                <span class="field-value">+52 555 123 4567</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Rol</span>
+                                <span class="field-value">Administrador</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Departamento</span>
+                                <span class="field-value">Direccion General</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Fecha creacion</span>
+                                <span class="field-value">12/01/2024</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Ultimo acceso</span>
+                                <span class="field-value">Hace 2 horas</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Sesiones activas</span>
+                                <span class="field-value">2</span>
+                            </div>
+                        </div>
+
+                        <!-- Footer botones -->
+                        <div class="px-5 py-4 border-t border-base flex items-center gap-2">
+                            <button class="btn-secondary flex-1" onclick="window.open('modals/modal-eliminar-usuario.html', '_blank', 'width=420,height=320')">
+                                Eliminar
+                            </button>
+                            <button class="btn-primary flex-1 justify-center" onclick="window.open('modals/modal-editar-usuario.html', '_blank', 'width=720,height=720')">
+                                Editar usuario
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <script src="../utils/theme-toggle.js"></script>
+</body>
+</html>

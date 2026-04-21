@@ -1,0 +1,122 @@
+/* ============================================
+   CoffeeMagic - Sistema de diseno Huubie base
+   Reutilizable en todos los templates de usuarios
+   ============================================ */
+
+:root {
+    --bg-main: #111928;
+    --bg-card: #1F2A37;
+    --bg-input: #1a2332;
+    --bg-header: #141d2b;
+    --bg-sidebar: #0f172a;
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --border-base: #374151;
+    --accent: #7c3aed;
+    --btn-primary: #1c64f2;
+}
+
+html[data-theme="light"] {
+    --bg-main: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --bg-header: #ffffff;
+    --bg-sidebar: #ffffff;
+    --text-primary: #111928;
+    --text-secondary: #6b7280;
+    --border-base: #e5e7eb;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-primary);
+}
+
+/* Backgrounds */
+.bg-main { background: var(--bg-main); }
+.bg-card { background: var(--bg-card); }
+.bg-input { background: var(--bg-input); }
+.bg-header { background: var(--bg-header); }
+.bg-sidebar { background: var(--bg-sidebar); }
+
+/* Texts */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.border-base { border-color: var(--border-base); }
+
+/* Inputs */
+.input-modal {
+    background: var(--bg-input);
+    border: 1px solid var(--border-base);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text-primary);
+    width: 100%;
+}
+.input-modal:focus { outline: none; border-color: var(--accent); }
+
+/* Cards */
+.card-demo {
+    background: var(--bg-card);
+    border: 1px solid var(--border-base);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: .15s;
+}
+.card-demo:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+/* Badges */
+.badge-base {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Botones */
+.btn-primary {
+    background: var(--btn-primary);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: .15s;
+}
+.btn-primary:hover { background: #1a56db; }
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-base);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--text-primary); }
+
+/* Avatar */
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #7c3aed, #1c64f2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+}

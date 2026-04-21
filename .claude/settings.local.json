@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(which choco:*)",
+      "Bash(which winget:*)",
+      "Bash(winget install:*)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Read(//c/Users/CoffeSoft/**)",
+      "Bash(where cloudflared:*)",
+      "Bash(/c/wamp64/bin/mysql/mysql8.0.31/bin/mysql.exe -u root -e \"SHOW DATABASES LIKE '%erp%';\" 2>&1)",
+      "Bash(node -c ERP3/src/js/coffeeSoft.js 2>&1)",
+      "Bash(node -c ERP3/coffee/js/coffee.js 2>&1)",
+      "Bash(node -e \"try { new Function\\(require\\('fs'\\).readFileSync\\('ERP3/src/js/coffeeSoft.js','utf8'\\)\\); console.log\\('OK'\\); } catch\\(e\\) { console.log\\(e.message\\); }\" 2>&1)",
+      "Bash(node -e \"try { new Function\\(require\\('fs'\\).readFileSync\\('ERP3/coffee/js/coffee.js','utf8'\\)\\); console.log\\('OK'\\); } catch\\(e\\) { console.log\\(e.message\\); }\" 2>&1)",
+      "Bash(/c/wamp64/bin/php/php8.1.13/php.exe -l index.php)",
+      "Bash(/c/wamp64/bin/php/php8.1.13/php.exe -l ctrl/ctrl-usuarios.php)",
+      "Bash(/c/wamp64/bin/php/php8.1.13/php.exe -l mdl/mdl-usuarios.php)",
+      "Bash(/c/wamp64/bin/php/php8.1.13/php.exe -l layout/head.php)",
+      "Bash(/c/wamp64/bin/php/php8.1.13/php.exe -l layout/core-libraries.php)",
+      "Bash(grep -E \"^d|\\\\.php$\")",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/ctrl/ctrl-login.php)",
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/ctrl/ctrl-logout.php)",
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/mdl/mdl-login.php)",
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/index.php)",
+      "Bash(/c/wamp64/bin/php/php8.2.18/php.exe -l /c/wamp64/www/1592/ERP2/acceso/layout/head.php)"
+    ]
+  }
+}

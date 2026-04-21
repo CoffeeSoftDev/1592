@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario | CoffeeSoft 1592</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../utils/styles-base.css">
+    <style>
+        body { background: rgba(0,0,0,.6); display: flex; align-items: flex-start; justify-content: center; padding-top: 30px; }
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-base);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            max-height: calc(100vh - 60px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0,0,0,.5);
+        }
+        .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-base); display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 22px 24px; overflow-y: auto; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border-base); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .field-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+            <div class="flex items-center gap-3">
+                <div class="avatar" style="width:40px;height:40px;font-size:13px;">JD</div>
+                <div>
+                    <h2 class="text-base font-bold">Editar usuario</h2>
+                    <p class="text-[11px] text-secondary mt-0.5">Juan Doe Hernandez · #0001</p>
+                </div>
+            </div>
+            <button class="text-secondary hover:text-primary" onclick="window.close()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="grid grid-cols-2 gap-4">
+
+                <div class="col-span-2">
+                    <label class="field-label">Nombre completo *</label>
+                    <input class="input-modal" value="Juan Doe Hernandez">
+                </div>
+
+                <div>
+                    <label class="field-label">Usuario *</label>
+                    <input class="input-modal" value="@juandoe">
+                </div>
+
+                <div>
+                    <label class="field-label">Email *</label>
+                    <input class="input-modal" type="email" value="juan.doe@1592.com">
+                </div>
+
+                <div>
+                    <label class="field-label">Telefono</label>
+                    <input class="input-modal" value="+52 555 123 4567">
+                </div>
+
+                <div>
+                    <label class="field-label">Departamento</label>
+                    <select class="input-modal">
+                        <option>Direccion General</option>
+                        <option>Finanzas</option>
+                        <option>Recursos Humanos</option>
+                        <option>Operaciones</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label">Rol *</label>
+                    <select class="input-modal">
+                        <option>Administrador</option>
+                        <option>Supervisor</option>
+                        <option>Operador</option>
+                        <option>Lector</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label">Estado *</label>
+                    <select class="input-modal">
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                        <option>Suspendido</option>
+                    </select>
+                </div>
+
+                <div class="col-span-2 mt-2">
+                    <div class="text-[11px] uppercase tracking-wider text-secondary mb-3 font-semibold">Seguridad</div>
+                </div>
+
+                <div>
+                    <label class="field-label">Nueva contrasena</label>
+                    <input class="input-modal" type="password" placeholder="Dejar vacio para no cambiar">
+                </div>
+
+                <div>
+                    <label class="field-label">Confirmar contrasena</label>
+                    <input class="input-modal" type="password" placeholder="Confirmar nueva">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="flex items-center gap-2 text-[12px] text-primary">
+                        <input type="checkbox" class="rounded">
+                        Forzar cambio de contrasena en el siguiente acceso
+                    </label>
+                    <label class="flex items-center gap-2 text-[12px] text-primary mt-2">
+                        <input type="checkbox" class="rounded" checked>
+                        Habilitar autenticacion de dos factores
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="text-[11px] text-secondary">Ultima modificacion: 11/04/2026 09:14</div>
+            <div class="flex items-center gap-2">
+                <button class="btn-secondary" onclick="window.close()">Cancelar</button>
+                <button class="btn-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../utils/theme-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+*{
+   margin: 0;
+   padding: 0;
+}
+
+
+/*************************************
+               HEAD
+**************************************/
+
+#titulo-board{
+   /*background: #E9F0F5;*/
+   /*background: rgb(255,4,4);*/
+   /*padding-top: 10px ;*/
+   /*margin-bottom: 20px;*/
+}
+
+/* PANELES */
+
+.panel-white > .panel-heading{
+   background-color: #fff;
+}
+.panel-white{
+border-color: rgb(242,242,242);
+}
+.panel-white>.panel-heading+.panel-collapse>
+.list-group{
+
+}
+.panel-notification{
+   height: 80px;
+}
+
+
+div canvas .tablero {
+background: rgb(11,148,201);
+height: 30px;
+}
+
+
+
+.text-gray{
+   color: #929292;
+   font-size: 1.5rem;
+}
+
+#text-ico{
+   color :#FA7537;
+   font-size: 2rem;
+
+}
+
+.text-agendado{
+   color:#79C447;
+   font-size: 1.5rem;
+
+}
+
+.text-atrasado{
+   color:#FF2B40;
+   font-size: 1.5rem;
+
+}
+
+.text-proceso{
+   color:#FFCC00;
+   font-size: 1.5rem;
+
+}
+
+.text-white{
+   color:#fff;
+}
+
+
+#main {
+   margin:0 10% 20px 10%;
+   width: 80%;
+
+}
+
+@media (max-width: 500px) {
+
+#main {
+   margin:0 2% 20px 2%;
+   width: 95%;
+}
+}

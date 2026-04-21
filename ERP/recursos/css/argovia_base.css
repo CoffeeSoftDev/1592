@@ -1,0 +1,98 @@
+/* Align */
+
+
+
+/* Table */
+.table tbody tr>td, .table tbody tr>th, .table tfoot tr>td, .table tfoot tr>th, .table thead tr>td, .table thead tr>th {
+ border: 1px solid #323231;
+}
+
+.table-bordered {
+ /* border: 1px solid #ccc5b9; */
+ border: 1px solid #323231;
+}
+/* background archivo Ingresos */
+
+.bg-info-1 {
+ background-color: #538DD5;
+ color: #000000;
+ font-weight: 700;
+}
+
+.bg-warning {
+ background-color: #FFFF00;
+ color: #0000FF;
+ font-weight: 700;
+}
+
+.bg-primary {
+ background-color: #0F243E !important;
+ color: #fff;
+}
+
+/* Botones */
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+.btn-primary:focus,
+.btn-primary.focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #0062cc;
+  border-color: #005cbf;
+}
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+
+/* Nav bar */
+.nav>li>a:hover {
+ text-decoration: none;
+ color: #ffffff;
+ border-bottom: none;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+ text-decoration: none;
+ color: #ffffff;
+ background-color: #30a5ff;
+ border-bottom: none;
+}
+
+/* CSS MODAL-SIZE */
+.medium > .modal-dialog {
+    width: 80% !important;
+}
+
+@media screen and (max-width: 767px){
+.table-responsive {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #323231;
+}
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../src/img/logos/logo_icon.png" type="image/x-icon">
+    <title>coffeeForm - CoffeeSoft</title>
+
+    <!-- FONTELLO -->
+    <link rel="stylesheet" href="../src/plugin/fontello/css/fontello.css">
+    <link rel="stylesheet" href="../src/plugin/fontello/css/animation.css">
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="../src/plugin/bootstrap-5/css/bootstrap.min.css">
+
+    <!-- DATERANGEPICKER -->
+    <link rel="stylesheet" href="../src/plugin/daterangepicker/daterangepicker.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- CDN TAILWIND -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Core Libraries -->
+    <script src="../src/plugin/jquery/jquery-3.7.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="../src/plugin/bootstrap-5/js/bootstrap.bundle.js"></script>
+
+    <!-- Date & Time -->
+    <script src="../src/plugin/daterangepicker/moment.min.js"></script>
+    <script src="../src/plugin/daterangepicker/daterangepicker.js"></script>
+
+    <!-- CoffeeSoft Framework -->
+    <script src="../src/js/coffeeSoft.js"></script>
+    <script src="../src/js/plugins.js"></script>
+
+    <style>
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 16px;
+            border-radius: 8px;
+            overflow: auto;
+            max-height: 100%;
+            white-space: pre;
+            line-height: 1.5;
+        }
+        .code-block .key { color: #7dd3fc; }
+        .code-block .str { color: #86efac; }
+        .code-block .comment { color: #64748b; }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-[Poppins]">
+
+    <div class="container mx-auto py-6 px-4">
+
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">coffeeForm()</h1>
+        <p class="text-sm text-gray-500 mb-6">Generador declarativo de formularios con TailwindCSS</p>
+
+        <!-- ========== LIGHT ========== -->
+        <section class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">Theme: Light (default)</h2>
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <div id="demoLight" class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm"></div>
+                </div>
+                <div class="w-1/2">
+                    <div class="code-block h-full"><span class="comment">// Theme Light (default)</span>
+app.coffeeForm({
+    <span class="key">parent</span>: <span class="str">"demoLight"</span>,
+    <span class="key">id</span>: <span class="str">"frmLight"</span>,
+    <span class="key">data</span>: [
+        { <span class="key">opc</span>: <span class="str">"label"</span>, <span class="key">id</span>: <span class="str">"lbl1"</span>,
+          <span class="key">text</span>: <span class="str">"Datos del Componente"</span>,
+          <span class="key">class</span>: <span class="str">"w-full px-2"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"input"</span>, <span class="key">id</span>: <span class="str">"lt_name"</span>,
+          <span class="key">lbl</span>: <span class="str">"Nombre"</span>, <span class="key">tipo</span>: <span class="str">"texto"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/2 px-2 mt-3"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"input"</span>, <span class="key">id</span>: <span class="str">"lt_version"</span>,
+          <span class="key">lbl</span>: <span class="str">"Version"</span>, <span class="key">tipo</span>: <span class="str">"textoNum"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/2 px-2 mt-3"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"select"</span>, <span class="key">id</span>: <span class="str">"lt_category"</span>,
+          <span class="key">lbl</span>: <span class="str">"Categoria"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-3"</span>,
+          <span class="key">data</span>: [
+            { <span class="key">id</span>: <span class="str">"layout"</span>, <span class="key">valor</span>: <span class="str">"Layout"</span> },
+            { <span class="key">id</span>: <span class="str">"component"</span>, <span class="key">valor</span>: <span class="str">"Componente"</span> }
+          ] },
+
+        { <span class="key">opc</span>: <span class="str">"input-group"</span>, <span class="key">id</span>: <span class="str">"lt_price"</span>,
+          <span class="key">lbl</span>: <span class="str">"Precio"</span>, <span class="key">tipo</span>: <span class="str">"cifra"</span>,
+          <span class="key">icon</span>: <span class="str">"icon-dollar"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-3"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"input"</span>, <span class="key">id</span>: <span class="str">"lt_date"</span>,
+          <span class="key">lbl</span>: <span class="str">"Fecha"</span>, <span class="key">type</span>: <span class="str">"date"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-3"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"checkbox"</span>, <span class="key">id</span>: <span class="str">"lt_active"</span>,
+          <span class="key">text</span>: <span class="str">"Componente activo"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-2"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"radio"</span>, <span class="key">id</span>: <span class="str">"lt_type_1"</span>,
+          <span class="key">name</span>: <span class="str">"lt_type"</span>, <span class="key">value</span>: <span class="str">"public"</span>,
+          <span class="key">text</span>: <span class="str">"Publico"</span>, <span class="key">checked</span>: true,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-2"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"textarea"</span>, <span class="key">id</span>: <span class="str">"lt_notes"</span>,
+          <span class="key">lbl</span>: <span class="str">"Observaciones"</span>, <span class="key">rows</span>: 2,
+          <span class="key">class</span>: <span class="str">"w-full px-2 mt-3"</span>,
+          <span class="key">required</span>: false },
+
+        { <span class="key">opc</span>: <span class="str">"btn-submit"</span>, <span class="key">id</span>: <span class="str">"lt_save"</span>,
+          <span class="key">text</span>: <span class="str">"Guardar"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/3 px-2 mt-3"</span> },
+    ]
+});</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== DARK ========== -->
+        <section class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">Theme: Dark</h2>
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <div id="demoDark" class="bg-gray-900 rounded-lg p-4 border border-gray-700 shadow-sm"></div>
+                </div>
+                <div class="w-1/2">
+                    <div class="code-block h-full"><span class="comment">// Theme Dark</span>
+app.coffeeForm({
+    <span class="key">parent</span>: <span class="str">"demoDark"</span>,
+    <span class="key">id</span>: <span class="str">"frmDark"</span>,
+    <span class="key">theme</span>: <span class="str">"dark"</span>,  <span class="comment">// &lt;-- cambio de tema</span>
+    <span class="key">data</span>: [
+        { <span class="key">opc</span>: <span class="str">"label"</span>, <span class="key">id</span>: <span class="str">"lbl2"</span>,
+          <span class="key">text</span>: <span class="str">"Datos del Componente"</span>,
+          <span class="key">class</span>: <span class="str">"w-full px-2"</span> },
+
+        { <span class="key">opc</span>: <span class="str">"input"</span>, <span class="key">id</span>: <span class="str">"dk_name"</span>,
+          <span class="key">lbl</span>: <span class="str">"Nombre"</span>, <span class="key">tipo</span>: <span class="str">"texto"</span>,
+          <span class="key">class</span>: <span class="str">"w-full sm:w-1/2 px-2 mt-3"</span> },
+
+        <span class="comment">// ... mismos campos, solo cambia theme</span>
+    ]
+});</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== TODOS LOS TIPOS ========== -->
+        <section class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">Todos los tipos de campo</h2>
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <div id="demoAll" class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm"></div>
+                </div>
+                <div class="w-1/2">
+                    <div class="code-block h-full"><span class="comment">// Catalogo completo de opc:</span>
+
+<span class="comment">// --- Inputs ---</span>
+{ <span class="key">opc</span>: <span class="str">"input"</span>,     <span class="key">tipo</span>: <span class="str">"texto"</span> }
+{ <span class="key">opc</span>: <span class="str">"input"</span>,     <span class="key">tipo</span>: <span class="str">"numero"</span> }  <span class="comment">// align-right</span>
+{ <span class="key">opc</span>: <span class="str">"input"</span>,     <span class="key">tipo</span>: <span class="str">"cifra"</span> }   <span class="comment">// align-right</span>
+{ <span class="key">opc</span>: <span class="str">"input"</span>,     <span class="key">type</span>: <span class="str">"date"</span> }
+
+<span class="comment">// --- Input Group (con icono) ---</span>
+{ <span class="key">opc</span>: <span class="str">"input-group"</span>, <span class="key">tipo</span>: <span class="str">"cifra"</span>,
+  <span class="key">icon</span>: <span class="str">"icon-dollar"</span> }  <span class="comment">// icono izq</span>
+{ <span class="key">opc</span>: <span class="str">"input-group"</span>, <span class="key">tipo</span>: <span class="str">"texto"</span>,
+  <span class="key">icon</span>: <span class="str">"icon-search"</span> }  <span class="comment">// icono der</span>
+
+<span class="comment">// --- Select ---</span>
+{ <span class="key">opc</span>: <span class="str">"select"</span>,
+  <span class="key">selected</span>: <span class="str">"-- Seleccione --"</span>,
+  <span class="key">data</span>: [{ <span class="key">id</span>: 1, <span class="key">valor</span>: <span class="str">"Opcion"</span> }] }
+
+<span class="comment">// --- Calendario ---</span>
+{ <span class="key">opc</span>: <span class="str">"input-calendar"</span> }
+
+<span class="comment">// --- Select + Boton ---</span>
+{ <span class="key">opc</span>: <span class="str">"btn-select"</span>,
+  <span class="key">icon</span>: <span class="str">"icon-plus"</span>,
+  <span class="key">data</span>: [...] }
+
+<span class="comment">// --- Textarea ---</span>
+{ <span class="key">opc</span>: <span class="str">"textarea"</span>, <span class="key">rows</span>: 3 }
+
+<span class="comment">// --- Checkbox / Radio ---</span>
+{ <span class="key">opc</span>: <span class="str">"checkbox"</span>, <span class="key">text</span>: <span class="str">"Activo"</span> }
+{ <span class="key">opc</span>: <span class="str">"radio"</span>, <span class="key">name</span>: <span class="str">"grupo"</span>,
+  <span class="key">value</span>: <span class="str">"a"</span>, <span class="key">text</span>: <span class="str">"Opcion A"</span> }
+
+<span class="comment">// --- Archivos ---</span>
+{ <span class="key">opc</span>: <span class="str">"input-file-btn"</span> }
+{ <span class="key">opc</span>: <span class="str">"input-file"</span>,
+  <span class="key">text</span>: <span class="str">"Subir Excel"</span> }
+
+<span class="comment">// --- Botones ---</span>
+{ <span class="key">opc</span>: <span class="str">"btn"</span>,  <span class="key">icon</span>: <span class="str">"icon-cog"</span> }
+{ <span class="key">opc</span>: <span class="str">"btn-submit"</span> }
+{ <span class="key">opc</span>: <span class="str">"button"</span>, <span class="key">color_btn</span>: <span class="str">"green"</span> }
+
+<span class="comment">// --- Label / Titulo ---</span>
+{ <span class="key">opc</span>: <span class="str">"label"</span>, <span class="key">text</span>: <span class="str">"Titulo"</span> }
+
+<span class="comment">// --- Clases de columna (Tailwind) ---</span>
+<span class="comment">// w-full         = col-12</span>
+<span class="comment">// sm:w-1/2 px-2  = col-sm-6</span>
+<span class="comment">// sm:w-1/3 px-2  = col-sm-4</span>
+<span class="comment">// sm:w-1/4 px-2  = col-sm-3</span></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        class Demo extends Templates {
+            constructor() {
+                super('', '');
+            }
+        }
+
+        $(function () {
+            const app = new Demo();
+
+            // ---- Light (default) ----
+            app.coffeeForm({
+                parent: "demoLight",
+                id: "frmLight",
+                data: [
+                    { opc: "label", id: "lbl1", text: "Datos del Componente", class: "w-full px-2" },
+                    { opc: "input", id: "lt_name", lbl: "Nombre", tipo: "texto", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "input", id: "lt_version", lbl: "Version", tipo: "textoNum", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "select", id: "lt_category", lbl: "Categoria", class: "w-full sm:w-1/3 px-2 mt-3", data: [{ id: "layout", valor: "Layout" }, { id: "component", valor: "Componente" }, { id: "utility", valor: "Utilidad" }] },
+                    { opc: "input-group", id: "lt_price", lbl: "Precio", tipo: "cifra", icon: "icon-dollar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input", id: "lt_date", lbl: "Fecha", type: "date", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "checkbox", id: "lt_active", text: "Componente activo", class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "radio", id: "lt_type_1", name: "lt_type", value: "public", text: "Publico", checked: true, class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "radio", id: "lt_type_2", name: "lt_type", value: "private", text: "Privado", class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "textarea", id: "lt_notes", lbl: "Observaciones", rows: 2, class: "w-full px-2 mt-3", required: false },
+                    { opc: "input-calendar", id: "lt_range", lbl: "Rango de fechas", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "input-file-btn", id: "lt_file", lbl: "Archivo", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "btn-submit", id: "lt_save", text: "Guardar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                ]
+            });
+
+            // ---- Dark ----
+            app.coffeeForm({
+                parent: "demoDark",
+                id: "frmDark",
+                theme: "dark",
+                data: [
+                    { opc: "label", id: "lbl2", text: "Datos del Componente", class: "w-full px-2" },
+                    { opc: "input", id: "dk_name", lbl: "Nombre", tipo: "texto", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "input", id: "dk_version", lbl: "Version", tipo: "textoNum", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "select", id: "dk_category", lbl: "Categoria", class: "w-full sm:w-1/3 px-2 mt-3", data: [{ id: "layout", valor: "Layout" }, { id: "component", valor: "Componente" }, { id: "utility", valor: "Utilidad" }] },
+                    { opc: "input-group", id: "dk_price", lbl: "Precio", tipo: "cifra", icon: "icon-dollar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input", id: "dk_date", lbl: "Fecha", type: "date", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "checkbox", id: "dk_active", text: "Componente activo", class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "radio", id: "dk_type_1", name: "dk_type", value: "public", text: "Publico", checked: true, class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "radio", id: "dk_type_2", name: "dk_type", value: "private", text: "Privado", class: "w-full sm:w-1/3 px-2 mt-2" },
+                    { opc: "textarea", id: "dk_notes", lbl: "Observaciones", rows: 2, class: "w-full px-2 mt-3", required: false },
+                    { opc: "input-calendar", id: "dk_range", lbl: "Rango de fechas", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "input-file-btn", id: "dk_file", lbl: "Archivo", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "btn-submit", id: "dk_save", text: "Guardar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                ]
+            });
+
+            // ---- Todos los tipos de campo ----
+            app.coffeeForm({
+                parent: "demoAll",
+                id: "frmAll",
+                data: [
+                    { opc: "label", id: "lblAll", text: "Todos los tipos soportados", class: "w-full px-2" },
+
+                    { opc: "input", id: "all_text", lbl: "input (texto)", tipo: "texto", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input", id: "all_num", lbl: "input (numero)", tipo: "numero", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input", id: "all_cifra", lbl: "input (cifra)", tipo: "cifra", class: "w-full sm:w-1/3 px-2 mt-3" },
+
+                    { opc: "input-group", id: "all_ig_cifra", lbl: "input-group (cifra)", tipo: "cifra", icon: "icon-dollar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input-group", id: "all_ig_text", lbl: "input-group (texto)", tipo: "texto", icon: "icon-search", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "input", id: "all_date", lbl: "input (date)", type: "date", class: "w-full sm:w-1/3 px-2 mt-3" },
+
+                    { opc: "select", id: "all_select", lbl: "select", class: "w-full sm:w-1/3 px-2 mt-3", selected: "-- Seleccione --", data: [{ id: 1, valor: "Opcion A" }, { id: 2, valor: "Opcion B" }, { id: 3, valor: "Opcion C" }] },
+                    { opc: "input-calendar", id: "all_cal", lbl: "input-calendar", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "btn-select", id: "all_btnsel", lbl: "btn-select", class: "w-full sm:w-1/3 px-2 mt-3", selected: "-- Elegir --", data: [{ id: 1, valor: "Item 1" }, { id: 2, valor: "Item 2" }], icon: "icon-plus", text: "" },
+
+                    { opc: "textarea", id: "all_textarea", lbl: "textarea", rows: 3, class: "w-full px-2 mt-3", required: false },
+
+                    { opc: "checkbox", id: "all_check", text: "checkbox", class: "w-full sm:w-1/4 px-2 mt-2" },
+                    { opc: "radio", id: "all_radio1", name: "all_radio", value: "a", text: "radio A", checked: true, class: "w-full sm:w-1/4 px-2 mt-2" },
+                    { opc: "radio", id: "all_radio2", name: "all_radio", value: "b", text: "radio B", class: "w-full sm:w-1/4 px-2 mt-2" },
+                    { opc: "radio", id: "all_radio3", name: "all_radio", value: "c", text: "radio C", class: "w-full sm:w-1/4 px-2 mt-2" },
+
+                    { opc: "input-file-btn", id: "all_filebtn", lbl: "input-file-btn", class: "w-full sm:w-1/2 px-2 mt-3" },
+                    { opc: "input-file", id: "all_file", lbl: "input-file", text: '<i class="icon-upload mr-1"></i> Subir Excel', class: "w-full sm:w-1/2 px-2 mt-3" },
+
+                    { opc: "btn", id: "all_btn", text: "btn (button)", icon: "icon-cog", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "btn-submit", id: "all_submit", text: "btn-submit", class: "w-full sm:w-1/3 px-2 mt-3" },
+                    { opc: "button", id: "all_button", text: "button", icon: "icon-check", color_btn: "green", class: "w-full sm:w-1/3 px-2 mt-3" },
+                ]
+            });
+        });
+    </script>
+
+</body>
+</html>

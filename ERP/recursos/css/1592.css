@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,700i,800&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background-color: #F5F6F7;
+}
+
+.navbar {
+    background-color: #333333;
+}
+
+#sidebarMenu,
+.sidebarMenu,
+.submenu {
+    background-color: #FAF7F2;
+    border-right-color: #333333;
+}
+
+#sidebarMenu .nav-link {
+    font-family: 'Poppins', sans-serif;
+    color: #2C360D;
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.submenu li a {
+    font-family: 'Poppins', sans-serif;
+    color: #5130A1;
+    font-size: .8em;
+    font-weight: 700;
+}
+
+#navbarNav {
+    background-color: #333333;
+   
+}
+
+
+
+.nav-link{
+color: #F5F6F7;
+}
+
+
+/* css for table */
+
+.table tbody tr>td,
+.table tbody tr>th,
+.table tfoot tr>td,
+.table tfoot tr>th,
+.table thead tr>td,
+.table thead tr>th {
+    border: 1px solid #253544;
+}
+
+.table-bordered {
+    border: 1px solid #253544;
+}

@@ -1,0 +1,32 @@
+/* @import url('https://fonts.googleapis.com/css?family=Space+Mono'); */
+
+body{
+
+ /* font-family: 'Space Mono', monospace; */
+ font-size: 14px;
+ line-height: 1.42857143;
+ color: #000000;
+ background-color: #ffffff;
+}
+
+#txtFont {
+    font-weight: 400;
+}
+
+tr > td#txtvacio{
+ height: 8px;
+
+
+}
+
+tr > td#txtfirma{
+ height: 28px;
+
+
+}
+table{
+ /* font-family: 'Source Sans Pro', sans-serif; */
+ font-size: 14px;
+ font-weight: bold;
+ color: #222222;
+}

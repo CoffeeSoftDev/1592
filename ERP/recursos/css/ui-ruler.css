@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,700i,800&display=swap');
+
+.console {
+  font-size: 1em;
+  font-weight: 600;
+  content: "...";
+
+}
+
+.console::before {
+  color: #0088CC;
+  content: "ln [0]: ";
+
+}
+
+
+
+.line {
+  border: 1.2px dashed #0088CC;
+  background: #E5F3F9;
+}
+
+.col {
+  border: 1.4px dashed rgb(215, 17, 59);
+
+}
+
+.line-1{
+   border: 1.4px solid #2F1C53;
+}
+
+.container {
+  border: 1.4px dashed black;
+}
+
+
+/* #resumen_gral{
+	border:1.2px solid #6E7066;
+	background:#F1F2F1;
+} */
+
+/* .form-group{
+	border:1.4px solid #2F1C53;
+} */
+
+/* .row{
+	border:1.2px dashed #0088CC;
+}*/
+
+/* Todos los divs cuya clase empieza con la cadena 'col' */
+/* div[class^='col']{
+    border:1.2px solid #E8B463;
+} */

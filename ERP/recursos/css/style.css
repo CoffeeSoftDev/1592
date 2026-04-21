@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,700i,800&display=swap');
+@import url(style_form.css);
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  background-color: #EDEFF0;
+}
+
+.format-doc {
+  min-height: 750px;
+  margin-bottom: 30px;
+}
+
+.content-doc {
+  border: 1px solid #DBE0E4;
+  overflow: auto;
+}
+
+.format-pdf{
+  border: 1px solid #DBE0E4;
+  height: 600px;
+  margin-bottom: 30px;
+}
+
+
+.input-ranger {
+  cursor: pointer;
+  padding: 10px 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+
+.breadcrumb {
+  background: 0 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  width: auto;
+}
+
+.breadcrumb>li>a {
+
+  color: #7F8FA4;
+  font-size: 1.2em;
+  text-decoration: none;
+  -webkit-transition: color .1s linear;
+  -moz-transition: color .1s linear;
+  -ms-transition: color .1s linear;
+  -o-transition: color .1s linear;
+  transition: color .1s linear
+}
+
+
+/* Modal */
+
+.modal-content {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+
+/* Formulario */
+
+
+#content-folio {
+  /* height: 600px; */
+  overflow: auto;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  /* background-color: #F2F2F2; */
+}
+
+#content-folio::-webkit-scrollbar {
+  /* width: 10px;
+  background-color: #F5F5F5; */
+}
+
+.ico-2x {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+
+/* Botones */
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show>.btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #0062cc;
+  border-color: #005cbf;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.show>.btn-primary.dropdown-toggle:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+
+/* Tables */
+
+.ticket_table {
+  font-size: .76em;
+  font-weight: 600;
+  color: #0A0B10;
+}
+
+.pd-10 {
+  margin-bottom: 10px;
+}
+
+.table-xtra-condensed>thead>tr>th,
+.table-xtra-condensed>tbody>tr>th,
+.table-xtra-condensed>tfoot>tr>th,
+.table-xtra-condensed>thead>tr>td,
+.table-xtra-condensed>tbody>tr>td,
+.table-xtra-condensed>tfoot>tr>td {
+  padding: 1.2px;
+  font-weight: 600;
+}
+
+.table>thead>tr>th {
+  background: #f1f5f9;
+  color: #56688A;
+  font-size: 12px;
+  padding: 6px;
+  text-align: center;
+}
+
+.table-bordered>thead>tr>td,
+.table-bordered>thead>tr>th {
+  border-bottom-width: 1px;
+}
+
+
+table.table-movil {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+@media only screen and (max-width: 768px) {
+  table.table-movil {
+    font-weight: 500;
+    font-size: .72em;
+  }
+}
+
+
+/* Fonts ico */
+.ico-1x {
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+.text-default {
+  color: #454545 !important;
+}
+
+.text-muted {
+  color: #7F8FA4 !important;
+}
+
+.text-primary {
+  color: #292f43 !important;
+}
+
+.text-info {
+  color: #4FB5DD !important;
+}
+
+.text-success {
+  color: #76AB3C !important;
+}
+
+.text-warning {
+  color: #F69F00 !important;
+}
+
+.text-danger {
+  color: #F04E51 !important;
+}
+
+.text-sm {
+  font-size: 11px;
+}
+
+.text-rg {
+  font-size: 13px;
+}
+
+.text-lg {
+  font-size: 15px;
+}
+
+.text-xlg {
+  font-size: 17px;
+}
+
+.text-thin {
+  font-weight: 300;
+}
+
+.text-regular {
+  font-weight: 400;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.text-bolder {
+  font-weight: 700;
+}
+
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.text-italic {
+  font-style: italic !important;
+}
+
+
+/* DATA-TABLES */
+button.buttons-excel {
+
+  border-color: #DBE0E4;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+
+}
+
+button.buttons-copy {
+  border-color: #DBE0E4;
+
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+
+}
+
+button.buttons-excel:hover {
+  background-color: #EDEFF0;
+}
+
+button.buttons-copy:hover {
+  background-color: #EDEFF0;
+}

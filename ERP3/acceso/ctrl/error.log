@@ -1,3 +1,25 @@
+[ 2026-03-20 08:42:43 ]
+[ UNIX_USR ] :: nt authority\system
+[ WINDOWS_USR ] :: DESKTOP-O7AOGR9$
+[ ERROR CONECT ] :: SQLSTATE[HY000] [1049] Unknown database 'hgpqgijw_erp
+            }'
+
+[ 2026-03-20 08:42:28 ]
+[ UNIX_USR ] :: nt authority\system
+[ WINDOWS_USR ] :: DESKTOP-O7AOGR9$
+[ ERROR CONECT ] :: SQLSTATE[HY000] [1049] Unknown database 'hgpqgijw_erp
+            }'
+
+[ 2026-03-20 07:13:14 ]
+[ UNIX_USR ] :: nt authority\system
+[ WINDOWS_USR ] :: DESKTOP-O7AOGR9$
+[ ERROR CONECT ] :: SQLSTATE[HY000] [1049] Unknown database 'hgpqgijw_erpfija'
+
+[ 2026-03-20 07:13:04 ]
+[ UNIX_USR ] :: nt authority\system
+[ WINDOWS_USR ] :: DESKTOP-O7AOGR9$
+[ ERROR CONECT ] :: SQLSTATE[HY000] [1049] Unknown database 'hgpqgijw_erpfija'
+
 [ 2026-02-14 11:17:30 ]
 [ UNIX_USR ] :: nt authority\system
 [ WINDOWS_USR ] :: DESKTOP-FHJB2CN$

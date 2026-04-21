@@ -1,0 +1,25 @@
+::-webkit-scrollbar
+{
+	background: white;
+	height: 0;
+	width: 0;
+}
+
+
+::-moz-scroollbar{
+    background: white;
+	height: 0;
+	width: 0;
+}
+
+::-ms-scroollbar{
+    background: white;
+	height: 0;
+	width: 0;
+}
+
+-o-scroollbar{
+    background: white;
+	height: 0;
+	width: 0;
+}
