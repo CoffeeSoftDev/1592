@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image:url('../img/bg.png');
+  /* background-repeat: no-repeat; */
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1 {
+  color:#ffffff;
+  font-size:5vw;
+}
+
+h2 {
+  color:#F6A116;
+  font-size:5vw;
+}
+
+.star {
+  font-size:5vw;
+  letter-spacing: 5vw;
+  font-weight:bold;
+  -webkit-text-fill-color: #312F35;
+  -webkit-text-stroke-color: white;
+  -webkit-text-stroke-width: 3px;
+}
+
+.container {
+  display: table;
+	height:100vh;
+  /* background: red; */
+}
+
+.pregunta {
+  display: table-cell;
+	vertical-align: middle;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+footer {
+  color: #FFF;
+  background: ;
+  position:absolute; /*El div será ubicado con relación a la pantalla*/
+  left:0px; /*A la derecha deje un espacio de 0px*/
+  right:0px; /*A la izquierda deje un espacio de 0px*/
+  bottom:0px; /*Abajo deje un espacio de 0px*/
+  height:50px; /*alto del div*/
+  z-index:0;
+}
+
+footer #footer {
+  width: 100%;
+  height: 100%;
+}

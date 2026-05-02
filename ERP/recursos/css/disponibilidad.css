@@ -1,0 +1,29 @@
+
+.tb-bordered {
+ border: 1px DOTTED #ccc;
+}
+
+.tb tbody tr>td, .b tbody tr>th, .tb tfoot tr>td, .tb tfoot tr>th, .tb thead tr>td, .tb thead tr>th {
+ border: 1px DOTTED #ccc
+}
+
+.tb {
+ margin-bottom: .98px;
+ width: 100%;
+ max-width: 100%;
+}
+
+.total-input {
+    border: none;
+    /* outline: none; */
+    text-align: right;
+    background: transparent;
+    color: #121B22;
+    box-shadow: none;
+}
+
+.formato{
+ padding-right: 5px;
+ padding-left: 5px;
+ color: #121B22;
+}

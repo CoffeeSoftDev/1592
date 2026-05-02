@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Usuario | CoffeeSoft 1592</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../utils/styles-base.css">
+    <style>
+        body { background: rgba(0,0,0,.6); display: flex; align-items: flex-start; justify-content: center; padding-top: 30px; }
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-base);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            max-height: calc(100vh - 60px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0,0,0,.5);
+        }
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-base);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body { padding: 22px 24px; overflow-y: auto; }
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-base);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .field-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+        .upload-zone {
+            border: 2px dashed var(--border-base);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: .15s;
+        }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(124,58,237,.04); }
+    </style>
+</head>
+<body>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+            <div>
+                <h2 class="text-base font-bold">Nuevo usuario</h2>
+                <p class="text-[11px] text-secondary mt-0.5">Completa los datos para crear un nuevo usuario en el sistema</p>
+            </div>
+            <button class="text-secondary hover:text-primary" onclick="window.close()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+
+            <!-- Avatar / Foto -->
+            <div class="upload-zone mb-5">
+                <div class="flex items-center justify-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-[12px] text-primary font-medium">Arrastra una imagen o haz clic</div>
+                        <div class="text-[11px] text-secondary mt-1">PNG, JPG hasta 2 MB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid 2 columnas -->
+            <div class="grid grid-cols-2 gap-4">
+
+                <div class="col-span-2">
+                    <label class="field-label">Nombre completo *</label>
+                    <input class="input-modal" placeholder="Ej. Juan Doe Hernandez">
+                </div>
+
+                <div>
+                    <label class="field-label">Usuario *</label>
+                    <input class="input-modal" placeholder="@usuario">
+                </div>
+
+                <div>
+                    <label class="field-label">Email *</label>
+                    <input class="input-modal" type="email" placeholder="usuario@1592.com">
+                </div>
+
+                <div>
+                    <label class="field-label">Telefono</label>
+                    <input class="input-modal" placeholder="+52 555 000 0000">
+                </div>
+
+                <div>
+                    <label class="field-label">Departamento</label>
+                    <select class="input-modal">
+                        <option>Seleccionar...</option>
+                        <option>Direccion General</option>
+                        <option>Finanzas</option>
+                        <option>Recursos Humanos</option>
+                        <option>Operaciones</option>
+                        <option>Ventas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label">Rol *</label>
+                    <select class="input-modal">
+                        <option>Seleccionar rol...</option>
+                        <option>Administrador</option>
+                        <option>Supervisor</option>
+                        <option>Operador</option>
+                        <option>Lector</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label">Estado *</label>
+                    <select class="input-modal">
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                        <option>Suspendido</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label">Contrasena temporal *</label>
+                    <input class="input-modal" type="password" placeholder="Minimo 8 caracteres">
+                </div>
+
+                <div>
+                    <label class="field-label">Confirmar contrasena *</label>
+                    <input class="input-modal" type="password" placeholder="Repite la contrasena">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="flex items-center gap-2 text-[12px] text-primary">
+                        <input type="checkbox" class="rounded" checked>
+                        Forzar cambio de contrasena en el primer acceso
+                    </label>
+                    <label class="flex items-center gap-2 text-[12px] text-primary mt-2">
+                        <input type="checkbox" class="rounded">
+                        Enviar email de bienvenida con credenciales
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="window.close()">Cancelar</button>
+            <button class="btn-primary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Crear usuario
+            </button>
+        </div>
+    </div>
+
+    <script src="../../utils/theme-toggle.js"></script>
+</body>
+</html>

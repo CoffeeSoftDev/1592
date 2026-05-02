@@ -1,0 +1,86 @@
+.scrolling ::-webkit-scrollbar
+{
+	height: 10px;
+	width: 5px;
+}
+.scrolling ::-webkit-scrollbar-thumb{
+  background: #A8A8A8;
+
+}
+
+
+.scrolling table {
+    table-layout: inherit;
+ /**margin-left: -200px;/*ie7*/*/
+}
+
+/* .scrolling th#col_1 {
+	vertical-align: top;
+	padding: 5px;
+	min-width: 220px;
+} */
+
+.scrolling #col_2 {
+    /* position: absolute;
+    left: 275px;
+    width: 215px; */
+    text-align: right;
+    font-weight: bold;
+}
+
+
+.scrolling td {
+	vertical-align: top;
+	/*padding: 10px;*/
+	min-width: 100px;
+	text-align: right;
+}
+.scrolling th {
+	position: absolute;
+ *position: relative; /*ie7*/
+	left: 0;
+	width: 200px;
+}
+
+.outer {
+	position: relative
+}
+
+
+.inner {
+	overflow-x: auto;
+	overflow-y: visible;
+	margin-left: 200px;
+}
+
+.scrolling #td_col1 {
+ vertical-align: middle;
+ min-width: 150px;
+ text-align: center;
+ /* font-weight:500; */
+
+}
+
+/*
+.scrolling tr:hover{
+	background:#F4F4F4;
+	color:#323231;
+ font-weight: bold;
+}
+.scrolling th:hover{
+	background:#F4F4F4;
+	color:#323231;
+font-weight: bold;
+} */
+
+
+/*-----------------------------------*/
+/*  Titulos - formato
+/*-----------------------------------*/
+#table-title{
+ font-size: 1em;
+}
+
+#table-title-1{
+ font-size: 12px;
+}

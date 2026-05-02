@@ -1,0 +1,13 @@
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #323231;
+    border-bottom: none;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #30a5ff;
+    border-bottom: none;
+}

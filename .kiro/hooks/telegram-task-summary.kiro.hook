@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "name": "Resumen a Telegram",
+  "description": "Envía un mensaje a Telegram con un resumen breve de la tarea completada cuando el agente termina de ejecutar",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Envía un mensaje a Telegram usando el MCP de Telegram con el siguiente formato: \"✅ Tarea completada en Kiro. [Resumen breve de 1-2 líneas de lo que hiciste]\". Usa MarkdownV2 y escapa los caracteres especiales."
+  },
+  "workspaceFolderName": "DEV",
+  "shortName": "telegram-task-summary"
+}

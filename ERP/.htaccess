@@ -1,0 +1,97 @@
+Options +FollowSymLinks
+RewriteEngine on
+#RewriteBase /ARGOVIA/
+
+# Login & Logout
+RewriteRule ^/$ index.php [L]
+RewriteRule ^salir$ controlador/logout.php [L]
+
+
+
+RewriteRule ^movimientos$ vista/finanzas/cliente/submenu.php [L]
+
+
+#NIVEL ADMIN
+RewriteRule ^admin$ vista/direccion/menu-00.php [L]
+
+RewriteRule ^inicio$ vista/direccion/menu_inicio.php [L]
+
+RewriteRule ^administracion$ vista/direccion/administracion.php [L]
+RewriteRule ^reportes$ vista/direccion/balance_general.php [L]
+#NEW - ADMIN
+
+RewriteRule ^ingresos_turismo$ vista/direccion/finanzas_costo.php [L]
+
+
+#NIVEL MTTO
+RewriteRule ^mtto$      vista/mtto/mtto_admin.php [L]
+RewriteRule ^productos$ vista/mtto/inventario.php [L]
+RewriteRule ^mtto_catalogo$ vista/mtto/catalogo_mtto.php [L]
+RewriteRule ^carga-masiva$ vista/mtto/import_mtto.php [L]
+
+#NIVEL FINANZAS
+RewriteRule ^finanzas$ vista/finanzas/admin/finanzas_admin.php [L]
+RewriteRule ^proveedores$ vista/finanzas/admin/lista_proveedores.php [L]
+
+
+#USER-CIERRE
+RewriteRule ^movimientos$ vista/finanzas/submenu.php [L]
+
+#CATÁLOGO
+RewriteRule ^catalogo$ vista/finanzas/admin/catalogo.php [L]
+RewriteRule ^retiros_rembolsos$ vista/finanzas/cliente/retiros.php [L]
+
+
+RewriteRule ^productos_admin$  vista/direccion/productos_admin.php [L]
+RewriteRule ^materiales_admin$ vista/direccion/materiales_admin.php [L]
+RewriteRule ^mtto_folios$      vista/mtto/mtto_folios.php [L]
+RewriteRule ^inventario_productos$       vista/mtto/inventario_productos.php [L]
+RewriteRule ^lista_inv_productos$       vista/mtto/lista_inventario_pro.php [L]
+
+RewriteRule ^mtto_catalogo$ vista/mtto/catalogo_mtto.php [L]
+RewriteRule ^requisicion$ vista/mtto/requisicion.php [L]
+
+# NUEVO **
+
+RewriteRule ^formato_inventario$ vista/mtto/Formato_Inventario.php [L]
+
+RewriteRule ^flores_admin$ vista/flores/flores_admin.php [L]
+RewriteRule ^flores_tpv$ vista/flores/usuario/tpv.php [L]
+
+## Flores & Follajes [ Oficina ]
+
+
+RewriteRule ^flores_admin$ vista/flores/flores_admin.php [L]
+RewriteRule ^f_requi$ vista/flores/usuario/requisicion.php [L]
+RewriteRule ^inventario$ vista/flores/inventario.php [L]
+RewriteRule ^inventario_flores$ vista/flores/usuario/inventario.php [L]
+
+
+## Diversificados [ Finca ]
+
+RewriteRule ^control_ventas$ vista/dia/cliente/productos.php [L]
+RewriteRule ^movimientos_ventas$ vista/dia/cliente/movimientos.php [L]
+RewriteRule ^informe_ventas$ vista/dia/cliente/informe_ventas.php [L]
+
+## Tiendita [ Finca ]
+
+RewriteRule ^almacen_tiendita$ vista/tiendita/cliente/productos.php [L]
+
+RewriteRule ^movimientos_ventas$ vista/dia/cliente/movimientos.php [L]
+RewriteRule ^informe_ventas$ vista/dia/cliente/informe_ventas.php [L]
+
+
+
+
+
+
+## Flores & Follajes [ Oficina ]
+RewriteRule ^pedidos$ vista/flores/usuario/pedidos.php [L]
+
+RewriteRule ^flores_admin$ vista/flores/flores_admin.php [L]
+RewriteRule ^flores_requisicion$ vista/flores/usuario/requisicion.php [L]
+
+
+
+# area contable
+RewriteRule ^contabilidad$ vista/contabilidad/conta_admin.php [L]

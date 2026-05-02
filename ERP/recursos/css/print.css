@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+
+@media print {
+	body {
+		-webkit-print-color-adjust: exact;
+		color:#323231;
+		font-family: 'Poppins', sans-serif;
+
+	}
+
+/* Formato Ingresos */
+
+
+	.bg-primary{
+		background: #16365C;
+		color:#FFFFFF;
+	}
+
+	.bg-default {
+		/* color: rgb(130, 130, 130); */
+		background: #D9D9D9;
+	}
+
+	.bg-info{
+		background: #8DB4E2;
+	}
+
+
+
+	.table {
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 15px;
+		font-size:14px;
+	}
+
+	table { border-collapse: collapse; }
+
+	.table td, .table th { border: 1px solid black; padding: 3px; }
+
+	.tb {
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 15px;
+		font-size:16px;
+	}
+	.tb tbody tr>td, .tb tbody tr>th, .tb tfoot tr>td, .tb tfoot tr>th, .tb thead tr>td, .tb thead tr>th {
+		border: 1px solid #ccc5b9;
+	}
+
+	#size1> thead > tr > th, #size1 > tbody > tr > th, #size1 > tfoot > tr > th, #size1 > thead > tr > td, #size1 > tbody > tr > td, #size1 > tfoot > tr > td {
+		padding: 3px;
+		line-height: 1.2;
+		font-family: 'Poppins', sans-serif;
+	}
+
+
+
+	.col-xs-12 {
+		width: 100%;
+	}
+
+	.col-xs-6 {
+		width: 50%;
+	}
+
+	.row {
+		margin-right: -14px;
+		margin-left: -14px;
+	}
+
+	.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+		position: relative;
+		min-height: 1px;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.text-right {
+		text-align: right;
+	}
+
+	.form-group {
+		margin-bottom: 5px;
+	}
+
+
+	.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
