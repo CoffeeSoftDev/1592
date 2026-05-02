@@ -1,10 +1,20 @@
 let api = 'ctrl/ctrl-usuarios.php';
-let usuarios;
+let usuarios, roles, departamentos;
 
 $(async () => {
     const data = await useFetch({ url: api, data: { opc: "init" } });
+    const dataTabs = await useFetch({ url: api, data: { opc: "initTabs" } });
+
     usuarios = new Usuarios(api, 'root');
     usuarios.roles = data.roles || [];
+    usuarios.estados = data.estados || [];
+    usuarios.departamentosData = data.departamentos || [];
+    usuarios.rolesDB = dataTabs.rolesDB || [];
+    usuarios.departamentosTab = dataTabs.departamentos || [];
+
+    roles = new Roles(api, 'root');
+    departamentos = new Departamentos(api, 'root');
+
     usuarios.init();
 });
 
@@ -21,8 +31,7 @@ class App extends Templates {
     render() {
         this.layout();
         this.filterBar();
-
-        this.renderInfoCards();
+        // this.renderInfoCards();
         this.lsUsuarios();
         lucide.createIcons();
     }
@@ -40,13 +49,11 @@ class App extends Templates {
                         id: `filterBar${this.PROJECT_NAME}`,
                         class: 'w-full mb-3 py-2'
                     },
-                  
                     {
                         type: 'div',
                         id: `cards${this.PROJECT_NAME}`,
                         class: 'w-full mb-4'
                     },
-                 
                     {
                         type: 'div',
                         id: `container${this.PROJECT_NAME}`,
@@ -55,12 +62,51 @@ class App extends Templates {
                 ]
             }
         });
+
+        this.layoutTabs();
+        roles.filterBarRoles();
+        departamentos.filterBarDepartamentos();
     }
-   
+
+    layoutTabs() {
+        this.tabLayout({
+            parent: `container${this.PROJECT_NAME}`,
+            id: "tabsAdmin",
+            content: { class: "" },
+            theme: "light",
+            type: 'short',
+            json: [
+                {
+                    id: "usuarios",
+                    tab: "Usuarios",
+                    class: 'mb-1',
+                    onClick: () => this.lsUsuarios(),
+                    active: true,
+                },
+                {
+                    id: "roles",
+                    tab: "Roles",
+                    onClick: () => roles.lsRoles()
+                },
+                {
+                    id: "departamentos",
+                    tab: "Departamentos",
+                    onClick: () => departamentos.lsDepartamentos()
+                }
+            ]
+        });
+
+        $(`#container${this.PROJECT_NAME}`).prepend(`
+        <div class="px-4 pt-3 pb-3">
+            <h2 class="text-2xl font-semibold">Administracion</h2>
+            <p class="text-gray-400">Gestiona usuarios, roles y departamentos.</p>
+        </div>`);
+    }
+
     filterBar() {
         this.createfilterBar({
             parent: `filterBar${this.PROJECT_NAME}`,
-            coffeesoft:true,
+            coffeesoft: true,
             data: [
                 {
                     opc: "select",
@@ -90,16 +136,15 @@ class App extends Templates {
                     text: "Actualizar",
                     lucideIcon: "refresh-cw",
                     fn: `${this.PROJECT_NAME.toLowerCase()}.refresh()`
-                },
-          
+                }
             ]
         });
     }
 
     async renderInfoCards() {
-        const response     = await useFetch({ url: this._link, data: { opc: "showUsuarios" } });
-        const counts       = (response && response.counts) ? response.counts : { total: 0, activos: 0, inactivos: 0, administradores: 0 };
-        const pctActivos   = counts.total > 0 ? Math.round((counts.activos / counts.total) * 100) : 0;
+        const response = await useFetch({ url: this._link, data: { opc: "showUsuarios" } });
+        const counts = (response && response.counts) ? response.counts : { total: 0, activos: 0, inactivos: 0, administradores: 0 };
+        const pctActivos = counts.total > 0 ? Math.round((counts.activos / counts.total) * 100) : 0;
         const pctInactivos = counts.total > 0 ? Math.round((counts.inactivos / counts.total) * 100) : 0;
 
         this.infoCard({
@@ -167,6 +212,25 @@ class App extends Templates {
         this.renderInfoCards();
         this.lsUsuarios();
     }
+
+    lsUsuarios() {
+        this.createTable({
+            parent: `container-usuarios`,
+            idFilterBar: `filterBar${this.PROJECT_NAME}`,
+            data: { opc: "lsUsuarios" },
+            conf: { datatable: true, pag: 10 },
+            coffeesoft: true,
+            attr: {
+                id: `tb${this.PROJECT_NAME}`,
+                theme: 'corporativo',
+                center: [1, 4],
+                right: [8]
+            },
+            success: () => {
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        });
+    }
 }
 
 class Usuarios extends App {
@@ -175,23 +239,52 @@ class Usuarios extends App {
         this.PROJECT_NAME = "Usuarios";
     }
 
-    lsUsuarios() {
-        this.createTable({
-            parent: `container${this.PROJECT_NAME}`,
-            idFilterBar: `filterBar${this.PROJECT_NAME}`,
-            data: { opc: "lsUsuarios" },
-            conf: { datatable: true, pag: 10 },
-            coffeesoft: true,
-            attr: {
-                id: `tb${this.PROJECT_NAME}`,
-                theme: 'corporativo',
-                     center: [1, 4],
-                right: [8]
-            },
-            success: () => {
-                if (typeof lucide !== 'undefined') lucide.createIcons();
+    // init() {
+    //     this.render();
+    // }
+
+    // render() {
+    //     this.layout();
+    //     this.filterBar();
+    //     // this.renderInfoCards();
+    //     this.lsUsuarios();
+    //     lucide.createIcons();
+    // }
+
+    render(){
+        this.layout();
+    }
+
+    layout() {
+        this.createLayout({
+            parent: 'container-usuarios',
+            design: false,
+            data: {
+                id: 'content'.this.PROJECT_NAME,
+                class: 'au-wrapper p-3',
+                container: [
+                    {
+                        type: 'div',
+                        id: `filterBar${this.PROJECT_NAME}`,
+                        class: 'w-full mb-3 py-2'
+                    },
+                    {
+                        type: 'div',
+                        id: `cards${this.PROJECT_NAME}`,
+                        class: 'w-full mb-4'
+                    },
+                    {
+                        type: 'div',
+                        id: `container${this.PROJECT_NAME}`,
+                        class: 'w-full h-full'
+                    }
+                ]
             }
         });
+
+        this.layoutTabs();
+        roles.filterBarRoles();
+        departamentos.filterBarDepartamentos();
     }
 
     addUsuario() {
@@ -242,8 +335,6 @@ class Usuarios extends App {
 
         const autofill = request.data[0];
         autofill.password = '';
-
-        // FIX: Eliminado mapeo hardcodeado de IDs de BD — el backend debe enviar el campo 'rol' directamente
 
         this.createModalForm({
             id: 'frmEditUsuario',
@@ -404,6 +495,280 @@ class Usuarios extends App {
                 tipo: "numero",
                 class: "col-12 col-md-6 mb-3",
                 required: false
+            }
+        ];
+    }
+}
+
+class Roles extends Templates {
+    constructor(link, div_modulo) {
+        super(link, div_modulo);
+        this.PROJECT_NAME = "Roles";
+    }
+
+    filterBarRoles() {
+        const container = $("#container-roles");
+        container.html('<div id="filterbar-roles" class="mb-2"></div><div id="table-roles"></div>');
+
+        this.createfilterBar({
+            parent: "filterbar-roles",
+            coffeesoft: true,
+            data: [
+                {
+                    opc: "btn",
+                    class: "col-sm-3",
+                    color_btn: "primary",
+                    id: "btnNuevoRol",
+                    text: "Nuevo Rol",
+                    lucideIcon: "plus",
+                    fn: 'roles.addRol()'
+                },
+                {
+                    opc: "btn",
+                    class: "col-sm-2",
+                    color_btn: "secondary",
+                    id: "btnRefreshRoles",
+                    text: "Actualizar",
+                    lucideIcon: "refresh-cw",
+                    fn: 'roles.lsRoles()'
+                }
+            ]
+        });
+    }
+
+    lsRoles() {
+        this.createTable({
+            parent: "table-roles",
+            idFilterBar: "filterbar-roles",
+            data: { opc: "lsRoles" },
+            coffeesoft: true,
+            conf: { datatable: true, pag: 10 },
+            attr: {
+                id: "tbRoles",
+                theme: 'corporativo',
+                title: 'Roles del sistema',
+                subtitle: 'Lista de roles registrados',
+                center: [0]
+            },
+            success: () => {
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        });
+    }
+
+    addRol() {
+        this.createModalForm({
+            id: 'frmAddRol',
+            data: { opc: 'addRol' },
+            bootbox: {
+                title: 'Agregar Rol',
+                closeButton: true,
+                size: 'large'
+            },
+            json: this.jsonRol(false),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({ icon: "success", title: "Rol creado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    this.lsRoles();
+                } else {
+                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                }
+            }
+        });
+    }
+
+    async editRol(id) {
+        const request = await useFetch({ url: this._link, data: { opc: "getRol", id } });
+
+        if (request.status != 200 || !request.data || !request.data[0]) {
+            alert({ icon: "error", text: "No se pudo cargar el rol", btn1: true, btn1Text: "Ok" });
+            return;
+        }
+
+        const autofill = request.data[0];
+
+        this.createModalForm({
+            id: 'frmEditRol',
+            data: { opc: 'editRol', id },
+            bootbox: {
+                title: `Editar Rol: ${autofill.nombre || ''}`,
+                closeButton: true,
+                size: 'large'
+            },
+            autofill: autofill,
+            json: this.jsonRol(true),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({ icon: "success", title: "Rol actualizado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    this.lsRoles();
+                } else {
+                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                }
+            }
+        });
+    }
+
+    deleteRol(id) {
+        this.swalQuestion({
+            opts: {
+                title: "¿Eliminar rol?",
+                html: "Esta accion eliminara el rol del sistema. Los usuarios asignados a este rol podrian verse afectados."
+            },
+            data: { opc: "deleteRol", id },
+            methods: {
+                request: () => {
+                    alert({ icon: "success", title: "Rol eliminado", text: "El rol fue eliminado correctamente.", btn1: true });
+                    this.lsRoles();
+                }
+            }
+        });
+    }
+
+    jsonRol(isEdit = false) {
+        return [
+            {
+                opc: "input",
+                lbl: "Nombre del Rol",
+                id: "nombre",
+                tipo: "texto",
+                class: "col-12 mb-3"
+            }
+        ];
+    }
+}
+
+class Departamentos extends Templates {
+    constructor(link, div_modulo) {
+        super(link, div_modulo);
+        this.PROJECT_NAME = "Departamentos";
+    }
+
+    filterBarDepartamentos() {
+        const container = $("#container-departamentos");
+        container.html('<div id="filterbar-departamentos" class="mb-2"></div><div id="table-departamentos"></div>');
+
+        this.createfilterBar({
+            parent: "filterbar-departamentos",
+            coffeesoft: true,
+            data: [
+                {
+                    opc: "btn",
+                    class: "col-sm-3",
+                    color_btn: "primary",
+                    id: "btnNuevoDepto",
+                    text: "Nuevo Departamento",
+                    lucideIcon: "plus",
+                    fn: 'departamentos.addDepartamento()'
+                },
+                {
+                    opc: "btn",
+                    class: "col-sm-2",
+                    color_btn: "secondary",
+                    id: "btnRefreshDepto",
+                    text: "Actualizar",
+                    lucideIcon: "refresh-cw",
+                    fn: 'departamentos.lsDepartamentos()'
+                }
+            ]
+        });
+    }
+
+    lsDepartamentos() {
+        this.createTable({
+            parent: "table-departamentos",
+            idFilterBar: "filterbar-departamentos",
+            data: { opc: "lsDepartamentos" },
+            coffeesoft: true,
+            conf: { datatable: true, pag: 10 },
+            attr: {
+                id: "tbDepartamentos",
+                theme: 'corporativo',
+                title: 'Departamentos del sistema',
+                subtitle: 'Lista de departamentos registrados',
+                center: [0]
+            },
+            success: () => {
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        });
+    }
+
+    addDepartamento() {
+        this.createModalForm({
+            id: 'frmAddDepartamento',
+            data: { opc: 'addDepartamento' },
+            bootbox: {
+                title: 'Agregar Departamento',
+                closeButton: true,
+                size: 'large'
+            },
+            json: this.jsonDepartamento(false),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({ icon: "success", title: "Departamento creado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    this.lsDepartamentos();
+                } else {
+                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                }
+            }
+        });
+    }
+
+    async editDepartamento(id) {
+        const request = await useFetch({ url: this._link, data: { opc: "getDepartamento", id } });
+
+        if (request.status != 200 || !request.data || !request.data[0]) {
+            alert({ icon: "error", text: "No se pudo cargar el departamento", btn1: true, btn1Text: "Ok" });
+            return;
+        }
+
+        const autofill = request.data[0];
+
+        this.createModalForm({
+            id: 'frmEditDepartamento',
+            data: { opc: 'editDepartamento', id },
+            bootbox: {
+                title: `Editar Departamento: ${autofill.nombre || ''}`,
+                closeButton: true,
+                size: 'large'
+            },
+            autofill: autofill,
+            json: this.jsonDepartamento(true),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({ icon: "success", title: "Departamento actualizado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    this.lsDepartamentos();
+                } else {
+                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                }
+            }
+        });
+    }
+
+    deleteDepartamento(id) {
+        this.swalQuestion({
+            opts: {
+                title: "¿Eliminar departamento?",
+                html: "Esta accion eliminara el departamento del sistema. Los usuarios asignados a este departamento podrian verse afectados."
+            },
+            data: { opc: "deleteDepartamento", id },
+            methods: {
+                request: () => {
+                    alert({ icon: "success", title: "Departamento eliminado", text: "El departamento fue eliminado correctamente.", btn1: true });
+                    this.lsDepartamentos();
+                }
+            }
+        });
+    }
+
+    jsonDepartamento(isEdit = false) {
+        return [
+            {
+                opc: "input",
+                lbl: "Nombre del Departamento",
+                id: "nombre",
+                tipo: "texto",
+                class: "col-12 mb-3"
             }
         ];
     }

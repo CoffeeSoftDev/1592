@@ -171,12 +171,98 @@ class mdl extends CRUD {
     }
 
     function lsDepartamentos() {
-        return [
-            ['id' => 'Direccion General', 'valor' => 'Direccion General'],
-            ['id' => 'Finanzas',          'valor' => 'Finanzas'],
-            ['id' => 'Recursos Humanos',  'valor' => 'Recursos Humanos'],
-            ['id' => 'Operaciones',       'valor' => 'Operaciones'],
-            ['id' => 'Ventas',            'valor' => 'Ventas']
-        ];
+        return $this->_Read("SELECT idArea AS id, Area AS valor FROM {$this->bd}area ORDER BY Area ASC", null);
+    }
+
+    // === ROLES CRUD (tabla: nivel) ===
+
+    function lsRolesDB() {
+        return $this->_Read("SELECT idNivel AS id, Nombre_Nivel AS nombre FROM {$this->bd}nivel ORDER BY idNivel ASC", null);
+    }
+
+    function getRolById($array) {
+        $query = "SELECT idNivel AS id, Nombre_Nivel AS nombre FROM {$this->bd}nivel WHERE idNivel = ?";
+        return $this->_Read($query, $array);
+    }
+
+    function existsRolByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bd}nivel WHERE Nombre_Nivel = ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function existsOtherRolByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bd}nivel WHERE Nombre_Nivel = ? AND idNivel != ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function createRol($array) {
+        return $this->_Insert([
+            'table'  => "{$this->bd}nivel",
+            'values' => $array['values'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function updateRol($array) {
+        return $this->_Update([
+            'table'  => "{$this->bd}nivel",
+            'values' => $array['values'],
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function deleteRolById($array) {
+        return $this->_Delete([
+            'table' => "{$this->bd}nivel",
+            'where' => $array['where'],
+            'data'  => $array['data']
+        ]);
+    }
+
+    // === DEPARTAMENTOS CRUD (tabla: area) ===
+
+    function getDepartamentoById($array) {
+        $query = "SELECT idArea AS id, Area AS nombre FROM {$this->bd}area WHERE idArea = ?";
+        return $this->_Read($query, $array);
+    }
+
+    function existsDepartamentoByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bd}area WHERE Area = ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function existsOtherDepartamentoByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bd}area WHERE Area = ? AND idArea != ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function createDepartamento($array) {
+        return $this->_Insert([
+            'table'  => "{$this->bd}area",
+            'values' => $array['values'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function updateDepartamento($array) {
+        return $this->_Update([
+            'table'  => "{$this->bd}area",
+            'values' => $array['values'],
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function deleteDepartamentoById($array) {
+        return $this->_Delete([
+            'table' => "{$this->bd}area",
+            'where' => $array['where'],
+            'data'  => $array['data']
+        ]);
     }
 }

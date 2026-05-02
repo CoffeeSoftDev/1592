@@ -15,6 +15,13 @@ class ctrl extends mdl {
         ];
     }
 
+    function initTabs() {
+        return [
+            'rolesDB'       => $this->lsRolesDB(),
+            'departamentos'  => $this->lsDepartamentos()
+        ];
+    }
+
     function lsUsuarios() {
         $__row = [];
         $ls = $this->listUsuarios([$_POST['rol']]);
@@ -173,6 +180,272 @@ class ctrl extends mdl {
         if ($delete === true) {
             $status  = 200;
             $message = 'Usuario eliminado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    // === ROLES ===
+
+    function lsRoles() {
+        $__row = [];
+        $ls    = $this->lsRolesDB();
+
+        foreach ($ls as $rol) {
+            $a = [];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
+                'html'    => '<i data-lucide="pencil" class="w-4 h-4"></i>',
+                'onclick' => 'roles.editRol(' . $rol['id'] . ')'
+            ];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
+                'html'    => '<i data-lucide="trash-2" class="w-4 h-4"></i>',
+                'onclick' => 'roles.deleteRol(' . $rol['id'] . ')'
+            ];
+
+            $__row[] = [
+                'id'     => $rol['id'],
+                'ID'     => '#' . str_pad($rol['id'], 4, '0', STR_PAD_LEFT),
+                'Rol'    => '<span class="font-semibold text-primary">' . htmlspecialchars($rol['nombre']) . '</span>',
+                'a'      => $a
+            ];
+        }
+
+        return ['row' => $__row, 'thead' => ''];
+    }
+
+    function getRol() {
+        $id      = $_POST['id'];
+        $status  = 500;
+        $message = 'Error al obtener los datos';
+        $getData = $this->getRolById([$id]);
+
+        if ($getData) {
+            $status  = 200;
+            $message = 'Datos obtenidos correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $getData
+        ];
+    }
+
+    function addRol() {
+        $status  = 500;
+        $message = 'No se pudo agregar el rol';
+        $nombre  = $_POST['nombre'];
+
+        if ($this->existsRolByName([$nombre])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe un rol con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Nombre_Nivel' => $nombre
+        ];
+
+        $create = $this->createRol($this->util->sql($payload));
+
+        if ($create === true) {
+            $status  = 200;
+            $message = 'Rol creado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function editRol() {
+        $status  = 500;
+        $message = 'Error al editar rol';
+        $id      = $_POST['id'];
+        $nombre  = $_POST['nombre'];
+
+        if ($this->existsOtherRolByName([$nombre, $id])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe otro rol con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Nombre_Nivel' => $nombre,
+            'idNivel'      => $id
+        ];
+
+        $edit = $this->updateRol($this->util->sql($payload, 1));
+
+        if ($edit === true) {
+            $status  = 200;
+            $message = 'Rol actualizado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function deleteRol() {
+        $status  = 500;
+        $message = 'Error al eliminar rol';
+        $id      = $_POST['id'];
+
+        $delete = $this->deleteRolById([
+            'where' => ['idNivel'],
+            'data'  => [$id]
+        ]);
+
+        if ($delete === true) {
+            $status  = 200;
+            $message = 'Rol eliminado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    // === DEPARTAMENTOS ===
+
+    function lsDepartamentos() {
+        $__row = [];
+        $ls    = $this->listDepartamentos();
+
+        foreach ($ls as $depto) {
+            $a = [];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
+                'html'    => '<i data-lucide="pencil" class="w-4 h-4"></i>',
+                'onclick' => 'departamentos.editDepartamento(' . $depto['id'] . ')'
+            ];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
+                'html'    => '<i data-lucide="trash-2" class="w-4 h-4"></i>',
+                'onclick' => 'departamentos.deleteDepartamento(' . $depto['id'] . ')'
+            ];
+
+            $__row[] = [
+                'id'           => $depto['id'],
+                'ID'           => '#' . str_pad($depto['id'], 4, '0', STR_PAD_LEFT),
+                // 'Departamento' => '<span class="font-semibold text-primary">' . $depto['nombre'] ?? '' . '</span>',
+                'a'            => $a
+            ];
+        }
+
+        return ['row' => $__row, 'thead' => ''];
+    }
+
+    function listDepartamentos() {
+        return parent::lsDepartamentos();
+    }
+
+    function getDepartamento() {
+        $id      = $_POST['id'];
+        $status  = 500;
+        $message = 'Error al obtener los datos';
+        $getData = $this->getDepartamentoById([$id]);
+
+        if ($getData) {
+            $status  = 200;
+            $message = 'Datos obtenidos correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $getData
+        ];
+    }
+
+    function addDepartamento() {
+        $status  = 500;
+        $message = 'No se pudo agregar el departamento';
+        $nombre  = $_POST['nombre'];
+
+        if ($this->existsDepartamentoByName([$nombre])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe un departamento con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Area' => $nombre
+        ];
+
+        $create = $this->createDepartamento($this->util->sql($payload));
+
+        if ($create === true) {
+            $status  = 200;
+            $message = 'Departamento creado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function editDepartamento() {
+        $status  = 500;
+        $message = 'Error al editar departamento';
+        $id      = $_POST['id'];
+        $nombre  = $_POST['nombre'];
+
+        if ($this->existsOtherDepartamentoByName([$nombre, $id])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe otro departamento con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Area'   => $nombre,
+            'idArea' => $id
+        ];
+
+        $edit = $this->updateDepartamento($this->util->sql($payload, 1));
+
+        if ($edit === true) {
+            $status  = 200;
+            $message = 'Departamento actualizado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function deleteDepartamento() {
+        $status  = 500;
+        $message = 'Error al eliminar departamento';
+        $id      = $_POST['id'];
+
+        $delete = $this->deleteDepartamentoById([
+            'where' => ['idArea'],
+            'data'  => [$id]
+        ]);
+
+        if ($delete === true) {
+            $status  = 200;
+            $message = 'Departamento eliminado correctamente';
         }
 
         return [

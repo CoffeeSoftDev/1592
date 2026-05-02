@@ -32,7 +32,9 @@
       "Bash(git cat-file:*)",
       "Bash(sort -k3 -n -r)",
       "Bash(git rm:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Bash(/c/wamp64/bin/php/php8.2.0/php.exe -l /c/wamp64/www/1592/ERP2/admin/usuarios/ctrl/ctrl-usuarios.php)",
+      "Bash(/c/wamp64/bin/php/php8.2.0/php.exe -l /c/wamp64/www/1592/ERP2/admin/usuarios/mdl/mdl-usuarios.php)"
     ]
   }
 }
