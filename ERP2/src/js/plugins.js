@@ -1788,23 +1788,28 @@ function dataPicker(options) {
 }
 
 function getDataRangePicker(idInput) {
-    const fi = $("#" + idInput).data("daterangepicker").startDate.format("YYYY-MM-DD");
-    const ff = $("#" + idInput).data("daterangepicker").endDate.format("YYYY-MM-DD");
+    const picker = $("#" + idInput).data("daterangepicker");
+    if (!picker) return null;
+
+    const fi = picker.startDate.format("YYYY-MM-DD");
+    const ff = picker.endDate.format("YYYY-MM-DD");
 
     return { fi, ff };
 }
 
-function simple_data_table(table, no) {
+function simple_data_table(table, no = 10) {
     $(table).DataTable({
         pageLength: no,
         destroy: true,
         searching: true,
-        bLengthChange: false,
         bFilter: false,
         order: [],
+        lengthChange: true,
+
         bInfo: true,
         "oLanguage": {
             "sSearch": "Buscar:",
+            "sLengthMenu": "Mostrar _MENU_ registros",
             "sInfo": "Mostrando del (_START_ al _END_) de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando del 0 al 0 de un total de 0 registros",
             "sLoadingRecords": "Por favor espere - cargando...",
@@ -1816,7 +1821,71 @@ function simple_data_table(table, no) {
             }
         }
     });
+    $(table).closest('.dataTables_wrapper').find('.row.dt-row').css('overflow-x', 'auto');
     getPageDataTable(table)
+}
+
+function filter_data_table(table, no, filterColumns = []) {
+    if (!filterColumns || !filterColumns.length) {
+        simple_data_table(table, no);
+        return;
+    }
+
+    $(table).DataTable({
+        pageLength: no,
+        destroy: true,
+        searching: true,
+        order: [],
+        bInfo: true,
+        lengthChange: true,
+
+        "oLanguage": {
+            "sSearch": "Buscar:",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sInfo": "Mostrando del (_START_ al _END_) de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando del 0 al 0 de un total de 0 registros",
+            "sLoadingRecords": "Por favor espere - cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            }
+        },
+        initComplete: function () {
+            var api = this.api();
+            var wrapper = $(api.table().container());
+            var leftCol = wrapper.find('.dataTables_filter').parent().prev();
+
+            var selectGroup = $('<div style="display:flex;align-items:center;gap:8px;padding-top:4px;"></div>');
+
+            filterColumns.forEach(function (colIdx) {
+                var column = api.column(colIdx);
+                var headerText = $(column.header()).text().trim();
+                var select = $('<select class="form-select form-select-sm" style="width:auto;"></select>');
+                select.append('<option value="">' + headerText + ': Todos</option>');
+
+                column.data().unique().sort().each(function (val) {
+                    var text = $('<div>').html(val).text().trim();
+                    if (text !== '') {
+                        select.append('<option value="' + text + '">' + text + '</option>');
+                    }
+                });
+
+                select.on('change', function () {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                });
+
+                selectGroup.append(select);
+            });
+
+            leftCol.append(selectGroup);
+
+            wrapper.find('.row.dt-row').css('overflow-x', 'auto');
+        }
+    });
+    getPageDataTable(table);
 }
 
 function getPageDataTable(tableId) {
@@ -1859,7 +1928,7 @@ function fn_ajax(datos, url, div = '') {
 }
 
 function formatPrice(amount, locale = 'es-MX', currency = 'MXN') {
-    if (!amount && amount !== false) {
+    if (!amount || Math.abs(parseFloat(amount)) < 0.01) {
         return '-';
     }
     return new Intl.NumberFormat(locale, {

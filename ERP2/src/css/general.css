@@ -43,13 +43,6 @@ span.select2-container {
   padding: 1rem 1rem;
 }
 
-.block {
-  border: 1px solid #dbe0e4;
-  margin-bottom: 15px;
-  border-radius: 0.25rem;
-  float: left;
-  padding: 1rem 1rem;
-}
 
 .app .block.block-condensed {
   padding: 0;

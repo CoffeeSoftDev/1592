@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modal - Nuevo Rol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../src/css/coffee-varoch.css">
+<style>
+  body{font-family:'Inter',system-ui,sans-serif;}
+  .perm-row { display:grid; grid-template-columns: 1fr repeat(4, 50px); gap:6px; align-items:center; padding:6px 10px; border-radius:8px; }
+  .perm-row:hover { background: rgba(37,99,235,.08); }
+  .perm-head { display:grid; grid-template-columns: 1fr repeat(4, 50px); gap:6px; padding:6px 10px; }
+</style>
+</head>
+<body class="coffee-varoch" data-theme="dark">
+
+<div class="cv-overlay fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="cv-card w-full max-w-[720px] max-h-[92vh] overflow-y-auto cv-scroll relative">
+
+    <!-- Header -->
+    <div class="px-5 py-4 flex items-center justify-between border-b border-[var(--cv-border-dk)] sticky top-0 z-10" style="background:var(--cv-card-dk)">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(139,92,246,.15);color:#A78BFA">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="cv-title text-base">Nuevo Rol</div>
+          <div class="cv-muted">Define un perfil de acceso con permisos por modulo</div>
+        </div>
+      </div>
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost p-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 space-y-5">
+
+      <!-- Datos rol -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="cv-label">Nombre del rol *</label>
+          <input class="cv-input mt-1" placeholder="Ej. Coordinador Logistica">
+        </div>
+        <div>
+          <label class="cv-label">Codigo</label>
+          <input class="cv-input mt-1" placeholder="ROL-007">
+        </div>
+        <div class="md:col-span-2">
+          <label class="cv-label">Descripcion</label>
+          <textarea class="cv-input mt-1" rows="2" placeholder="Resume el alcance y responsabilidades del rol..."></textarea>
+        </div>
+        <div>
+          <label class="cv-label">Hereda de</label>
+          <select class="cv-input mt-1">
+            <option>Ninguno (rol independiente)</option>
+            <option>Operador</option><option>Supervisor</option><option>Admin</option>
+          </select>
+        </div>
+        <div>
+          <label class="cv-label">Estatus</label>
+          <select class="cv-input mt-1">
+            <option selected>Activo</option><option>Inactivo</option><option>Restringido</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Matriz permisos -->
+      <div class="cv-card p-4">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <div class="cv-title text-sm">Matriz de permisos</div>
+            <div class="cv-muted">Marca las acciones permitidas por modulo</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="cv-btn cv-btn-ghost text-[11px]">Marcar todo</button>
+            <button class="cv-btn cv-btn-ghost text-[11px]">Limpiar</button>
+          </div>
+        </div>
+
+        <div class="perm-head cv-label">
+          <div>Modulo</div>
+          <div class="text-center">Crear</div>
+          <div class="text-center">Leer</div>
+          <div class="text-center">Editar</div>
+          <div class="text-center">Borrar</div>
+        </div>
+
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Usuarios</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Departamentos</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Roles</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Finanzas</div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">RRHH</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Inventario</div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Reportes</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check" checked></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+        <div class="perm-row"><div class="text-white font-semibold text-[12px]">Auditoria</div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+          <div class="text-center"><input type="checkbox" class="cv-check"></div>
+        </div>
+
+        <div class="cv-divider my-3"></div>
+        <div class="flex items-center justify-between">
+          <span class="cv-text">11 / 32 permisos seleccionados</span>
+          <span class="cv-badge cv-badge-info">Rol nivel medio</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 flex items-center justify-end gap-2 border-t border-[var(--cv-border-dk)] sticky bottom-0" style="background:var(--cv-card-dk)">
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost">Cancelar</button>
+      <button class="cv-btn cv-btn-action">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Crear rol
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const KEY = 'huubie-theme';
+  document.body.setAttribute('data-theme', localStorage.getItem(KEY) || 'dark');
+</script>
+</body>
+</html>

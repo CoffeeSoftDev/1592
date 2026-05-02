@@ -1,11 +1,55 @@
-// update version 1.2
+// update version 1.7
 
 /*
- actualizacion de infoCards
- actualizacion de createLayout
- actualizacion de coffeTable3
-
+ coffeeTable collapsed
+ inlineCard 
 */
+
+const CF_REGEX = {
+    texto: /^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/,
+    texto_clean: /[^a-zA-ZÀ-ÖØ-öø-ÿ\s]+/g,
+    numero: /^\d+$/,
+    numero_clean: /[^0-9]/g,
+    cifra: /^-?\d+(\.\d+)?$/,
+    email: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
+    tel: /^[0-9+\-() ]+$/,
+    tel_clean: /[^0-9+\-() ]/g,
+};
+
+const CF_CSS = {
+    input: 'tw-input w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#003360] dark:focus:border-[#0a4a85] bg-white dark:bg-gray-700',
+    select: 'tw-input w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-800 dark:text-gray-200 outline-none focus:border-[#003360] dark:focus:border-[#0a4a85] bg-white dark:bg-gray-700 appearance-none cursor-pointer',
+    textarea: 'tw-input w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#003360] dark:focus:border-[#0a4a85] bg-white dark:bg-gray-700 resize-y',
+    label: 'block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5',
+    error: 'tw-error text-xs text-red-500 dark:text-red-400 mt-1 hidden',
+    btnPrimary: 'tw-btn w-full rounded-lg bg-[#003360]/90 px-4 py-2 text-sm font-semibold text-white hover:bg-[#003360] active:bg-[#003360] focus:outline-none focus:ring-2 focus:ring-[#003360] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnInfo: 'tw-btn w-full rounded-lg bg-[#0078D7]/90 px-4 py-2 text-sm font-semibold text-white hover:bg-[#0078D7] active:bg-[#0078D7] focus:outline-none focus:ring-2 focus:ring-[#0078D7] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnSuccess: 'tw-btn w-full rounded-lg bg-[#7aab20]/90 px-4 py-2 text-sm font-semibold text-white hover:bg-[#7aab20] active:bg-[#7aab20] focus:outline-none focus:ring-2 focus:ring-[#7aab20] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnDanger: 'tw-btn w-full rounded-lg bg-[#9e1b32]/90 px-4 py-2 text-sm font-semibold text-white hover:bg-[#9e1b32] active:bg-[#9e1b32] focus:outline-none focus:ring-2 focus:ring-[#9e1b32] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnWarning: 'tw-btn w-full rounded-lg bg-[#FFC107] px-4 py-2 text-sm font-semibold text-[#003360] hover:bg-[#FFC107]/80 active:bg-[#FFC107]/80 focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnOutline: 'tw-btn w-full rounded-lg border border-[#003360] bg-white dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-[#003360] dark:text-gray-200 hover:bg-[#003360] hover:text-white active:bg-[#003360] focus:outline-none focus:ring-2 focus:ring-[#003360] focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnSecondary: 'tw-btn w-full rounded-lg bg-gray-500 dark:bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 dark:hover:bg-gray-500 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnLight: 'tw-btn w-full rounded-lg bg-gray-100 dark:bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-200 dark:hover:bg-gray-300 active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnDark: 'tw-btn w-full rounded-lg bg-gray-800 dark:bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-900 dark:hover:bg-black active:bg-black focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-1 dark:focus:ring-offset-gray-800',
+    btnLink: 'tw-btn w-full rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 underline hover:text-blue-700 dark:hover:text-blue-300 focus:outline-none',
+    radio: 'w-4 h-4 text-[#003360] border-gray-300 dark:border-gray-600 focus:ring-[#003360] accent-[#003360]',
+    checkbox: 'w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#003360] focus:ring-[#003360] accent-[#003360]',
+    file: 'tw-input w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-[#e6eef5] dark:file:bg-[#0a2540] file:px-3 file:py-1 file:text-xs file:font-semibold file:text-[#003360] dark:file:text-[#7bafe6] hover:file:bg-[#cddfee] dark:hover:file:bg-[#0f3358]',
+    groupAddon: 'inline-flex items-center justify-center px-3 rounded-l-lg border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-600 text-gray-500 dark:text-gray-300 text-sm',
+};
+
+const CF_BTN_COLORS = {
+    primary: 'btnPrimary',
+    secondary: 'btnSecondary',
+    success: 'btnSuccess',
+    danger: 'btnDanger',
+    warning: 'btnWarning',
+    info: 'btnInfo',
+    light: 'btnLight',
+    dark: 'btnDark',
+    link: 'btnLink',
+    outline: 'btnOutline',
+};
 
 class Complements {
 
@@ -141,20 +185,23 @@ class Complements {
             const classList = element.className;
 
             const colorMap = {
-                'bg-green-50': 'E8F5E9', 'bg-green-100': 'C6EFCE', 'bg-green': '00B050',
-                'bg-blue-50': 'E3F2FD', 'bg-blue-100': 'BDD7EE', 'bg-blue': '4472C4',
-                'bg-yellow-50': 'FFFDE7', 'bg-yellow-100': 'FFE699', 'bg-yellow': 'FFC000',
-                'bg-red-50': 'FFEBEE', 'bg-red-100': 'FFC7CE', 'bg-red': 'FF0000',
-                'bg-gray-50': 'F9FAFB', 'bg-gray-100': 'D9D9D9', 'bg-gray': '808080',
-                'bg-purple-50': 'F3E5F5', 'bg-purple-100': 'E4DFEC', 'bg-purple': '7030A0',
-                'bg-orange-50': 'FFF3E0', 'bg-orange-100': 'FFD9B3', 'bg-orange': 'FF6600',
-                'bg-pink-50': 'FCE4EC', 'bg-pink-100': 'F8BBD0', 'bg-pink': 'E91E63',
-                'bg-indigo-50': 'E8EAF6', 'bg-indigo-100': 'C5CAE9', 'bg-indigo': '3F51B5',
-                'bg-teal-50': 'E0F2F1', 'bg-teal-100': 'B2DFDB', 'bg-teal': '009688',
+                'bg-green-50': 'E8F5E9', 'bg-green-100': 'C6EFCE', 'bg-green-200': 'A5D6A7', 'bg-green-300': '81C784', 'bg-green': '00B050',
+                'bg-blue-50': 'E3F2FD', 'bg-blue-100': 'BDD7EE', 'bg-blue-200': '90CAF9', 'bg-blue-300': '64B5F6', 'bg-blue': '4472C4',
+                'bg-yellow-50': 'FFFDE7', 'bg-yellow-100': 'FFE699', 'bg-yellow-200': 'FFF59D', 'bg-yellow-300': 'FFF176', 'bg-yellow': 'FFC000',
+                'bg-red-50': 'FFEBEE', 'bg-red-100': 'FFC7CE', 'bg-red-200': 'EF9A9A', 'bg-red-300': 'E57373', 'bg-red': 'FF0000',
+                'bg-gray-50': 'F9FAFB', 'bg-gray-100': 'F3F4F6', 'bg-gray-200': 'E5E7EB', 'bg-gray-300': 'D1D5DB', 'bg-gray': '808080',
+                'bg-purple-50': 'F3E5F5', 'bg-purple-100': 'E4DFEC', 'bg-purple-200': 'CE93D8', 'bg-purple-300': 'BA68C8', 'bg-purple': '7030A0',
+                'bg-orange-50': 'FFF3E0', 'bg-orange-100': 'FFD9B3', 'bg-orange-200': 'FFCC80', 'bg-orange-300': 'FFB74D', 'bg-orange': 'FF6600',
+                'bg-pink-50': 'FCE4EC', 'bg-pink-100': 'F8BBD0', 'bg-pink-200': 'F48FB1', 'bg-pink-300': 'F06292', 'bg-pink': 'E91E63',
+                'bg-indigo-50': 'E8EAF6', 'bg-indigo-100': 'C5CAE9', 'bg-indigo-200': '9FA8DA', 'bg-indigo-300': '7986CB', 'bg-indigo': '3F51B5',
+                'bg-teal-50': 'E0F2F1', 'bg-teal-100': 'B2DFDB', 'bg-teal-200': '80CBC4', 'bg-teal-300': '4DB6AC', 'bg-teal': '009688',
                 'bg-[#283341]': '283341', 'bg-[#1F2A37]': '1F2A37'
             };
 
-            for (const [className, color] of Object.entries(colorMap)) {
+            // Ordenar por longitud descendente para matchear primero la clase mas especifica
+            // (ej: 'bg-gray-200' antes que 'bg-gray', evita que shades caigan en la base oscura)
+            const sortedEntries = Object.entries(colorMap).sort((a, b) => b[0].length - a[0].length);
+            for (const [className, color] of sortedEntries) {
                 if (classList.includes(className)) return color;
             }
 
@@ -202,20 +249,41 @@ class Complements {
             const rows = table.querySelectorAll('tr');
             const excelData = [];
 
+            const parseCurrency = (text) => {
+                if (typeof text !== 'string') return null;
+                // Normaliza espacios no rompibles y todos los whitespace
+                const trimmed = text.replace(/\u00a0/g, ' ').trim();
+                if (!trimmed) return null;
+                // Debe contener el simbolo $ y al menos un digito
+                if (!/\$/.test(trimmed) || !/\d/.test(trimmed)) return null;
+                // Acepta: $1,500.00 | $ 1,500.00 | -$1,500.00 | $-1,500.00 | ($1,500.00)
+                const currencyRegex = /^\(?\s*-?\s*\$\s*-?\s*\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*\)?$|^\(?\s*-?\s*\$\s*-?\s*\d+(?:\.\d+)?\s*\)?$/;
+                if (!currencyRegex.test(trimmed)) return null;
+                const isNegative = /^\(.*\)$/.test(trimmed) || /-/.test(trimmed);
+                const cleaned = trimmed.replace(/[^\d.]/g, '');
+                if (cleaned === '' || isNaN(cleaned)) return null;
+                const num = parseFloat(cleaned);
+                return isNegative ? -num : num;
+            };
+
             rows.forEach((row) => {
                 const cells = row.querySelectorAll('th, td');
                 const rowData = [];
                 const rowStyles = [];
 
                 cells.forEach((cell) => {
-                    const text = cell.innerText || cell.textContent || '';
-                    rowData.push(text.trim());
+                    const text = (cell.innerText || cell.textContent || '').trim();
+                    const isHeader = cell.tagName === 'TH';
+                    const numericValue = isHeader ? null : parseCurrency(text);
+                    const isCurrency = numericValue !== null;
+
+                    rowData.push(isCurrency ? numericValue : text);
 
                     const bgColor = getColorFromElement(cell);
                     const textColor = getTextColor(cell);
                     const isBold = cell.classList.contains('font-bold') ||
                         cell.classList.contains('fw-bold') ||
-                        cell.tagName === 'TH';
+                        isHeader;
                     const textAlign = cell.classList.contains('text-center') ? 'center' :
                         cell.classList.contains('text-right') || cell.classList.contains('text-end') ? 'right' : 'left';
 
@@ -224,7 +292,8 @@ class Complements {
                         textColor,
                         isBold,
                         textAlign,
-                        isHeader: cell.tagName === 'TH'
+                        isHeader,
+                        isCurrency
                     });
                 });
 
@@ -252,9 +321,13 @@ class Complements {
                         };
                     }
 
-                    const cellText = cell.value ? cell.value.toString() : '';
+                    if (style.isCurrency) {
+                        cell.numFmt = '"$"#,##0.00';
+                    }
+
+                    const cellText = cell.value != null ? cell.value.toString() : '';
                     cell.alignment = {
-                        horizontal: style.textAlign,
+                        horizontal: style.isCurrency ? 'right' : style.textAlign,
                         vertical: 'middle',
                         wrapText: cellText.includes('\n')
                     };
@@ -376,6 +449,133 @@ class Complements {
         return html;
     }
 
+    cfBindLiveValidation(container) {
+        container.find('input, textarea').on('input', function () {
+            let el = $(this);
+            let tipo = el.attr('data-tipo');
+            let val = el.val();
+
+            if (tipo === 'texto' && !CF_REGEX.texto.test(val))
+                el.val(val.replace(CF_REGEX.texto_clean, ''));
+
+            if (tipo === 'numero' && !CF_REGEX.numero.test(val))
+                el.val(val.replace(CF_REGEX.numero_clean, ''));
+
+            if (tipo === 'cifra' && !CF_REGEX.cifra.test(val))
+                el.val(val.replace('--', '-').replace('..', '.').replace('.-', '.').replace('-.', '-0.')
+                    .replace(/^\./, '0.').replace(/[^0-9.\-]/g, '')
+                    .replace(/(\.[^.]+)\./g, '$1').replace(/(\d)\-/g, '$1'));
+
+            if (tipo === 'tel' && !CF_REGEX.tel.test(val))
+                el.val(val.replace(CF_REGEX.tel_clean, ''));
+
+            if (tipo === 'email') {
+                el.removeClass('is-invalid');
+                let errSpan = el.parent().find('.tw-error');
+                if (el.val().trim() !== '' && !CF_REGEX.email.test(el.val())) {
+                    el.addClass('is-invalid');
+                    if (errSpan.length) errSpan.text('Ingrese un correo valido').removeClass('hidden');
+                } else if (errSpan.length) {
+                    errSpan.addClass('hidden');
+                }
+            }
+
+            if (el.val().trim() !== '') {
+                el.removeClass('is-invalid');
+                el.parent().find('.tw-error').addClass('hidden');
+            }
+        });
+
+        container.find('input, textarea').on('blur', function () {
+            $(this).val($(this).val().trim());
+        });
+
+        container.find('select').on('change', function () {
+            let el = $(this);
+            if (el.val() && el.val() !== '0') {
+                el.removeClass('is-invalid');
+                el.closest('div').parent().find('.tw-error').addClass('hidden');
+            }
+        });
+    }
+
+    cfValidateForm(container) {
+        let valid = true;
+
+        container.find('[required]').each(function () {
+            let el = $(this);
+            let val = el.val() ? el.val().trim() : '';
+            let isEmpty = val === '' || val === '0';
+
+            let parent = el.is('select') ? el.closest('div').parent() : el.parent();
+            let errSpan = parent.find('.tw-error');
+
+            if (isEmpty) {
+                valid = false;
+                el.addClass('is-invalid');
+                el.focus();
+                if (errSpan.length) errSpan.text('El campo es requerido').removeClass('hidden');
+            } else {
+                el.removeClass('is-invalid');
+                if (errSpan.length) errSpan.addClass('hidden');
+            }
+        });
+
+        container.find('[data-tipo="email"]').each(function () {
+            let el = $(this);
+            if (el.val().trim() !== '' && !CF_REGEX.email.test(el.val())) {
+                valid = false;
+                el.addClass('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
+    cfAutofill(containerId, data) {
+        let container = $('#' + containerId);
+        if (!container.length) return;
+
+        for (let key in data) {
+            let el = container.find(`[name="${key}"]`);
+            if (!el.length) continue;
+            el.val(data[key]);
+            if (el.is('select')) el.trigger('change');
+        }
+    }
+
+    cfToTailwindGrid(bsClass) {
+        let result = bsClass;
+        result = result.replace(/\bcol-(sm|md|lg|xl)-(\d{1,2})\b/g, (_, bp, n) => `${bp}:col-span-${n}`);
+        result = result.replace(/\bcol-(\d{1,2})\b/g, (_, n) => `col-span-${n}`);
+        result = result.replace(/\boffset-(sm|md|lg|xl)-(\d{1,2})\b/g, (_, bp, n) => `${bp}:col-start-${Number(n) + 1}`);
+        result = result.replace(/\boffset-(\d{1,2})\b/g, (_, n) => `col-start-${Number(n) + 1}`);
+        result = result.replace(/\b(mb-\d|mt-\d|p-\d|fw-bold|text-lg|text-uppercase|line|hidex|resize|text-end)\b/g, '').trim();
+        return result;
+    }
+
+    cfThemedClass(str, theme) {
+        if (!str) return str;
+        const tokens = str.split(/\s+/).filter(Boolean);
+        if (theme !== 'dark') {
+            return tokens.filter(t => !t.startsWith('dark:')).join(' ');
+        }
+        const darkTokens = tokens.filter(t => t.startsWith('dark:')).map(t => t.slice(5));
+        const isColorVal = (v) => /^(white|black|transparent|current|inherit|[a-z]+-\d{2,3})(\/\d+)?$/.test(v);
+        const propPrefix = (t) => {
+            let base = t.replace(/-\[[^\]]*\]/g, '');
+            const m = base.match(/^((?:[a-z]+:)*(?:bg|text|border|ring|placeholder|fill|stroke|accent|outline|caret|divide|from|to|via|decoration))-(.+)$/);
+            if (m && isColorVal(m[2])) return m[1] + '-COLOR';
+            return base.replace(/-\d+(\.\d+)?(\/\d+)?$/, '');
+        };
+        const darkProps = new Set(darkTokens.map(propPrefix));
+        const lightFiltered = tokens.filter(t => {
+            if (t.startsWith('dark:')) return false;
+            return !darkProps.has(propPrefix(t));
+        });
+        return [...lightFiltered, ...darkTokens].join(' ');
+    }
+
 }
 
 // add component
@@ -386,6 +586,559 @@ class Components extends Complements {
     }
 
 
+
+    coffeeForm(options) {
+        const self = this;
+
+        const defaults = {
+            parent: 'root',
+            id: 'coffeeForm',
+            class: 'grid grid-cols-12 gap-x-4 gap-y-1',
+            type: 'default',
+            Element: 'div',
+            json: [],
+            data: {},
+            autofill: false,
+            prefijo: '',
+            color: 'primary',
+            color_default: 'primary',
+            theme: 'light',
+            card: false,
+            showRequired: true,
+            onSave: () => { },
+            onAdd: () => { },
+            onUpdate: () => { },
+            onDelete: () => { },
+        };
+
+        const opts = Object.assign({}, defaults, options);
+
+        const css = {};
+        for (const k in CF_CSS) css[k] = self.cfThemedClass(CF_CSS[k], opts.theme);
+
+        const makeLabel = (text, forId, required) => {
+            let lbl = $('<label>', {
+                class: css.label,
+                for: forId
+            });
+            lbl.html(text + (opts.showRequired && required ? '<span class="text-red-400 ml-0.5">*</span>' : ''));
+            return lbl;
+        };
+
+        let themeWrap = $('<div>', {
+            class: opts.theme === 'dark' ? 'dark' : ''
+        });
+        let card = $('<div>', {
+            class: opts.card
+                ? self.cfThemedClass('bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 sm:p-6 fade-in', opts.theme)
+                : 'fade-in',
+        });
+        themeWrap.append(card);
+
+        let container;
+        if (opts.Element === 'form') {
+            container = $('<form>', {
+                id: opts.id,
+                class: opts.class
+            });
+            container.attr('novalidate', true);
+        } else {
+            container = $('<div>', {
+                id: opts.id,
+                class: opts.class
+            });
+        }
+
+        for (const x of opts.json) {
+            let div_col = self.cfToTailwindGrid(x.class || 'col-sm-4') + ' mt-1';
+            let div_hijo = $('<div>', {
+                class: div_col
+            });
+
+            let required = x.required === false ? false : true;
+            let aux_name = x.name ? x.name : x.id;
+
+            if (x.showLabel !== false && x.lbl) {
+                div_hijo.append(makeLabel(x.lbl, opts.prefijo + x.id, required));
+            }
+
+            let attr_default = {
+                id: opts.prefijo + x.id,
+                'data-tipo': x.tipo,
+                name: aux_name,
+                value: x.value,
+                placeholder: x.placeholder,
+            };
+
+            if (required) attr_default.required = '';
+            if (x.disabled) attr_default.disabled = '';
+
+            let color;
+
+            switch (x.opc) {
+
+                case 'code':
+                    div_hijo.empty();
+                    let codeText = JSON.stringify(x.json, null, 2);
+                    div_hijo.addClass('rounded-lg bg-gray-900 dark:bg-gray-950 p-4 overflow-x-auto');
+                    let pre = $('<pre>', {
+                        class: 'text-xs text-gray-200 font-mono whitespace-pre'
+                    }).text(codeText);
+                    div_hijo.append(pre);
+                    break;
+
+                case 'radio':
+                    if (x.data) {
+                        let radioGroup = $('<div>', {
+                            class: 'flex flex-wrap gap-4 mt-1'
+                        });
+                        $.each(x.data, function (_, item) {
+                            let radioLabel = $('<label>', {
+                                class: 'inline-flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300',
+                                for: item.id,
+                            });
+                            let rd = $('<input>', {
+                                type: 'radio',
+                                class: x.className || 'w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 focus:ring-blue-500 accent-blue-600',
+                                name: x.name || x.id,
+                                value: item.id,
+                                id: item.id,
+                            });
+                            if (item.checked) rd.prop('checked', true);
+                            if (x.onchange) rd.attr('onchange', x.onchange);
+                            radioLabel.append(rd, document.createTextNode(item.valor));
+                            radioGroup.append(radioLabel);
+                        });
+                        div_hijo.append(radioGroup);
+                    } else {
+                        let rdSingle = $('<input>', {
+                            type: 'radio',
+                            class: x.className || css.radio,
+                            name: x.name || x.id,
+                            value: x.value,
+                            id: opts.prefijo + x.id,
+                        });
+                        if (x.checked) rdSingle.prop('checked', true);
+                        if (x.onchange) rdSingle.attr('onchange', x.onchange);
+
+                        let rdLabel = $('<label>', {
+                            class: 'inline-flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300',
+                            text: x.text || x.valor,
+                            for: opts.prefijo + x.id,
+                        });
+                        div_hijo.append(rdSingle, rdLabel);
+                    }
+                    break;
+
+                case 'checkbox':
+                    if (x.data) {
+                        let cbGroup = $('<div>', {
+                            class: 'flex flex-wrap gap-4 mt-1'
+                        });
+                        $.each(x.data, function (_, item) {
+                            let cbLabel = $('<label>', {
+                                class: x.classLabel || 'inline-flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300',
+                                for: item.id,
+                            });
+                            let cb = $('<input>', {
+                                type: 'checkbox',
+                                class: x.className || 'w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 accent-blue-600',
+                                name: item.id,
+                                value: 'true',
+                                id: item.id,
+                            });
+                            if (item.checked) cb.prop('checked', true);
+                            if (x.onchange) cb.attr('onchange', x.onchange);
+                            cbLabel.append(cb, document.createTextNode(item.valor));
+                            cbGroup.append(cbLabel);
+                        });
+                        div_hijo.append(cbGroup);
+                    } else {
+                        div_hijo.empty();
+                        let cbId = opts.prefijo + x.id;
+                        let cbSingle = $('<input>', {
+                            type: 'checkbox',
+                            class: x.className || css.checkbox,
+                            name: x.name || x.id,
+                            value: true,
+                            id: cbId,
+                        });
+                        if (x.onchange) cbSingle.attr('onchange', x.onchange);
+
+                        let cbLbl = $('<label>', {
+                            class: x.classLabel || 'inline-flex items-center gap-2 cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300',
+                            text: x.text || x.valor,
+                            for: cbId,
+                        });
+                        div_hijo.append(cbSingle, cbLbl);
+                    }
+                    break;
+
+                case 'list-group':
+                    let divGroup = $('<div>', {
+                        class: 'flex flex-col gap-1'
+                    });
+                    x.data.forEach(function (item) {
+                        let a = $('<a>', {
+                            class: 'flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors'
+                        });
+                        let iconText = $('<span>', {
+                            class: 'text-sm text-gray-600 dark:text-gray-300'
+                        });
+                        if (item.ico) iconText.prepend($('<i>', { class: item.ico + ' mr-2' }));
+                        iconText.append(item.text);
+
+                        let badge = $('<span>', {
+                            class: 'text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
+                            text: item.notifications,
+                        });
+                        a.append(iconText, badge);
+                        divGroup.append(a);
+                    });
+                    div_hijo.append(divGroup);
+                    break;
+
+                case 'input':
+                    let align = '';
+                    if (x.tipo === 'cifra' || x.tipo === 'numero') align = ' text-right';
+
+                    let htmlType = x.type || 'text';
+                    if (x.tipo === 'email') htmlType = 'email';
+                    if (x.tipo === 'tel') htmlType = 'tel';
+
+                    let attrInput = Object.assign({}, attr_default, {
+                        class: css.input + align,
+                        type: htmlType,
+                        onkeyup: x.onkeyup || '',
+                    });
+                    if (x.onchange) attrInput.onchange = x.onchange;
+                    if (x.readonly) attrInput.readonly = '';
+
+                    div_hijo.append($('<input>', attrInput));
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                case 'input-group':
+                    let inputGroup = $('<div>', {
+                        class: 'flex'
+                    });
+
+                    let valType = x.type || 'text';
+                    let alignGrp = '';
+                    if (x.tipo === 'cifra' || x.tipo === 'numero') alignGrp = ' text-right';
+
+                    if (x.tipo === 'cifra' || x.tipo === 'numero') {
+                        let iconPre = $('<span>', {
+                            class: css.groupAddon
+                        });
+                        if (x.icon) iconPre.html(`<i class="${x.icon}"></i>`);
+                        inputGroup.append(iconPre);
+                    }
+
+                    let attrGrp = Object.assign({}, attr_default, {
+                        class: css.input + ' rounded-l-none' + alignGrp,
+                        type: valType,
+                        onkeyup: x.onkeyup || '',
+                    });
+                    if (x.cat) attrGrp.cat = x.cat;
+                    if (x.readonly) attrGrp.readonly = '';
+                    if (x.onchange) attrGrp.onchange = x.onchange;
+
+                    inputGroup.append($('<input>', attrGrp));
+
+                    if (x.tipo !== 'cifra' && x.tipo !== 'numero') {
+                        let iconApp = $('<span>', {
+                            class: 'inline-flex items-center justify-center px-3 rounded-r-lg border border-l-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-600 text-gray-500 dark:text-gray-300 text-sm',
+                        });
+                        if (x.icon) iconApp.html(`<i class="${x.icon}"></i>`);
+                        inputGroup.append(iconApp);
+                    }
+
+                    div_hijo.append(inputGroup);
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                case 'textarea':
+                    div_hijo.append($('<textarea>', {
+                        class: css.textarea,
+                        id: opts.prefijo + x.id,
+                        'data-tipo': x.tipo,
+                        name: x.name || x.id,
+                        text: x.value,
+                        placeholder: x.placeholder,
+                        cols: x.cols,
+                        rows: x.rows || 3,
+                        required: x.required || false,
+                    }));
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                case 'input-file-btn':
+                    div_hijo.append($('<input>', {
+                        class: css.file,
+                        id: opts.prefijo + x.id,
+                        'data-tipo': x.tipo,
+                        name: x.name || x.id,
+                        type: 'file',
+                    }));
+                    break;
+
+                case 'input-file':
+                    color = x.color_btn || opts.color_default;
+                    let cssKeyFile = CF_BTN_COLORS[color] || 'btnOutline';
+
+                    let iptFile = $('<input>', {
+                        class: 'hidden',
+                        type: 'file',
+                        accept: x.accept || '.xlsx, .xls',
+                        id: opts.prefijo + x.id,
+                        onchange: x.fn,
+                    });
+
+                    let lblBtn = $('<label>', {
+                        class: css[cssKeyFile] + ' mt-4 cursor-pointer text-center',
+                        html: `  ${x.text} `,
+                        for: opts.prefijo + x.id,
+                    });
+
+                    div_hijo.append(iptFile, lblBtn);
+                    break;
+
+                case 'btn':
+                    color = x.color_btn || opts.color_default;
+                    let cssKeyBtn = CF_BTN_COLORS[color] || 'btnOutline';
+                    let iconBtn = x.icon ? `<i class="${x.icon}"></i>` : '';
+                    let textBtn = x.text || '';
+
+                    if (!x.lbl) {
+                        div_hijo.append($('<label>', {
+                            class: css.label,
+                            html: '&nbsp;',
+                            'aria-hidden': 'true'
+                        }));
+                    }
+
+                    div_hijo.append($('<button>', {
+                        class: css[cssKeyBtn] + ' w-full ' + (x.className || ''),
+                        html: `${iconBtn}  ${textBtn} `,
+                        type: 'button',
+                        id: opts.prefijo + x.id,
+                        onclick: x.fn,
+                    }));
+                    break;
+
+                case 'btn-submit':
+                    color = x.color_btn || opts.color_default;
+                    let cssKeySub = CF_BTN_COLORS[color] || 'btnPrimary';
+                    let iconSub = (x.icon || x.icono) ? `<i class="${x.icon || x.icono} mr-1"></i> ` : '';
+
+                    if (!x.lbl) {
+                        div_hijo.append($('<label>', {
+                            class: css.label,
+                            html: '&nbsp;',
+                            'aria-hidden': 'true'
+                        }));
+                    }
+
+                    div_hijo.append($('<button>', {
+                        class: css[cssKeySub] + ' ' + (x.className || ''),
+                        html: iconSub + (x.text || 'Enviar'),
+                        type: 'submit',
+                        id: opts.prefijo + x.id,
+                        onclick: x.fn,
+                    }));
+                    break;
+
+                case 'button':
+                    color = x.color_btn || opts.color_default;
+                    let cssKeyButton = CF_BTN_COLORS[color] || 'btnPrimary';
+                    let iconButton = x.icon ? `<i class="${x.icon}"></i>` : '';
+                    let textButton = x.text || '';
+
+                    let buttonEvents = {};
+                    if (x.fn) buttonEvents.onclick = x.fn;
+                    if (x.onClick) buttonEvents.click = x.onClick;
+
+                    if (!x.lbl) {
+                        div_hijo.append($('<label>', {
+                            class: css.label,
+                            html: '&nbsp;',
+                            'aria-hidden': 'true'
+                        }));
+                    }
+
+                    div_hijo.append($('<button>', {
+                        class: css[cssKeyButton] + ' ' + (x.className || ''),
+                        html: `${iconButton} ${textButton} `,
+                        id: opts.prefijo + x.id,
+                        type: 'button',
+                        ...buttonEvents,
+                    }));
+                    break;
+
+                case 'select':
+                    let selectWrap = $('<div>', {
+                        class: 'relative'
+                    });
+
+                    let select = $('<select>', {
+                        class: css.select + ' pr-8',
+                        id: opts.prefijo + x.id,
+                        name: x.name || x.id,
+                        onchange: x.onchange,
+                        placeholder: x.placeholder,
+                    });
+
+                    if (x.selected) {
+                        select.html(`<option value="0"> ${x.selected} </option>`);
+                    }
+
+                    if (x.data) {
+                        $.each(x.data, function (_, item) {
+                            let bandera = false;
+                            if (String(item.id) == String(x.value)) bandera = true;
+                            select.append($('<option>', {
+                                value: item.id,
+                                text: item.valor,
+                                selected: bandera,
+                            }));
+                        });
+                    }
+
+                    let chevron = $('<div>', {
+                        class: 'pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5',
+                        html: '<svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>',
+                    });
+
+                    selectWrap.append(select, chevron);
+                    div_hijo.append(selectWrap);
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                case 'input-calendar':
+                    let calGroup = $('<div>', {
+                        class: 'flex'
+                    });
+
+                    let calAddon = $('<span>', {
+                        class: css.groupAddon,
+                        html: '<i class="icon-calendar-2"></i>',
+                    });
+
+                    let calInput = $('<input>', {
+                        type: 'date',
+                        class: css.input + ' rounded-l-none',
+                        id: opts.prefijo + x.id,
+                        'data-tipo': x.tipo,
+                        name: x.name || x.id,
+                        value: x.value,
+                        placeholder: x.placeholder || 'dd/mm/aaaa',
+                    });
+
+                    if (required) calInput.attr('required', '');
+                    if (x.disabled) calInput.attr('disabled', '');
+                    if (x.readonly) calInput.attr('readonly', '');
+                    if (x.onchange) calInput.attr('onchange', x.onchange);
+
+                    calGroup.append(calAddon, calInput);
+                    div_hijo.append(calGroup);
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                case 'btn-select':
+                    let bsGroup = $('<div>', {
+                        class: 'flex'
+                    });
+
+                    let bsSelect = $('<select>', {
+                        class: css.select + ' rounded-r-none pr-8',
+                        id: opts.prefijo + x.id,
+                        name: x.name || x.id,
+                        onchange: x.onchange,
+                    });
+                    if (required) bsSelect.attr('required', '');
+
+                    if (x.selected) {
+                        bsSelect.html(`<option value="0"> ${x.selected} </option>`);
+                    }
+
+                    if (x.data) {
+                        $.each(x.data, function (_, item) {
+                            let bandera = String(item.id) == String(x.value);
+                            bsSelect.append($('<option>', {
+                                value: item.id,
+                                text: item.valor,
+                                selected: bandera,
+                            }));
+                        });
+                    }
+
+                    let bsBtn = $('<button>', {
+                        type: 'button',
+                        id: x.btnId || (opts.prefijo + x.id + '_btn'),
+                        class: 'px-3 rounded-r-lg border border-l-0 border-gray-300 dark:border-gray-600 bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium transition-colors',
+                        html: x.btnIcon ? `<i class="${x.btnIcon}"></i>` : (x.btnText || '+'),
+                    });
+                    if (x.fn) bsBtn.attr('onclick', x.fn);
+                    if (x.btnFn) bsBtn.attr('onclick', x.btnFn);
+                    if (x.btnOnClick) bsBtn.on('click', x.btnOnClick);
+
+                    let bsBtnIcon = x.icon ? $('<i>', { class: x.icon }) : null;
+                    if (bsBtnIcon) bsBtn.append(bsBtnIcon);
+
+                    bsGroup.append(bsSelect, bsBtn);
+                    div_hijo.append(bsGroup);
+                    div_hijo.append($('<span>', { class: css.error }));
+                    break;
+
+                default:
+                    if (x.opc) {
+                        const { class: _, ...xWithoutClass } = x;
+                        div_hijo.append($('<' + x.opc + '>', xWithoutClass));
+                    }
+                    break;
+            }
+
+            container.append(div_hijo);
+        }
+
+        if (opts.type === 'btn') {
+            let cssKeyAuto = CF_BTN_COLORS[opts.color] || 'btnPrimary';
+            let divBtn = $('<div>', {
+                class: 'mt-3 col-span-12 flex justify-center'
+            });
+            let btnSubmit = $('<button>', {
+                class: css[cssKeyAuto] + ' sm:w-1/3',
+                text: 'Aceptar',
+                id: 'btnAceptar',
+                type: 'submit',
+            });
+            divBtn.append(btnSubmit);
+            container.append(divBtn);
+        }
+
+        card.append(container);
+        $(`#${opts.parent}`).html(themeWrap);
+
+        if (opts.autofill) self.cfAutofill(opts.id, opts.autofill);
+
+        self.cfBindLiveValidation(container);
+
+        if (opts.Element === 'form') {
+            container.on('submit', function (e) {
+                e.preventDefault();
+                if (!self.cfValidateForm(container)) return;
+
+                let formData = new FormData(container[0]);
+                let result = Object.assign({}, opts.data);
+                formData.forEach(function (val, key) { result[key] = val; });
+
+                opts.onSave(result);
+            });
+        }
+
+        return container;
+    }
 
     detailCard(options = {}) {
         const defaults = {
@@ -675,8 +1428,10 @@ class Components extends Complements {
                     }
 
                     if (dataConfig.datatable) {
-                        window[dataConfig.fn_datatable]('#' + attr_table_filter.id, dataConfig.pag);
+                        window[dataConfig.fn_datatable]('#' + attr_table_filter.id, dataConfig.pag, dataConfig.filterColumns);
                     }
+
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
 
                 }
 
@@ -698,38 +1453,14 @@ class Components extends Complements {
                     opts.methods.send(data);
                     this.processData(data, opts, dataConfig);
 
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+
                 }
 
             });
 
         }
 
-    }
-
-    processData(data, opts, conf) {
-
-        let attrTable = {
-            data: data,
-            f_size: '14',
-            id: 'tbSearch',
-            ...opts.attr
-        };
-
-        if (opts.success) opts.success(data);
-
-        if (opts.coffeesoft) {
-            attrTable.parent = opts.parent;
-            if (conf.datatable) attrTable.scrollable = false;
-            this[opts.fn_coffeesoft](attrTable);
-        } else {
-            $(`#${opts.parent}`).rpt_json_table2(attrTable);
-        }
-
-        opts.methods.send(data);
-
-        if (conf.datatable) {
-            window[conf.fn_datatable](`#${attrTable.id}`, conf.pag);
-        }
     }
 
     createForm(options) {
@@ -1336,6 +2067,8 @@ class Components extends Complements {
         let defaults = {
             id: 'idFilterBar',
             parent: 'filterBar',
+            coffeesoft: false,
+
             json: [
                 {
                     opc: "input-calendar",
@@ -1357,6 +2090,21 @@ class Components extends Complements {
 
         //  Combinar objetos
         let opts = Object.assign(defaults, options);
+
+        if (opts.coffeesoft) {
+            this.coffeeForm({
+                parent: opts.parent,
+                id: opts.id,
+                showRequired: false,
+                // class: 'grid grid-cols-12 gap-x-4 gap-y-1',
+                json: opts.data,
+                theme: opts.theme || 'light',
+                card: opts.card === true,
+                prefijo: opts.prefijo || '',
+            });
+            return;
+        }
+
         $(`#${opts.parent}`).content_json_form({ data: opts.data, type: '', id: opts.id });
 
 
@@ -2558,8 +3306,8 @@ class Components extends Complements {
 
 
         if (opts.fixed.length > 0) {
-            const bgHeader = opts.theme === 'dark' ? '#0F172A' : opts.theme === 'corporativo' ? '#003360' : '#003360';
-            const bgDefault = opts.theme === 'dark' ? '#1E293B' : '#F3F4F6';
+            const bgHeader = opts.theme === 'dark' ? '#374151' : opts.theme === 'corporativo' ? '#003360' : '#003360';
+            const bgDefault = opts.theme === 'dark' ? '#283341' : '#F3F4F6';
 
             let fixedCSS = `
                 #${opts.id} { 
@@ -2749,6 +3497,7 @@ class Components extends Complements {
             right: [],
             fixed: [],
             fixedWidth: 200,
+            colMinWidth: 150,
             selectable: false,
             folding: false,
             collapsed: false,
@@ -2761,13 +3510,14 @@ class Components extends Complements {
             class: "w-full table-auto text-sm text-gray-800",
             extends: true,
             f_size: 12,
-            border_table: "border rounded-lg border-gray-300",
+            border_table: "border border-gray-200 rounded-lg",
             border_row: "border-b border-gray-200",
             color_row_alt: "bg-gray-100",
             striped: false,
             hover: false,
             bordered: false,
             border_color: "",
+            border_group: "border-gray-300",
         };
 
         if (options.theme === 'light') {
@@ -2775,9 +3525,9 @@ class Components extends Complements {
             defaults.color_row = "";
             defaults.color_group = "bg-gray-100";
             defaults.class = "w-full text-sm";
-            defaults.border_table = "border rounded-lg border-gray-300";
-            defaults.border_row = "border-t border-gray-300";
-            defaults.border_color = "border-gray-300";
+            defaults.border_table = "border border-gray-200 rounded-lg";
+            defaults.border_row = "border-b border-gray-200";
+            defaults.border_color = "border-gray-200";
             defaults.color_row_alt = "bg-gray-50";
         }
 
@@ -2786,23 +3536,42 @@ class Components extends Complements {
             defaults.color_row = "";
             defaults.color_group = "bg-gray-100";
             defaults.class = "w-full text-sm";
-            defaults.border_table = "border rounded-lg border-gray-300";
+            defaults.border_table = "border border-gray-200 rounded-lg";
             defaults.border_row = "border-b border-gray-200";
             defaults.color_row_alt = "bg-gray-100";
         }
 
         if (options.theme === 'dark') {
             defaults.dark = true;
-            defaults.color_th = "bg-[#0F172A] text-white";
-            defaults.color_row = "bg-[#1E293B] text-white";
+            defaults.color_th = "bg-[#374151] text-gray-300";
+            defaults.color_row = "bg-[#283341]";
             defaults.color_group = "bg-[#334155] text-white";
-            defaults.class = "w-full text-sm text-white";
+            defaults.class = "w-full table-auto text-sm text-gray-300";
             defaults.border_table = "";
-            defaults.border_row = "border-b border-gray-600";
+            defaults.border_row = "border-t border-gray-700";
             defaults.color_row_alt = "bg-[#111827]";
         }
 
+        if (options.theme === 'slate') {
+            defaults.color_th = "bg-slate-700 text-slate-100";
+            defaults.color_row = "";
+            defaults.color_group = "bg-slate-100";
+            defaults.class = "w-full text-sm";
+            defaults.border_table = "border border-slate-200 rounded-lg";
+            defaults.border_row = "border-b border-slate-200";
+            defaults.color_row_alt = "bg-slate-50";
+        }
+
         const opts = Object.assign({}, defaults, options);
+
+        if (!('scrollable' in options)) {
+            opts.scrollable = opts.fixed.length > 0;
+        }
+
+        const getFixedWidth = (col) => {
+            if (typeof opts.fixedWidth === 'object') return opts.fixedWidth[col] || 200;
+            return opts.fixedWidth;
+        };
 
         const container = $("<div>", { class: "rounded-lg h-full" });
 
@@ -2861,10 +3630,11 @@ class Components extends Complements {
                             let thClass = `text-center px-3 py-2 ${opts.color_th} capitalize font-semibold ${borderedClass}`;
                             let thStyle = `font-size:${opts.f_size}px;`;
                             if (isFixed) {
+                                const fw = getFixedWidth(colIdx);
                                 thClass += ` sticky z-20 border-r border-gray-200`;
-                                thStyle += `left:${leftOffset}px;min-width:${opts.fixedWidth}px;width:${opts.fixedWidth}px;`;
-                                fixedStyles.push({ col: colIdx, left: leftOffset, width: opts.fixedWidth });
-                                leftOffset += opts.fixedWidth;
+                                thStyle += `left:${leftOffset}px;min-width:${fw}px;width:${fw}px;`;
+                                fixedStyles.push({ col: colIdx, left: leftOffset, width: fw });
+                                leftOffset += fw;
                             }
                             headerRow.append($("<th>", {
                                 class: thClass,
@@ -2892,10 +3662,11 @@ class Components extends Complements {
                     let thClass = `text-center px-3 py-2 capitalize ${opts.color_th} font-semibold ${borderedClass}`;
                     let thStyle = `font-size:${opts.f_size}px;`;
                     if (isFixed) {
+                        const fw = getFixedWidth(colIdx);
                         thClass += ` sticky z-20 border-r border-gray-200`;
-                        thStyle += `left:${leftOffset}px;min-width:${opts.fixedWidth}px;width:${opts.fixedWidth}px;`;
-                        fixedStyles.push({ col: colIdx, left: leftOffset, width: opts.fixedWidth });
-                        leftOffset += opts.fixedWidth;
+                        thStyle += `left:${leftOffset}px;min-width:${fw}px;width:${fw}px;`;
+                        fixedStyles.push({ col: colIdx, left: leftOffset, width: fw });
+                        leftOffset += fw;
                     }
                     simpleHeaderRow.append($("<th>", {
                         class: thClass,
@@ -2921,10 +3692,11 @@ class Components extends Complements {
                     let thStyle = `font-size:${opts.f_size}px;`;
 
                     if (isFixed) {
+                        const fw = getFixedWidth(colIdx);
                         thClass += ` sticky z-20 border-r border-gray-200`;
-                        thStyle += `left:${leftOffset}px;min-width:${opts.fixedWidth}px;width:${opts.fixedWidth}px;`;
-                        fixedStyles.push({ col: colIdx, left: leftOffset, width: opts.fixedWidth });
-                        leftOffset += opts.fixedWidth;
+                        thStyle += `left:${leftOffset}px;min-width:${fw}px;width:${fw}px;`;
+                        fixedStyles.push({ col: colIdx, left: leftOffset, width: fw });
+                        leftOffset += fw;
                     }
 
                     autoHeaderRow.append($("<th>", {
@@ -2975,6 +3747,8 @@ class Components extends Complements {
             let bg_grupo = "";
             let isGroupRow = false;
 
+            let borderTopClass = "";
+
             if (data.opc) {
                 if (data.opc == 1) {
                     const groupColor = data.color_group || opts.color_group;
@@ -2983,19 +3757,26 @@ class Components extends Complements {
                     groupIndex++;
                     currentGroupId = `group_${opts.id}_${groupIndex}`;
                 }
+                if (data.opc == 2) {
+                    borderTopClass = ` border-t-2 ${borderColor} `;
+                }
+                if (data.opc == 3) {
+                    const groupBorder = opts.border_group || borderColor;
+                    borderTopClass = ` border-t-2 border-t-${groupBorder.replace('border-', '')} `;
+                }
             }
 
             let colorBg = bg_grupo || (opts.striped && i % 2 === 0 ? opts.color_row_alt : opts.color_row);
-
-            if (opts.hover && !bg_grupo) {
-                colorBg += opts.theme === 'dark' ? ' hover:bg-[#334155]' : ' hover:bg-gray-50';
-            }
 
             const originalOpc = data.opc;
             delete data.opc;
             delete data.color_group;
 
             const tr = $("<tr>");
+
+            if (opts.hover && !bg_grupo) {
+                tr.addClass('ct3-hoverable');
+            }
 
             if (originalOpc) {
                 tr.attr('data-opc', originalOpc);
@@ -3034,7 +3815,7 @@ class Components extends Complements {
                 }
 
                 const truncateClass = opts.scrollable ? 'truncate' : '';
-                let cellClass = ` ${align} ${opts.border_row} px-2 py-2 ${truncateClass} ${colorBg} `;
+                let cellClass = ` ${align} ${opts.border_row} px-2 py-2 ${truncateClass} ${colorBg} ${borderTopClass} `;
 
                 if (opts.bordered) {
                     cellClass += typeof opts.bordered === 'string'
@@ -3118,12 +3899,19 @@ class Components extends Complements {
             });
 
             // Botones de acción 'a'
-            if (data.a?.length) {
-                const actions = $("<td>", { class: `px-2 py-2 text-center align-middle ${colorBg} ${opts.border_row}` });
-                data.a.forEach(atributos => {
-                    const button_a = $("<a>", atributos);
-                    actions.append(button_a);
+            if (data.a) {
+                const actions = $("<td>", {
+                    class: `px-3 py-2 text-center align-middle whitespace-nowrap ${colorBg} ${opts.border_row}`,
+                    style: `width:1%;`
                 });
+                if (data.a.length) {
+                    const actionsWrapper = $("<div>", { class: "inline-flex items-center gap-1" });
+                    data.a.forEach(atributos => {
+                        const button_a = $("<a>", atributos);
+                        actionsWrapper.append(button_a);
+                    });
+                    actions.append(actionsWrapper);
+                }
                 tr.append(actions);
             }
 
@@ -3187,6 +3975,8 @@ class Components extends Complements {
         container.append(tableWrapper);
         $(`#${opts.parent}`).html(container);
 
+        // table-auto maneja el plegado sin fijar anchos en px
+
         // Cerrar dropdowns ct3 al hacer clic fuera
         $(document).off('click.ct3Dropdown').on('click.ct3Dropdown', () => {
             $(`#${opts.id} ul.ct3-dropdown-menu`).hide();
@@ -3197,9 +3987,15 @@ class Components extends Complements {
 
 
 
-        if (opts.fixed.length > 0) {
-            const bgHeader = opts.theme === 'dark' ? '#0F172A' : opts.theme === 'corporativo' ? '#003360' : '#003360';
-            const bgDefault = opts.theme === 'dark' ? '#1E293B' : '#F3F4F6';
+        const styleId = `style-ct3-${opts.id}`;
+
+        const recalcLayout = () => {
+            $(`#${styleId}`).remove();
+
+            if (opts.fixed.length === 0) return;
+
+            const bgHeader = opts.theme === 'dark' ? '#374151' : opts.theme === 'corporativo' ? '#003360' : '#003360';
+            const bgDefault = opts.theme === 'dark' ? '#283341' : '#F3F4F6';
 
             let fixedCSS = `
                 #${opts.id} {
@@ -3245,10 +4041,10 @@ class Components extends Complements {
             const extractBgColor = (classStr) => {
                 const arbitraryMatch = classStr.match(/bg-\[([^\]]+)\]/);
                 if (arbitraryMatch) return arbitraryMatch[1];
-                
+
                 const standardMatch = classStr.match(/bg-((?:green|blue|red|yellow|gray|purple|orange|white|black)(?:-\d+)?)/);
                 if (standardMatch) return tailwindColors[standardMatch[1]] || null;
-                
+
                 return null;
             };
 
@@ -3273,7 +4069,23 @@ class Components extends Complements {
                 });
             }, 50);
 
-            $("<style>").text(fixedCSS).appendTo("head");
+            $("<style>", { id: styleId }).text(fixedCSS).appendTo("head");
+        };
+
+        recalcLayout();
+
+        const parentEl = document.getElementById(opts.parent);
+        if (parentEl && typeof ResizeObserver !== 'undefined') {
+            if (parentEl.__ct3Observer) {
+                parentEl.__ct3Observer.disconnect();
+            }
+            let resizeTimer = null;
+            const observer = new ResizeObserver(() => {
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => recalcLayout(), 80);
+            });
+            observer.observe(parentEl);
+            parentEl.__ct3Observer = observer;
         }
 
         if (opts.selectable) {
@@ -3380,17 +4192,33 @@ class Components extends Complements {
         #${opts.id} tbody tr:last-child td {
             border-bottom: none !important;
         }
+        #${opts.id} tbody tr:first-child td {
+            border-top: none !important;
+        }
+        #${opts.id} thead tr th:last-child,
+        #${opts.id} tbody tr td:last-child {
+            border-right: none !important;
+        }
         ${opts.scrollable ? `
         #${opts.id} th:not(.sticky),
         #${opts.id} td:not(.sticky) {
-            min-width: 150px !important;
+            min-width: ${opts.colMinWidth}px !important;
         }` : ''}
-        #${opts.id} th.sticky,
-        #${opts.id} td.sticky {
-            min-width: ${opts.fixedWidth}px !important;
-            width: ${opts.fixedWidth}px !important;
-            max-width: ${opts.fixedWidth}px !important;
+        ${fixedStyles.map(f => `
+        #${opts.id} th.sticky[data-col="${f.col}"],
+        #${opts.id} td.sticky[data-col="${f.col}"] {
+            min-width: ${f.width}px !important;
+            width: ${f.width}px !important;
+            max-width: ${f.width}px !important;
+        }`).join('')}
+        ${opts.hover ? `
+        #${opts.id} tbody tr.ct3-hoverable {
+            cursor: pointer;
         }
+        #${opts.id} tbody tr.ct3-hoverable:hover td {
+            background-color: ${opts.theme === 'dark' ? '#334155' : '#E5E7EB'} !important;
+            transition: background-color 0.15s ease;
+        }` : ''}
         `).appendTo("head");
     }
 
@@ -3401,7 +4229,7 @@ class Components extends Complements {
             type: "large", // 'short' | 'large' | 'button'
             theme: "light", // 'dark' | 'light'
             class: "",
-            showBorder:true,
+            showBorder: true,
             tab: {
                 size: 'px-3 py-1',
             },
@@ -3422,7 +4250,7 @@ class Components extends Complements {
                 base: "bg-gray-900 text-white",
                 active: "bg-blue-600 text-white",
                 inactive: "text-gray-300 hover:bg-gray-700",
-                iconActive: "text-blue-400"
+                iconActive: "text-white"
             },
             light: {
                 base: "bg-gray-200 text-black",
@@ -3476,9 +4304,10 @@ class Components extends Complements {
                    ${isActive ? themeStyle.active : themeStyle.inactive}`;
 
             let iconHtml = '';
-            const iconColorClass = isActive ? (tab.iconColor || themeStyle.iconActive || '') : 'text-gray-800';
+            const inactiveIconColor = opts.theme === 'dark' ? 'text-gray-400' : 'text-gray-800';
+            const iconColorClass = isActive ? (tab.iconColor || themeStyle.iconActive || '') : inactiveIconColor;
             let baseIconClasses = '';
-            
+
             if (tab.lucideIcon) {
                 baseIconClasses = 'w-4 h-4 md:w-4 md:h-4 inline-block mr-2 md:mr-2';
                 iconHtml = `<i data-lucide="${tab.lucideIcon}" class="${baseIconClasses} ${iconColorClass}" data-base-classes="${baseIconClasses}"></i>`;
@@ -3499,7 +4328,7 @@ class Components extends Complements {
                         $(this).attr("data-state", "inactive")
                             .removeClass(themeStyle.active)
                             .addClass(themeStyle.inactive);
-                        
+
                         const $icon = $(this).find('i, svg');
                         if ($icon.length) {
                             const baseClasses = $icon.data('base-classes') || '';
@@ -3511,7 +4340,7 @@ class Components extends Complements {
                             if (themeStyle.iconActive) {
                                 $icon.removeClass(themeStyle.iconActive);
                             }
-                            $icon.removeClass('text-gray-800 text-blue-600 text-blue-400 text-white').addClass('text-gray-800');
+                            $icon.removeClass('text-gray-800 text-gray-400 text-blue-600 text-blue-400 text-white').addClass(opts.theme === 'dark' ? 'text-gray-400' : 'text-gray-800');
                         }
                     });
 
@@ -3527,7 +4356,7 @@ class Components extends Complements {
                         const $activeIcon = tabButton.find('i, svg');
                         if ($activeIcon.length) {
                             const iconColor = tabButton.data('icon-color');
-                            $activeIcon.removeClass('text-gray-800');
+                            $activeIcon.removeClass('text-gray-800 text-gray-400');
                             if (iconColor) {
                                 const colorClasses = iconColor.split(' ');
                                 colorClasses.forEach(cls => $activeIcon.addClass(cls));
@@ -3961,6 +4790,7 @@ class Components extends Complements {
             class: "",
             theme: "light",
             style: "default",
+            coffeesoft: false,
             borderColor: "border-[#8CC63F]",
             cols: 4,
             json: []
@@ -3969,25 +4799,54 @@ class Components extends Complements {
 
         const renderCard = (card, i = "") => {
             if (opts.style === "file") {
-                const box = $("<div>", {
-                    id: `${opts.id}_${i}`,
-                    class: `${card.bgColor || ""} border ${card.borderColor ||  opts.borderColor} rounded-lg p-3`
-                });
+                let box = '';
+                if (!opts.coffeesoft) {
+                    box = $("<div>", {
+                        id: `${opts.id}_${i}`,
+                        class: `${card.bgColor || ""} border ${card.borderColor || opts.borderColor} rounded-lg p-3`
+                    });
+                } else {
+                    box = $("<div>", {
+                        id: `${opts.id}_${i}`,
+                        class: `${card.bgColor || ""} border-2 group hover:${card.borderColor} rounded-lg p-3`
+                    });
+                }
 
-                const titleElement = $("<p>", { 
-                    class: "text-sm text-gray-500 mb-1", 
-                    text: card.title 
-                });
+                let colorHover = (card.borderColor || "").replace(/^border-/, "");
 
-                const subtitleElement = card.subtitle 
-                    ? $("<p>", { 
-                        class: "text-xs text-gray-400 mb-2", 
-                        text: card.subtitle 
+                const titleRow = $("<div>", {
+                    class: "flex items-center justify-between mb-1"
+                }).append(
+                    $("<p>", {
+                        class: "text-sm text-gray-500",
+                        text: card.title
+                    })
+                );
+
+                if (card.onClick) {
+                    const btnHoverClass = opts.coffeesoft && colorHover
+                        ? `group-hover:bg-${colorHover} group-hover:text-white`
+                        : "";
+                    const detailBtn = $("<button>", {
+                        type: "button",
+                        class: `text-xs text-gray-600 bg-gray-100 rounded-full px-2.5 py-0.5 transition-colors ${btnHoverClass}`,
+                        text: "Ver detalle"
+                    }).on('click', (e) => {
+                        e.stopPropagation();
+                        card.onClick();
+                    });
+                    titleRow.append(detailBtn);
+                }
+
+                const subtitleElement = card.subtitle
+                    ? $("<p>", {
+                        class: "text-xs text-gray-400 mb-2",
+                        text: card.subtitle
                     })
                     : null;
 
-                const valueContainer = $("<div>", { 
-                    class: "flex items-center justify-end" 
+                const valueContainer = $("<div>", {
+                    class: "flex items-center justify-end"
                 }).append(
                     $("<span>", {
                         id: card.id || "",
@@ -3996,7 +4855,7 @@ class Components extends Complements {
                     })
                 );
 
-                box.append(titleElement);
+                box.append(titleRow);
                 if (subtitleElement) box.append(subtitleElement);
                 box.append(valueContainer);
 
@@ -4070,390 +4929,439 @@ class Components extends Complements {
         $(`#${opts.parent}`).html(html);
     }
 
-    coffeeForm(options = {}) {
-        const defaults = {
-            parent: '',
-            id: 'coffeeForm',
-            class: 'flex flex-wrap -mx-2',
-            prefijo: '',
-            data: [],
-            Element: 'div',
-            required: true,
-            theme: 'light',
+    coffeeLoader(options = {}) {
+        const sizePresets = {
+            xs: 20,
+            sm: 32,
+            md: 44,
+            lg: 64,
+            xl: 80
         };
 
-        const themes = {
-            light: {
-                label: 'block text-sm font-semibold text-gray-700 mb-1 border-0',
-                labelTitle: 'block text-base font-bold text-gray-900 py-1',
-                input: 'w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                inputGroup: 'flex-1 bg-white border border-gray-300 text-gray-900 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400',
-                addon: 'bg-gray-100 border border-gray-300 px-3 py-2 text-gray-500',
-                textarea: 'w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 resize-y',
-                select: 'w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none',
-                radio: 'w-4 h-4 text-blue-500 bg-white border-gray-300 focus:ring-blue-500',
-                radioLabel: 'ml-2 text-sm font-semibold text-gray-700 cursor-pointer border-0',
-                checkbox: 'w-4 h-4 text-blue-500 bg-white border-gray-300 rounded focus:ring-blue-500',
-                checkboxLabel: 'ml-2 text-sm font-semibold text-gray-700 cursor-pointer border-0',
-                code: 'bg-gray-100 text-green-700 text-xs p-3 rounded-lg overflow-x-auto',
-                fileInput: 'w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700',
-                listItem: 'flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors',
-                listText: 'text-gray-700',
-                calendarInput: 'flex-1 bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 select_input',
-                calendarAddon: 'bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg px-3 py-2 text-gray-500',
-            },
-            dark: {
-                label: 'block text-sm font-semibold text-gray-300 mb-1 border-0',
-                labelTitle: 'block text-base font-bold text-white py-1',
-                input: 'w-full bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500',
-                inputGroup: 'flex-1 bg-gray-800 border border-gray-600 text-white text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500',
-                addon: 'bg-gray-700 border border-gray-600 px-3 py-2 text-gray-400',
-                textarea: 'w-full bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 resize-y',
-                select: 'w-full bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none',
-                radio: 'w-4 h-4 text-blue-500 bg-gray-800 border-gray-600 focus:ring-blue-500',
-                radioLabel: 'ml-2 text-sm font-semibold text-gray-300 cursor-pointer border-0',
-                checkbox: 'w-4 h-4 text-blue-500 bg-gray-800 border-gray-600 rounded focus:ring-blue-500',
-                checkboxLabel: 'ml-2 text-sm font-semibold text-gray-300 cursor-pointer border-0',
-                code: 'bg-gray-900 text-green-400 text-xs p-3 rounded-lg overflow-x-auto',
-                fileInput: 'w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700',
-                listItem: 'flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition-colors',
-                listText: 'text-gray-300',
-                calendarInput: 'flex-1 bg-gray-800 border border-gray-600 text-white text-sm rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 select_input',
-                calendarAddon: 'bg-gray-700 border border-gray-600 border-l-0 rounded-r-lg px-3 py-2 text-gray-400',
+        const defaults = {
+            parent: "root",
+            id: "coffeeLoader",
+            class: "",
+            text: "Cargando",
+            size: 44,
+            py: 20,
+            orientation: null,
+            variant: 'heart',
+            icon: null,
+            image: null,
+            iconHtml: null,
+            color: '#7560F3',
+            cycle: 8
+        };
+
+        const userProvidedText = options.text !== undefined;
+        const opts = Object.assign({}, defaults, options);
+
+        let sizePx = typeof opts.size === 'number' ? opts.size : 44;
+        let isHorizontal = opts.orientation === 'horizontal';
+
+        if (typeof opts.size === 'string') {
+            const key = opts.size.toLowerCase();
+            if (sizePresets[key]) sizePx = sizePresets[key];
+            if (opts.orientation === null && (key === 'xs' || key === 'sm')) {
+                isHorizontal = true;
             }
+        }
+
+        if (opts.orientation === 'vertical') isHorizontal = false;
+
+        const styleId = 'coffeeLoaderStyles';
+
+        if (!document.getElementById(styleId)) {
+            const style = $('<style>', { id: styleId }).text(`
+                @keyframes cs-heartbeat {
+                    0%   { transform: scale(1); background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 0 0 0 rgba(99,102,241,.4); }
+                    14%  { transform: scale(1.25); }
+                    28%  { transform: scale(1); }
+                    42%  { transform: scale(1.15); background: linear-gradient(135deg, #ec4899, #d946ef); }
+                    70%  { transform: scale(1); box-shadow: 0 0 0 16px rgba(99,102,241,0); background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+                    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+                }
+                @keyframes cs-dots { 0%, 20% { content: ''; } 40% { content: '.'; } 60% { content: '..'; } 80%, 100% { content: '...'; } }
+                @keyframes cs-spin { to { transform: rotate(360deg); } }
+                @keyframes cs-pulse-ring {
+                    0%   { transform: scale(0.6); opacity: 1; }
+                    100% { transform: scale(1.6); opacity: 0; }
+                }
+                @keyframes cs-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+                .cs-primary { position: relative; transform: translateZ(0); }
+                .cs-primary-gooey {
+                    position: absolute;
+                    inset: -10%;
+                    filter: url(#cs-goo-filter);
+                    -webkit-filter: url(#cs-goo-filter);
+                    will-change: filter;
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+                .cs-primary-main, .cs-primary-drop {
+                    position: absolute;
+                    border-radius: 50%;
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                    transform: translateZ(0);
+                }
+                .cs-primary-main { top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(0); }
+                .cs-primary-drop { top: 10%; left: 10%; offset-rotate: 0deg; animation: cs-travel var(--cs-cycle, 8s) linear infinite; }
+                .cs-primary-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; pointer-events: none; display: flex; align-items: center; justify-content: center; color: #fff; }
+                .cs-primary-center img { object-fit: contain; image-rendering: auto; }
+                .cs-heart { border-radius: 50%; animation: cs-heartbeat 1.5s ease-in-out infinite; }
+                .cs-dots::after { content: ''; animation: cs-dots 1.5s steps(4, end) infinite; }
+                .cs-circle {
+                    border-radius: 50%;
+                    border-style: solid;
+                    border-color: rgba(99,102,241,.15);
+                    border-top-color: #6366f1;
+                    border-right-color: #8b5cf6;
+                    animation: cs-spin 0.9s linear infinite;
+                }
+                .cs-pulse {
+                    position: relative;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                }
+                .cs-pulse::before, .cs-pulse::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                    animation: cs-pulse-ring 1.6s ease-out infinite;
+                }
+                .cs-pulse::after { animation-delay: 0.8s; }
+            `);
+            $('head').append(style);
+        }
+
+        const flexDir = isHorizontal ? 'flex-row' : 'flex-col';
+        const gap = isHorizontal ? 'gap-3' : 'gap-5';
+
+        const container = $('<div>', {
+            id: opts.id,
+            class: `flex ${flexDir} items-center justify-center ${gap} ${opts.class}`,
+            style: `padding-top: ${opts.py}px; padding-bottom: ${opts.py}px;`
+        });
+
+        let visual;
+        let needsLucide = false;
+        if (opts.variant === 'circle') {
+            const borderWidth = Math.max(2, Math.round(sizePx / 10));
+            visual = $('<div>', {
+                class: 'cs-circle',
+                style: `width: ${sizePx}px; height: ${sizePx}px; border-width: ${borderWidth}px;`
+            });
+        } else if (opts.variant === 'pulse') {
+            visual = $('<div>', {
+                class: 'cs-pulse',
+                style: `width: ${sizePx}px; height: ${sizePx}px;`
+            });
+        } else if (opts.variant === 'primary') {
+            if (!document.getElementById('cs-goo-filter-svg')) {
+                $('body').append(`
+                    <svg id="cs-goo-filter-svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+                        <defs>
+                            <filter id="cs-goo-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -11" result="goo" />
+                                <feGaussianBlur in="goo" stdDeviation="0.6" result="smooth" />
+                                <feComposite in="SourceGraphic" in2="smooth" operator="atop" />
+                            </filter>
+                        </defs>
+                    </svg>
+                `);
+            }
+
+            const mainSize = sizePx;
+            const loaderSize = Math.round(sizePx * 3.75);
+            const dropSize = Math.round(sizePx * 0.5625);
+            const scale = loaderSize / 300;
+            const s = (v) => (v * scale).toFixed(1);
+            const pathStr = `M ${s(130)},${s(155)} C ${s(-45)},${s(155)} ${s(155)},${s(-45)} ${s(150)},${s(150)} C ${s(155)},${s(345)} ${s(-45)},${s(145)} ${s(150)},${s(150)} C ${s(345)},${s(145)} ${s(145)},${s(345)} ${s(150)},${s(150)} C ${s(145)},${s(-45)} ${s(345)},${s(155)} ${s(150)},${s(150)} Z`;
+
+            let centerHtml = '';
+            if (opts.icon) {
+                const iconSize = Math.round(mainSize * 0.55);
+                centerHtml = `<i data-lucide="${opts.icon}" style="width:${iconSize}px;height:${iconSize}px"></i>`;
+                needsLucide = true;
+            } else if (opts.image) {
+                // Imagen al 100% de mainSize (igual que el loader.html original donde flame-logo == --main-size).
+                // Para reducirla, multiplicar mainSize por un factor (ej: mainSize * 0.80).
+                const imgSize = mainSize;
+                centerHtml = `<img src="${opts.image}" alt="loader" style="width:${imgSize}px;height:${imgSize}px;display:block;margin:auto;object-fit:contain;" />`;
+            } else if (opts.iconHtml) {
+                centerHtml = opts.iconHtml;
+            }
+
+            visual = $(`
+                <div class="cs-primary" style="width:${loaderSize}px;height:${loaderSize}px;--cs-cycle:${opts.cycle}s;">
+                    <div class="cs-primary-gooey">
+                        <div class="cs-primary-main" style="width:${mainSize}px;height:${mainSize}px;background:${opts.color};"></div>
+                        <div class="cs-primary-drop" style="width:${dropSize}px;height:${dropSize}px;background:${opts.color};offset-path:path('${pathStr}');"></div>
+                    </div>
+                    ${centerHtml ? `<div class="cs-primary-center" style="width:${mainSize}px;height:${mainSize}px;">${centerHtml}</div>` : ''}
+                </div>
+            `);
+        } else {
+            visual = $('<div>', {
+                class: 'cs-heart',
+                style: `width: ${sizePx}px; height: ${sizePx}px;`
+            });
+        }
+
+        const showLabel = !(opts.variant === 'primary' && !userProvidedText);
+
+        if (showLabel) {
+            const label = $('<p>', {
+                class: 'text-sm font-medium text-gray-400 tracking-wide cs-dots m-0',
+                text: opts.text
+            });
+            container.append(visual, label);
+        } else {
+            container.append(visual);
+        }
+
+        $(`#${opts.parent}`).html(container);
+
+        if (needsLucide && typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    inlineCards(options) {
+        const defaults = {
+            parent: "root",
+            id: "inlineCards",
+            class: "",
+            width: 120,
+            json: []
+        };
+        const opts = Object.assign({}, defaults, options);
+
+        const toneMap = {
+            blue:   { iconColor: 'text-blue-500',   iconBg: 'bg-blue-50',   valueColor: 'text-blue-600' },
+            teal:   { iconColor: 'text-teal-600',   iconBg: 'bg-teal-50',   valueColor: 'text-teal-600' },
+            gray:   { iconColor: 'text-gray-500',   iconBg: 'bg-gray-100',  valueColor: 'text-gray-700' },
+            green:  { iconColor: 'text-green-600',  iconBg: 'bg-green-50',  valueColor: 'text-green-600' },
+            amber:  { iconColor: 'text-amber-600',  iconBg: 'bg-amber-50',  valueColor: 'text-amber-700' },
+            red:    { iconColor: 'text-red-500',    iconBg: 'bg-red-50',    valueColor: 'text-red-600' },
+            purple: { iconColor: 'text-purple-500', iconBg: 'bg-purple-50', valueColor: 'text-purple-600' },
+            indigo: { iconColor: 'text-indigo-500', iconBg: 'bg-indigo-50', valueColor: 'text-indigo-600' }
+        };
+
+        const container = $(`#${opts.parent}`);
+        if (!container.length) return;
+        container.empty();
+
+        opts.json.forEach(card => {
+            const tone = toneMap[card.tone] || toneMap.blue;
+
+            const cardEl = $('<div>', {
+                class: `inline-flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-1 py-1 whitespace-nowrap ${opts.class}`,
+                style: `width: ${opts.width}px;`
+            });
+
+            const iconWrap = $('<div>', {
+                class: `w-7 h-7 rounded-full ${tone.iconBg} flex items-center justify-center flex-shrink-0`
+            }).append($('<i>', {
+                'data-lucide': card.icon,
+                class: `w-3.5 h-3.5 ${tone.iconColor}`
+            }));
+
+            const textWrap = $('<div>', { class: 'flex flex-col leading-none gap-0.5 min-w-0' });
+
+            const label = $('<span>', {
+                class: 'text-[10px] text-gray-400 font-medium',
+                text: card.label
+            });
+
+            const value = $('<span>', {
+                class: `text-xs font-bold ${tone.valueColor} truncate`,
+                text: card.value
+            });
+
+            textWrap.append(label, value);
+            cardEl.append(iconWrap, textWrap);
+            container.append(cardEl);
+        });
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    createNavbar(options) {
+        const defaults = {
+            parent: "body",
+            id: "cs-navbar",
+            logo: "ERP",
+            logoSuffix: "-GV",
+            userName: "",
+            height: 50,
+            apps: [],
+            onToggleSidebar: () => {
+                $("#sidebar").toggleClass("active");
+                $("#main__content").toggleClass("active");
+            },
+            onProfile: () => { },
+            onLogout: () => { }
         };
 
         const opts = Object.assign({}, defaults, options);
-        const t = themes[opts.theme] || themes.light;
-        const $container = $(`#${opts.parent}`);
-        const $div = $(`<${opts.Element}>`, { class: opts.class, id: opts.id });
 
-        for (const x of opts.data) {
-            const colClass = x.class || 'w-full sm:w-1/3 px-2 mt-3';
-            const $col = $('<div>', { class: colClass });
-            const required = x.required === false ? false : opts.required;
-            const auxName = x.name || x.id;
-            const prefId = opts.prefijo + (x.id || '');
+        let userName = opts.userName || (typeof getCookies === 'function' ? getCookies().USR : 'Usuario');
+        try { userName = decodeURIComponent(userName); } catch (e) { }
 
-            const baseAttr = {
-                id: prefId,
-                tipo: x.tipo,
-                name: auxName,
-                value: x.value,
-                required: required,
-                placeholder: x.placeholder,
-                disabled: x.disabled,
-            };
+        const navbar = $("<header>", {
+            id: opts.id,
+            class: "cs-navbar"
+        });
 
-            if (x.opc !== 'label' && x.opc !== 'code' && x.showLabel !== false && x.lbl) {
-                $col.append($('<label>', {
-                    class: t.label,
-                    html: x.lbl,
-                    for: prefId,
-                }));
+        const section = $("<div>", { class: "cs-navbar__section" });
+
+        const toggleBtn = $("<button>", {
+            class: "cs-navbar__toggle",
+            html: '<i data-lucide="menu" style="width:18px;height:18px"></i>'
+        });
+        toggleBtn.on("click", opts.onToggleSidebar);
+
+        const logo = $("<div>", {
+            class: "cs-navbar__logo",
+            html: `${opts.logo}<span>${opts.logoSuffix}</span>`
+        });
+
+        section.append(toggleBtn, logo);
+
+        const nav = $("<div>", { class: "cs-navbar__nav" });
+
+        const launcherBtn = $("<div>", {
+            id: "cs-launcherBtn",
+            class: "cs-navbar__item",
+            html: '<i data-lucide="layout-grid" style="width:18px;height:18px"></i>'
+        });
+        launcherBtn.on("click", function (e) {
+            e.stopPropagation();
+            $("#cs-appsLauncher").toggleClass("cs-navbar__launcher--active");
+            userDropdown.removeClass("cs-navbar__dropdown--active");
+        });
+
+        nav.append(launcherBtn);
+
+        const divider = $("<div>", { class: "cs-navbar__divider" });
+
+        const userContainer = $("<div>", { class: "cs-navbar__user" });
+
+        const avatarContent = $("<div>", {
+            class: "cs-navbar__avatar",
+            html: '<i data-lucide="user" style="width:16px;height:16px"></i>'
+        });
+
+        const nameSpan = $("<span>", { class: "cs-navbar__name", text: userName });
+        const chevron = $("<i>", {
+            "data-lucide": "chevron-down",
+            style: "width:14px;height:14px;color:#64748b"
+        });
+
+        userContainer.append(avatarContent, nameSpan, chevron);
+
+        const userDropdown = $("<ul>", { class: "cs-navbar__dropdown" });
+
+        const profileItem = $("<li>", {
+            class: "cs-navbar__dropdown-item",
+            html: '<i data-lucide="user" style="width:14px;height:14px"></i> Mi perfil'
+        });
+        profileItem.on("click", opts.onProfile);
+
+        const dividerItem = $("<li>", { class: "cs-navbar__dropdown-divider" });
+
+        const logoutItem = $("<li>", {
+            class: "cs-navbar__dropdown-item cs-navbar__dropdown-item--danger",
+            html: '<i data-lucide="log-out" style="width:14px;height:14px"></i> Cerrar sesion'
+        });
+        logoutItem.on("click", opts.onLogout);
+
+        userDropdown.append(profileItem, dividerItem, logoutItem);
+
+        const userWrapper = $("<div>", { class: "cs-navbar__user-wrapper" });
+        userWrapper.append(userContainer, userDropdown);
+
+        userContainer.on("click", function (e) {
+            e.stopPropagation();
+            userDropdown.toggleClass("cs-navbar__dropdown--active");
+            $("#cs-appsLauncher").removeClass("cs-navbar__launcher--active");
+        });
+
+        const launcher = $("<div>", {
+            id: "cs-appsLauncher",
+            class: "cs-navbar__launcher"
+        });
+
+        const launcherHeader = $("<div>", {
+            class: "cs-navbar__launcher-header",
+            html: '<span>Modulos ERP</span>'
+        });
+
+        const launcherGrid = $("<div>", { class: "cs-navbar__launcher-grid" });
+
+        const iconColors = {
+            "icon-calculator": "#818cf8", "icon-users": "#f472b6", "icon-landmark": "#34d399",
+            "icon-clipboard-check": "#fbbf24", "icon-calendar-days": "#22d3ee", "icon-flask-conical": "#c084fc",
+            "icon-palette": "#fb923c", "icon-cart": "#4ade80", "icon-bag": "#facc15", "icon-chart": "#a78bfa",
+            "icon-dollar": "#fb923c", "icon-industry": "#a78bfa", "icon-cog": "#94a3b8", "icon-gmail": "#ef4444"
+        };
+
+        opts.apps.forEach(app => {
+            const color = app.color || iconColors[app.icon] || "#94a3b8";
+            // Soporta tanto "icon-xxx" (clase) como "xxx" (nombre lucide directo)
+            const lucideName = (app.icon || "").replace(/^icon-/, "");
+            const iconEl = $("<i>", {
+                "data-lucide": lucideName,
+                style: "width:22px;height:22px"
+            });
+            const appBtn = $("<button>", {
+                class: "cs-navbar__launcher-app",
+                type: "button"
+            }).append(
+                $("<div>", { class: "cs-navbar__launcher-icon", style: `color:${color}` })
+                    .append(iconEl),
+                $("<span>", { text: app.name })
+            );
+            if (app.onClick) appBtn.on("click", app.onClick);
+            if (app.href) appBtn.on("click", () => { window.location.href = app.href; });
+            launcherGrid.append(appBtn);
+        });
+
+        launcher.append(launcherHeader, launcherGrid);
+
+        $(document).on("click.csNavbar", function (e) {
+            if (!$(e.target).closest("#cs-launcherBtn").length && !$(e.target).closest("#cs-appsLauncher").length) {
+                $("#cs-appsLauncher").removeClass("cs-navbar__launcher--active");
             }
-
-            switch (x.opc) {
-
-                case 'label':
-                    $col.empty();
-                    $col.append($('<span>', {
-                        class: x.className || t.labelTitle,
-                        html: x.text,
-                        id: prefId,
-                    }));
-                    break;
-
-                case 'code':
-                    $col.empty();
-                    $col.addClass('overflow-auto');
-                    const code = JSON.stringify(x.json, null, 2);
-                    $col.append($('<pre>', {
-                        class: t.code,
-                        text: code,
-                    }));
-                    break;
-
-                case 'input': {
-                    const align = (x.tipo === 'cifra' || x.tipo === 'numero') ? 'text-right' : '';
-                    const $input = $('<input>', Object.assign({}, baseAttr, {
-                        class: `${t.input} ${align}`,
-                        type: x.type || 'text',
-                        onkeyup: x.onkeyup || '',
-                    }));
-                    $col.append($input);
-                    break;
-                }
-
-                case 'input-group': {
-                    const align = (x.tipo === 'cifra' || x.tipo === 'numero') ? 'text-right' : '';
-                    const valType = x.type || 'text';
-                    const $group = $('<div>', { class: 'flex items-center' });
-
-                    if (x.tipo === 'cifra' || x.tipo === 'numero') {
-                        $group.append($('<span>', {
-                            class: `${t.addon} border-r-0 rounded-l-lg`,
-                        }).append($('<i>', { class: x.icon })));
-                    }
-
-                    const roundedClass = (x.tipo === 'cifra' || x.tipo === 'numero')
-                        ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none';
-
-                    $group.append($('<input>', Object.assign({}, baseAttr, {
-                        class: `${t.inputGroup} ${align} ${roundedClass}`,
-                        type: valType,
-                        cat: x.cat,
-                        readonly: x.readonly,
-                        onKeyUp: x.onkeyup,
-                    })));
-
-                    if (x.tipo !== 'cifra') {
-                        $group.append($('<span>', {
-                            class: `${t.addon} border-l-0 rounded-r-lg`,
-                        }).append($('<i>', { class: x.icon })));
-                    }
-
-                    $col.append($group);
-                    break;
-                }
-
-                case 'textarea':
-                    $col.append($('<textarea>', {
-                        class: t.textarea,
-                        id: prefId,
-                        tipo: x.tipo,
-                        name: auxName,
-                        text: x.value,
-                        placeholder: x.placeholder,
-                        cols: x.cols,
-                        rows: x.rows || 3,
-                        required: x.required || false,
-                    }));
-                    break;
-
-                case 'select': {
-                    const $select = $('<select>', {
-                        class: t.select,
-                        id: prefId,
-                        name: auxName,
-                        required: false,
-                        onchange: x.onchange,
-                    });
-
-                    if (x.selected) {
-                        $select.html(`<option value="0">${x.selected}</option>`);
-                    }
-
-                    if (x.data) {
-                        x.data.forEach(item => {
-                            $select.append($('<option>', {
-                                value: item.id,
-                                text: item.valor,
-                                selected: item.id == x.value,
-                            }));
-                        });
-                    }
-
-                    $col.append($select);
-                    break;
-                }
-
-                case 'radio': {
-                    const radioClass = x.className || t.radio;
-                    const $radio = $('<input>', {
-                        type: 'radio',
-                        class: radioClass,
-                        name: x.name || x.id,
-                        value: x.value,
-                        onChange: x.onchange,
-                        checked: x.checked || false,
-                        id: prefId,
-                    });
-                    const $lbl = $('<label>', {
-                        class: t.radioLabel,
-                        text: x.text || x.valor,
-                        for: prefId,
-                    });
-                    $col.append($('<div>', { class: 'flex items-center' }).append($radio, $lbl));
-                    break;
-                }
-
-                case 'checkbox': {
-                    $col.empty();
-                    const cbClass = x.className || t.checkbox;
-                    const $cb = $('<input>', {
-                        type: 'checkbox',
-                        class: cbClass,
-                        onChange: x.onchange ? x.onchange + '()' : undefined,
-                        name: x.name || x.id,
-                        value: true,
-                        id: prefId,
-                    });
-                    const $lblCb = $('<label>', {
-                        class: x.classLabel || t.checkboxLabel,
-                        text: x.text || x.valor,
-                        for: prefId,
-                    });
-                    $col.append($('<div>', { class: 'flex items-center py-2' }).append($cb, $lblCb));
-                    break;
-                }
-
-                case 'input-file-btn': {
-                    $col.append($('<input>', {
-                        class: t.fileInput,
-                        id: prefId,
-                        name: auxName,
-                        type: 'file',
-                    }));
-                    break;
-                }
-
-                case 'input-file': {
-                    const fileColor = x.color_btn || 'blue';
-                    const $hiddenFile = $('<input>', {
-                        class: 'hidden',
-                        type: 'file',
-                        accept: '.xlsx, .xls',
-                        id: prefId,
-                        onchange: x.fn,
-                    });
-                    const $fileLabel = $('<label>', {
-                        class: `inline-flex items-center justify-center w-full px-4 py-2 mt-1 text-sm font-medium
-                               border border-${fileColor}-500 text-${fileColor}-400 rounded-lg cursor-pointer
-                               hover:bg-${fileColor}-500/10 transition-colors`,
-                        html: x.text,
-                        for: prefId,
-                    });
-                    $col.append($hiddenFile, $fileLabel);
-                    break;
-                }
-
-                case 'btn': {
-                    const iconHtml = x.icon ? `<i class="${x.icon} mr-1"></i>` : '';
-                    const btnColor = x.color_btn || 'blue';
-                    $col.append($('<button>', {
-                        class: `w-full px-4 py-2 text-sm font-medium text-white bg-${btnColor}-600
-                               rounded-lg hover:bg-${btnColor}-700 focus:outline-none focus:ring-2
-                               focus:ring-${btnColor}-500 transition-colors`,
-                        html: `${iconHtml} ${x.text || ''}`,
-                        type: 'button',
-                        id: prefId,
-                        onclick: x.fn,
-                    }));
-                    break;
-                }
-
-                case 'btn-submit': {
-                    const btnSubColor = x.color_btn || 'blue';
-                    $col.append($('<button>', {
-                        class: `w-full px-4 py-2 mt-1 text-sm font-medium text-white bg-${btnSubColor}-600
-                               rounded-lg hover:bg-${btnSubColor}-700 focus:outline-none focus:ring-2
-                               focus:ring-${btnSubColor}-500 transition-colors`,
-                        text: x.text,
-                        type: 'submit',
-                        id: prefId,
-                        onclick: x.fn,
-                    }));
-                    break;
-                }
-
-                case 'button': {
-                    const bIconHtml = x.icon ? `<i class="${x.icon} mr-1"></i>` : '';
-                    const bColor = x.color_btn || 'blue';
-                    let btnEvents = { onclick: x.fn };
-                    if (x.onClick) btnEvents = { click: x.onClick };
-
-                    $col.append($('<button>', {
-                        class: (x.className || '') + ` px-4 py-2 text-sm font-medium text-white bg-${bColor}-600
-                               rounded-lg hover:bg-${bColor}-700 transition-colors`,
-                        html: `${bIconHtml} ${x.text || ''}`,
-                        id: prefId,
-                        ...btnEvents,
-                        type: 'button',
-                    }));
-                    break;
-                }
-
-                case 'input-calendar': {
-                    const $calGroup = $('<div>', { class: 'flex items-center' });
-                    $calGroup.append($('<input>', {
-                        class: t.calendarInput,
-                        id: prefId,
-                        tipo: x.tipo,
-                        name: auxName,
-                        value: x.value,
-                    }));
-                    $calGroup.append($('<span>', {
-                        class: t.calendarAddon,
-                    }).append($('<i>', { class: 'icon-calendar-2' })));
-                    $col.append($calGroup);
-                    break;
-                }
-
-                case 'btn-select': {
-                    const $bsGroup = $('<div>', { class: 'flex items-center' });
-                    const $bsSelect = $('<select>', {
-                        class: `${t.select} rounded-l-lg rounded-r-none`,
-                        id: prefId,
-                        name: auxName,
-                        required: required,
-                        onchange: x.onchange,
-                    });
-
-                    if (x.selected) {
-                        $bsSelect.html(`<option value="0">${x.selected}</option>`);
-                    }
-                    if (x.data) {
-                        x.data.forEach(item => {
-                            $bsSelect.append($('<option>', {
-                                value: item.id,
-                                text: item.valor,
-                                selected: item.id == x.value,
-                            }));
-                        });
-                    }
-
-                    const $bsBtn = $('<a>', {
-                        class: 'bg-blue-600 text-white px-3 py-2 rounded-r-lg hover:bg-blue-700 cursor-pointer transition-colors',
-                        html: x.text || '',
-                        onclick: x.fn,
-                    });
-                    if (x.icon) $bsBtn.append($('<i>', { class: x.icon + ' ml-1' }));
-
-                    $bsGroup.append($bsSelect, $bsBtn);
-                    $col.append($bsGroup);
-                    break;
-                }
-
-                case 'list-group': {
-                    const $list = $('<div>', { class: 'flex flex-col gap-1' });
-                    if (x.data) {
-                        x.data.forEach(item => {
-                            const $a = $('<a>', {
-                                class: t.listItem,
-                            });
-                            $a.append($('<span>', { class: t.listText + ' ' + (item.ico || ''), text: item.text }));
-                            $a.append($('<span>', { class: 'bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full', text: item.notifications }));
-                            $list.append($a);
-                        });
-                    }
-                    $col.append($list);
-                    break;
-                }
-
-                default: {
-                    const { class: _, ...rest } = x;
-                    $col.append($(`<${x.opc}>`, rest));
-                    break;
-                }
+            if (!$(e.target).closest(".cs-navbar__user-wrapper").length) {
+                userDropdown.removeClass("cs-navbar__dropdown--active");
             }
+        });
 
-            $div.append($col);
+        nav.append(divider, userWrapper);
+        navbar.append(section, nav);
+
+        if (opts.parent === "body") {
+            $("body").prepend(navbar);
+            $("body").append(launcher);
+        } else {
+            $(`#${opts.parent}`).html(navbar);
+            $(`#${opts.parent}`).append(launcher);
         }
 
-        $container.append($div);
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
-
 
 }
 

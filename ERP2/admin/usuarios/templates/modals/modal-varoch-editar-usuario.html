@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modal - Editar Usuario</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../src/css/coffee-varoch.css">
+<style>body{font-family:'Inter',system-ui,sans-serif;}</style>
+</head>
+<body class="coffee-varoch" data-theme="dark">
+
+<div class="cv-overlay fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="cv-card w-full max-w-[720px] max-h-[92vh] overflow-y-auto cv-scroll relative">
+
+    <!-- Header -->
+    <div class="px-5 py-4 flex items-center justify-between border-b border-[var(--cv-border-dk)] sticky top-0 z-10" style="background:var(--cv-card-dk)">
+      <div class="flex items-center gap-3">
+        <div class="cv-avatar" style="width:42px;height:42px;font-size:14px">RM</div>
+        <div>
+          <div class="cv-title text-base">Editar usuario</div>
+          <div class="cv-muted">Rosy Mendez - Sistemas</div>
+        </div>
+      </div>
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost p-1.5" title="Cerrar">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="px-5 pt-4">
+      <div class="flex gap-2 border-b border-[var(--cv-border-dk)]">
+        <button class="px-3 py-2 text-[12px] font-semibold border-b-2 border-[var(--cv-action)]" style="color:var(--cv-action)">Datos</button>
+        <button class="px-3 py-2 text-[12px] cv-text">Acceso</button>
+        <button class="px-3 py-2 text-[12px] cv-text">Permisos</button>
+        <button class="px-3 py-2 text-[12px] cv-text">Actividad</button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 space-y-5">
+
+      <div>
+        <div class="cv-label mb-2">Datos personales</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="cv-label">Nombre(s)</label>
+            <input class="cv-input mt-1" value="Rosy">
+          </div>
+          <div>
+            <label class="cv-label">Apellidos</label>
+            <input class="cv-input mt-1" value="Mendez">
+          </div>
+          <div>
+            <label class="cv-label">Email</label>
+            <input class="cv-input mt-1" value="rosy.mendez@coffeesoft.mx">
+          </div>
+          <div>
+            <label class="cv-label">Telefono</label>
+            <input class="cv-input mt-1" value="+52 555 123 4567">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cv-label mb-2">Asignacion</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="cv-label">Departamento</label>
+            <select class="cv-input mt-1">
+              <option selected>Sistemas</option><option>Finanzas</option><option>RRHH</option>
+              <option>Ventas</option><option>Compras</option>
+            </select>
+          </div>
+          <div>
+            <label class="cv-label">Rol</label>
+            <select class="cv-input mt-1">
+              <option selected>Super Admin</option><option>Admin</option>
+              <option>Supervisor</option><option>Operador</option>
+            </select>
+          </div>
+          <div>
+            <label class="cv-label">Estatus</label>
+            <select class="cv-input mt-1">
+              <option selected>Activo</option><option>Suspendido</option><option>Inactivo</option>
+            </select>
+          </div>
+          <div>
+            <label class="cv-label">Fecha alta</label>
+            <input class="cv-input mt-1" value="2024-03-15" type="date" disabled>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado actual -->
+      <div class="cv-card p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="cv-label mb-1">Estado actual</div>
+            <div class="flex items-center gap-2">
+              <span class="cv-badge cv-badge-success">Activo</span>
+              <span class="cv-badge cv-badge-purple">Super Admin</span>
+              <span class="cv-text">Ultimo login: hoy 09:42</span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="cv-btn cv-btn-outline-action">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Resetear contrasena
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 flex items-center justify-between gap-2 border-t border-[var(--cv-border-dk)] sticky bottom-0" style="background:var(--cv-card-dk)">
+      <button class="cv-btn cv-btn-danger">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+        Eliminar
+      </button>
+      <div class="flex gap-2">
+        <button onclick="window.close()" class="cv-btn cv-btn-ghost">Cancelar</button>
+        <button class="cv-btn cv-btn-action">Guardar cambios</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const KEY = 'huubie-theme';
+  document.body.setAttribute('data-theme', localStorage.getItem(KEY) || 'dark');
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" class="bg-[#111928]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeSoft Admin — Modal: Ver Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#111928; font-family:'Inter',system-ui,sans-serif; color:#fff; height:100vh; overflow:hidden; }
+        .badge-base { display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:10px; font-weight:700; border:1px solid; }
+        .badge-admin { background:rgba(124,58,237,.15); color:#a78bfa; border-color:rgba(124,58,237,.3); }
+        .badge-activo { background:rgba(63,193,137,.15); color:#3fc189; border-color:rgba(63,193,137,.3); }
+        .detail-label { font-size:10px; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:.03em; margin-bottom:2px; }
+        .detail-value { font-size:12px; color:#d1d5db; line-height:1.4; }
+        .avatar-gradient-0 { background: linear-gradient(135deg, #a855f7, #ec4899); }
+        body[data-theme="light"] { background:#f3f4f6; color:#111928; }
+        body[data-theme="light"] .bg-\[\#1F2A37\] { background:#ffffff !important; border-color:#e5e7eb !important; }
+        body[data-theme="light"] .text-white { color:#111928 !important; }
+        body[data-theme="light"] .text-gray-400 { color:#4b5563 !important; }
+        body[data-theme="light"] .text-gray-500 { color:#6b7280 !important; }
+        body[data-theme="light"] .detail-label { color:#9ca3af !important; }
+        body[data-theme="light"] .detail-value { color:#374151 !important; }
+        body[data-theme="light"] .border-gray-700 { border-color:#d1d5db !important; }
+        body[data-theme="light"] .border-gray-800 { border-color:#e5e7eb !important; }
+        body[data-theme="light"] .border-gray-600 { border-color:#d1d5db !important; }
+        body[data-theme="light"] .bg-\[\#1a2332\] { background:#f3f4f6 !important; }
+        [data-theme-btn] { transition:.15s; }
+        [data-theme-btn].theme-active { background:rgba(124,58,237,.8); color:#fff !important; border-radius:4px; }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <!-- Theme toggle minimal -->
+    <div class="fixed top-4 right-4 flex bg-[#1a2332] border border-gray-700 rounded-lg p-0.5 z-50">
+        <button data-theme-btn="light" onclick="setTheme('light')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Claro</button>
+        <button data-theme-btn="dark" onclick="setTheme('dark')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Oscuro</button>
+    </div>
+
+    <!-- Label -->
+    <div class="fixed top-4 left-4">
+        <a href="../usuarios-index-navegacion.html" class="text-xs text-gray-500 hover:text-purple-400 transition">&larr; Volver al indice</a>
+    </div>
+
+    <!-- Modal: Ver Usuario -->
+    <div class="bg-[#1F2A37] rounded-2xl p-6 border border-gray-700 w-[520px] max-h-[90vh] overflow-y-auto">
+        <!-- Header del modal -->
+        <div class="flex items-center gap-4 mb-5">
+            <div class="w-14 h-14 rounded-full avatar-gradient-0 flex items-center justify-center text-lg font-bold text-white flex-shrink-0">AM</div>
+            <div>
+                <h3 class="text-base font-bold">Ana Maria Lopez</h3>
+                <p class="text-[11px] text-gray-500">@alopez</p>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="badge-base badge-admin">ADMIN</span>
+                    <span class="badge-base badge-activo">ACTIVO</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800"></div>
+
+        <!-- Info general -->
+        <div class="mt-4 mb-4">
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-3">Informacion General</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="detail-label">ID Usuario</p>
+                    <p class="detail-value font-mono">#0001</p>
+                </div>
+                <div>
+                    <p class="detail-label">Nombre completo</p>
+                    <p class="detail-value">Ana Maria Lopez</p>
+                </div>
+                <div>
+                    <p class="detail-label">Usuario</p>
+                    <p class="detail-value">@alopez</p>
+                </div>
+                <div>
+                    <p class="detail-label">Email</p>
+                    <p class="detail-value text-blue-400">ana@company.com</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800"></div>
+
+        <!-- Datos organizacionales -->
+        <div class="mt-4 mb-4">
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-3">Datos Organizacionales</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="detail-label">Departamento</p>
+                    <p class="detail-value">Direccion General</p>
+                </div>
+                <div>
+                    <p class="detail-label">Rol</p>
+                    <p class="detail-value">Administrador</p>
+                </div>
+                <div>
+                    <p class="detail-label">Estado</p>
+                    <p class="detail-value">
+                        <span class="badge-base badge-activo">ACTIVO</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="detail-label">Telefono</p>
+                    <p class="detail-value">+52 55 1234 5678</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800"></div>
+
+        <!-- Seguridad -->
+        <div class="mt-4 mb-4">
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-3">Seguridad</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="detail-label">Autenticacion 2FA</p>
+                    <p class="detail-value">
+                        <span class="text-green-400 font-semibold flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Habilitado
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    <p class="detail-label">Fecha Creacion</p>
+                    <p class="detail-value">15 Ene 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800"></div>
+
+        <!-- Footer con acciones -->
+        <div class="flex items-center gap-3 mt-5 justify-end">
+            <button onclick="window.close()" class="px-6 py-2 rounded-lg border border-gray-600 text-xs font-semibold text-gray-300 hover:bg-[#1a2332] transition">Cerrar</button>
+            <button class="px-6 py-2 rounded-lg bg-[#1c64f2] text-white text-xs font-semibold hover:bg-blue-500 transition flex items-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Editar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function(){const t=localStorage.getItem('huubie-theme')||'dark';document.body.setAttribute('data-theme',t)})();
+        function setTheme(theme){document.body.setAttribute('data-theme',theme);localStorage.setItem('huubie-theme',theme);document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===theme)})}
+        window.addEventListener('DOMContentLoaded',()=>{const t=document.body.getAttribute('data-theme');document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===t)})});
+    </script>
+</body>
+</html>

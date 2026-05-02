@@ -1,0 +1,13 @@
+/* Normalizar fuentes del filterBar cuando usa content_json_form (sin coffeesoft:true) */
+#filterBarApp .form-control,
+#filterBarApp .form-select,
+#filterBarApp .btn {
+    font-size: 0.875rem !important;
+}
+
+#filterBarApp label {
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" class="bg-[#111928]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeSoft Admin — Modal: Editar Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#111928; font-family:'Inter',system-ui,sans-serif; color:#fff; height:100vh; overflow:hidden; }
+        .input-base { background:#1a2332; border:1px solid #374151; border-radius:8px; padding:8px 12px; font-size:12px; color:#d1d5db; width:100%; }
+        .input-base:focus { outline:none; border-color:#7c3aed; }
+        .avatar-gradient-0 { background: linear-gradient(135deg, #a855f7, #ec4899); }
+        body[data-theme="light"] { background:#f3f4f6; color:#111928; }
+        body[data-theme="light"] .bg-\[\#1F2A37\] { background:#ffffff !important; border-color:#e5e7eb !important; }
+        body[data-theme="light"] .text-white { color:#111928 !important; }
+        body[data-theme="light"] .text-gray-400 { color:#4b5563 !important; }
+        body[data-theme="light"] .text-gray-500 { color:#6b7280 !important; }
+        body[data-theme="light"] .input-base { background:#f9fafb !important; border-color:#e5e7eb !important; color:#111928 !important; }
+        body[data-theme="light"] .border-gray-700 { border-color:#d1d5db !important; }
+        body[data-theme="light"] .border-gray-600 { border-color:#d1d5db !important; }
+        body[data-theme="light"] input::placeholder { color:#9ca3af !important; }
+        [data-theme-btn] { transition:.15s; }
+        [data-theme-btn].theme-active { background:rgba(124,58,237,.8); color:#fff !important; border-radius:4px; }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <!-- Theme toggle minimal -->
+    <div class="fixed top-4 right-4 flex bg-[#1a2332] border border-gray-700 rounded-lg p-0.5 z-50">
+        <button data-theme-btn="light" onclick="setTheme('light')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Claro</button>
+        <button data-theme-btn="dark" onclick="setTheme('dark')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Oscuro</button>
+    </div>
+
+    <!-- Label -->
+    <div class="fixed top-4 left-4">
+        <a href="../usuarios-index-navegacion.html" class="text-xs text-gray-500 hover:text-purple-400 transition">&larr; Volver al indice</a>
+    </div>
+
+    <!-- Modal: Editar Usuario -->
+    <div class="bg-[#1F2A37] rounded-2xl p-6 border border-gray-700 w-[600px] max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center gap-3 mb-1">
+            <div class="w-10 h-10 rounded-full avatar-gradient-0 flex items-center justify-center text-sm font-bold text-white">AM</div>
+            <div>
+                <h3 class="text-base font-bold">Editar Usuario</h3>
+                <p class="text-[11px] text-gray-500">#0001 — @alopez</p>
+            </div>
+        </div>
+        <p class="text-[11px] text-gray-500 mb-5">Modifica los campos que desees actualizar</p>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Nombre completo *</label>
+                <input type="text" class="input-base" value="Ana Maria Lopez">
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Usuario *</label>
+                <input type="text" class="input-base" value="alopez">
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Email *</label>
+                <input type="email" class="input-base" value="ana@company.com">
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Telefono</label>
+                <input type="tel" class="input-base" value="+52 55 1234 5678">
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Departamento *</label>
+                <select class="input-base">
+                    <option selected>Direccion General</option>
+                    <option>Finanzas</option>
+                    <option>Recursos Humanos</option>
+                    <option>Operaciones</option>
+                    <option>Ventas</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Rol *</label>
+                <select class="input-base">
+                    <option selected>Administrador</option>
+                    <option>Editor</option>
+                    <option>Lector</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Estado *</label>
+                <select class="input-base">
+                    <option selected>Activo</option>
+                    <option>Inactivo</option>
+                    <option>Pendiente</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[11px] text-gray-500 mb-1">Password</label>
+                <div class="relative">
+                    <input type="password" id="editPwd" class="input-base pr-8" placeholder="Dejar vacio para no cambiar">
+                    <button type="button" onclick="togglePwd('editPwd','editPwdIcon')" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200">
+                        <svg id="editPwdIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-600 mt-1">Dejar vacio para mantener el password actual</p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked class="w-4 h-4 rounded border-gray-600 bg-[#1a2332] text-purple-600 focus:ring-purple-500">
+                <span class="text-xs text-gray-400">Habilitar autenticacion de dos factores (2FA)</span>
+            </label>
+        </div>
+
+        <div class="border-t border-gray-800 mt-5 pt-4">
+            <p class="text-[10px] text-gray-600">Ultima modificacion: 28 Abr 2026, 10:30 am</p>
+        </div>
+
+        <div class="flex items-center gap-3 mt-5 justify-end">
+            <button onclick="window.close()" class="px-6 py-2 rounded-lg border border-gray-600 text-xs font-semibold text-gray-300 hover:bg-[#1a2332] transition">Cancelar</button>
+            <button class="px-6 py-2 rounded-lg bg-[#1c64f2] text-white text-xs font-semibold hover:bg-blue-500 transition flex items-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                Guardar Cambios
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function(){const t=localStorage.getItem('huubie-theme')||'dark';document.body.setAttribute('data-theme',t)})();
+        function setTheme(theme){document.body.setAttribute('data-theme',theme);localStorage.setItem('huubie-theme',theme);document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===theme)})}
+        window.addEventListener('DOMContentLoaded',()=>{const t=document.body.getAttribute('data-theme');document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===t)})});
+        function togglePwd(inputId,iconId){const i=document.getElementById(inputId),ic=document.getElementById(iconId);if(i.type==='password'){i.type='text';ic.innerHTML='<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>'}else{i.type='password';ic.innerHTML='<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>'}}
+    </script>
+</body>
+</html>

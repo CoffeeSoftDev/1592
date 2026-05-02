@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" class="bg-[#111928]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeSoft Admin — Modal: Eliminar Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#111928; font-family:'Inter',system-ui,sans-serif; color:#fff; height:100vh; overflow:hidden; }
+        .avatar-gradient-0 { background: linear-gradient(135deg, #a855f7, #ec4899); }
+        body[data-theme="light"] { background:#f3f4f6; color:#111928; }
+        body[data-theme="light"] .bg-\[\#1F2A37\] { background:#ffffff !important; border-color:#e5e7eb !important; }
+        body[data-theme="light"] .text-white { color:#111928 !important; }
+        body[data-theme="light"] .text-gray-400 { color:#4b5563 !important; }
+        body[data-theme="light"] .text-gray-500 { color:#6b7280 !important; }
+        body[data-theme="light"] .border-gray-700 { border-color:#d1d5db !important; }
+        body[data-theme="light"] .border-gray-600 { border-color:#d1d5db !important; }
+        [data-theme-btn] { transition:.15s; }
+        [data-theme-btn].theme-active { background:rgba(124,58,237,.8); color:#fff !important; border-radius:4px; }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <!-- Theme toggle minimal -->
+    <div class="fixed top-4 right-4 flex bg-[#1a2332] border border-gray-700 rounded-lg p-0.5 z-50">
+        <button data-theme-btn="light" onclick="setTheme('light')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Claro</button>
+        <button data-theme-btn="dark" onclick="setTheme('dark')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Oscuro</button>
+    </div>
+
+    <!-- Label -->
+    <div class="fixed top-4 left-4">
+        <a href="../usuarios-index-navegacion.html" class="text-xs text-gray-500 hover:text-purple-400 transition">&larr; Volver al indice</a>
+    </div>
+
+    <!-- Modal: Eliminar Usuario -->
+    <div class="bg-[#1F2A37] rounded-2xl p-6 border border-gray-700 w-[400px] text-center">
+        <!-- Warning icon -->
+        <div class="w-14 h-14 rounded-full bg-red-500/15 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </div>
+
+        <h3 class="text-base font-bold mb-2">Eliminar Usuario</h3>
+        <p class="text-xs text-gray-400 mb-1">Estas a punto de eliminar al usuario:</p>
+
+        <!-- User info card -->
+        <div class="flex items-center gap-3 bg-[#1a2332] rounded-lg p-3 my-3">
+            <div class="w-10 h-10 rounded-full avatar-gradient-0 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">AM</div>
+            <div class="text-left">
+                <p class="text-sm font-semibold text-white">Ana Maria Lopez</p>
+                <p class="text-[11px] text-gray-500">@alopez — Direccion General</p>
+            </div>
+        </div>
+
+        <p class="text-[11px] text-red-400 mb-5">Esta accion no se puede deshacer. Se eliminaran todos los permisos y accesos asociados.</p>
+
+        <div class="flex items-center gap-3 justify-center">
+            <button onclick="window.close()" class="px-6 py-2 rounded-lg border border-gray-600 text-xs font-semibold text-gray-300 hover:bg-[#1a2332] transition">Cancelar</button>
+            <button class="px-6 py-2 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-500 transition flex items-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Eliminar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function(){const t=localStorage.getItem('huubie-theme')||'dark';document.body.setAttribute('data-theme',t)})();
+        function setTheme(theme){document.body.setAttribute('data-theme',theme);localStorage.setItem('huubie-theme',theme);document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===theme)})}
+        window.addEventListener('DOMContentLoaded',()=>{const t=document.body.getAttribute('data-theme');document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===t)})});
+    </script>
+</body>
+</html>

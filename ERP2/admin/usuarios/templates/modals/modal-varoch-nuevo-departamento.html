@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modal - Nuevo Departamento</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../src/css/coffee-varoch.css">
+<style>body{font-family:'Inter',system-ui,sans-serif;}</style>
+</head>
+<body class="coffee-varoch" data-theme="dark">
+
+<div class="cv-overlay fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="cv-card w-full max-w-[520px] max-h-[92vh] overflow-y-auto cv-scroll">
+
+    <!-- Header -->
+    <div class="px-5 py-4 flex items-center justify-between border-b border-[var(--cv-border-dk)]">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(140,198,63,.15);color:var(--cv-secondary)">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+        </div>
+        <div>
+          <div class="cv-title text-base">Nuevo Departamento</div>
+          <div class="cv-muted">Registra una nueva area organizacional</div>
+        </div>
+      </div>
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost p-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 space-y-4">
+      <div>
+        <label class="cv-label">Nombre del departamento *</label>
+        <input class="cv-input mt-1" placeholder="Ej. Marketing Digital">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="cv-label">Codigo</label>
+          <input class="cv-input mt-1" placeholder="MKT-DG" value="DEP-009">
+        </div>
+        <div>
+          <label class="cv-label">Centro de costos</label>
+          <input class="cv-input mt-1" placeholder="CC-009">
+        </div>
+      </div>
+
+      <div>
+        <label class="cv-label">Responsable</label>
+        <select class="cv-input mt-1">
+          <option>Selecciona un colaborador...</option>
+          <option>Rosy Mendez (Sistemas)</option>
+          <option>Laura Perez (Finanzas)</option>
+          <option>Miguel Reyes (Ventas)</option>
+          <option>Andrea Lopez (Almacen)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="cv-label">Descripcion</label>
+        <textarea class="cv-input mt-1" rows="3" placeholder="Funciones, alcance y proposito del departamento..."></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="cv-label">Departamento padre</label>
+          <select class="cv-input mt-1">
+            <option>Ninguno</option><option>Direccion</option>
+            <option>Sistemas</option><option>Finanzas</option>
+          </select>
+        </div>
+        <div>
+          <label class="cv-label">Estatus inicial</label>
+          <select class="cv-input mt-1">
+            <option selected>Activo</option><option>Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="flex items-center gap-2 cursor-pointer cv-card p-3">
+        <input type="checkbox" class="cv-check" checked>
+        <span class="cv-text">Notificar al responsable por correo</span>
+      </label>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 flex items-center justify-end gap-2 border-t border-[var(--cv-border-dk)]">
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost">Cancelar</button>
+      <button class="cv-btn cv-btn-action">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Crear departamento
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const KEY = 'huubie-theme';
+  document.body.setAttribute('data-theme', localStorage.getItem(KEY) || 'dark');
+</script>
+</body>
+</html>

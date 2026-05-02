@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es" class="bg-[#111928]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeSoft Admin — Usuarios · Indice de Demos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#111928; font-family:'Inter',system-ui,sans-serif; color:#fff; }
+        .card-demo { background:#1F2A37; border:1px solid rgba(55,65,81,.6); border-radius:12px; padding:1.5rem; transition:.15s; text-decoration:none; display:block; }
+        .card-demo:hover { border-color:#7c3aed; transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.3); }
+        body[data-theme="light"] { background:#f3f4f6; color:#111928; }
+        body[data-theme="light"] .bg-\[\#111928\] { background:#f9fafb !important; }
+        body[data-theme="light"] .card-demo { background:#ffffff !important; border-color:#e5e7eb !important; }
+        body[data-theme="light"] .card-demo:hover { border-color:#7c3aed !important; }
+        body[data-theme="light"] .text-white { color:#111928 !important; }
+        body[data-theme="light"] .text-gray-400 { color:#4b5563 !important; }
+        body[data-theme="light"] .text-gray-500 { color:#6b7280 !important; }
+        body[data-theme="light"] .text-gray-600 { color:#9ca3af !important; }
+        body[data-theme="light"] .border-gray-800 { border-color:#e5e7eb !important; }
+        [data-theme-btn] { transition:.15s; }
+        [data-theme-btn].theme-active { background:rgba(124,58,237,.8); color:#fff !important; border-radius:4px; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center font-bold text-sm">CS</div>
+                    <div>
+                        <h1 class="text-2xl font-bold">CoffeeSoft — Usuarios</h1>
+                        <p class="text-[12px] text-gray-500">Administracion · Demos estaticos · Fase 1</p>
+                    </div>
+                </div>
+                <div class="flex bg-[#1a2332] border border-gray-700 rounded-lg p-0.5">
+                    <button data-theme-btn="light" onclick="setTheme('light')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Claro</button>
+                    <button data-theme-btn="dark" onclick="setTheme('dark')" class="px-3 py-1 text-[11px] text-gray-500 rounded">Oscuro</button>
+                </div>
+            </div>
+            <p class="text-sm text-gray-400 mt-4 max-w-2xl">Plantillas HTML estaticas del modulo de Usuarios del sistema CoffeeSoft ERP v2.0. Cada demo es autocontenido y funciona standalone. Los modales embebidos en la vista principal se activan al hacer clic en los botones de accion.</p>
+        </header>
+
+        <!-- Vistas Principales -->
+        <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Vistas Principales</h2>
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <a href="usuarios.html" class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Tabla de Usuarios</h3>
+                <p class="text-[11px] text-gray-500">Vista principal con sidebar, KPI cards, tabla con filtros y paginacion. Incluye modales embebidos de crear, editar, eliminar y ver.</p>
+                <p class="text-[10px] text-purple-400 mt-3">usuarios.html &rarr;</p>
+            </a>
+        </div>
+
+        <!-- Modales -->
+        <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Modales (Standalone)</h2>
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <a href="modals/modal-nuevo-usuario.html" class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6m3-3h-6"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Nuevo Usuario</h3>
+                <p class="text-[11px] text-gray-500">Modal con formulario completo de 8 campos en grid 2 columnas. Incluye toggle de password y checkbox 2FA.</p>
+                <p class="text-[10px] text-purple-400 mt-3">modal-nuevo-usuario.html &rarr;</p>
+            </a>
+            <a href="modals/modal-editar-usuario.html" class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Editar Usuario</h3>
+                <p class="text-[11px] text-gray-500">Modal de edicion con datos pre-llenados. Avatar con iniciales, campos editables, y timestamp de ultima modificacion.</p>
+                <p class="text-[10px] text-purple-400 mt-3">modal-editar-usuario.html &rarr;</p>
+            </a>
+            <a href="modals/modal-eliminar-usuario.html" class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Eliminar Usuario</h3>
+                <p class="text-[11px] text-gray-500">Modal de confirmacion con icono de alerta, datos del usuario y advertencia de accion irreversible.</p>
+                <p class="text-[10px] text-purple-400 mt-3">modal-eliminar-usuario.html &rarr;</p>
+            </a>
+            <a href="modals/modal-ver-usuario.html" class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-green-500/20 text-green-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Ver Usuario</h3>
+                <p class="text-[11px] text-gray-500">Modal de solo lectura con avatar, badges de rol y estado, grid de datos organizado por secciones, y boton editar.</p>
+                <p class="text-[10px] text-purple-400 mt-3">modal-ver-usuario.html &rarr;</p>
+            </a>
+        </div>
+
+        <!-- Componentes -->
+        <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Componentes Destacados</h2>
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Avatares con Gradientes</h3>
+                <p class="text-[11px] text-gray-500">6 gradientes ciclicos por ID: purple-pink, blue-cyan, green-emerald, orange-red, yellow-orange, indigo-purple.</p>
+                <div class="flex items-center gap-2 mt-3">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-[8px] font-bold">AM</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-[8px] font-bold">CH</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-[8px] font-bold">MG</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-[8px] font-bold">RS</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-[8px] font-bold">LM</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-[8px] font-bold">DT</div>
+                </div>
+            </div>
+            <div class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">Badges de Estatus</h3>
+                <p class="text-[11px] text-gray-500">3 estados: Activo (verde), Inactivo (rojo), Pendiente (amarillo). 3 roles: Admin (purple), Editor (blue), Lector (gray).</p>
+                <div class="flex flex-wrap items-center gap-2 mt-3">
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(63,193,137,.15);color:#3fc189;border-color:rgba(63,193,137,.3)">ACTIVO</span>
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(234,2,52,.15);color:#ea0234;border-color:rgba(234,2,52,.35)">INACTIVO</span>
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(251,191,36,.15);color:#fbbf24;border-color:rgba(251,191,36,.3)">PENDIENTE</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(124,58,237,.15);color:#a78bfa;border-color:rgba(124,58,237,.3)">ADMIN</span>
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(28,100,242,.15);color:#76a9fa;border-color:rgba(28,100,242,.3)">EDITOR</span>
+                    <span class="badge-base" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:10px;font-weight:700;border:1px solid;background:rgba(107,114,128,.15);color:#9ca3af;border-color:rgba(107,114,128,.3)">LECTOR</span>
+                </div>
+            </div>
+            <div class="card-demo">
+                <div class="w-10 h-10 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                </div>
+                <h3 class="text-sm font-bold mb-1">KPI Cards</h3>
+                <p class="text-[11px] text-gray-500">4 indicadores: Total usuarios, Activos (con porcentaje), Inactivos (con porcentaje), Administradores. Iconos y colores contextuales.</p>
+                <p class="text-[10px] text-purple-400 mt-3">Embebidos en usuarios.html &rarr;</p>
+            </div>
+        </div>
+
+        <!-- Estructura -->
+        <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Estructura de Archivos</h2>
+        <div class="card-demo mb-8">
+            <pre class="text-[11px] text-gray-400 font-mono leading-relaxed"><code>ERP2/admin/usuarios/templates/
+├── usuarios-index-navegacion.html    # Este hub de demos
+├── usuarios.html                     # Vista principal (tabla + KPIs + modales embebidos)
+└── modals/
+    ├── modal-nuevo-usuario.html      # Formulario crear usuario (standalone)
+    ├── modal-editar-usuario.html     # Formulario editar usuario (standalone)
+    ├── modal-eliminar-usuario.html   # Confirmacion eliminar (standalone)
+    └── modal-ver-usuario.html        # Detalle de solo lectura (standalone)</code></pre>
+        </div>
+
+        <footer class="text-center text-[11px] text-gray-600 pt-8 border-t border-gray-800">
+            <p>&copy; 2026 CoffeeSoft, LLC. · Modulo Admin/Usuarios · Fase 1</p>
+        </footer>
+    </div>
+
+    <script>
+        (function(){const t=localStorage.getItem('huubie-theme')||'dark';document.body.setAttribute('data-theme',t)})();
+        function setTheme(theme){document.body.setAttribute('data-theme',theme);localStorage.setItem('huubie-theme',theme);document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===theme)})}
+        window.addEventListener('DOMContentLoaded',()=>{const t=document.body.getAttribute('data-theme');document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('theme-active',b.dataset.themeBtn===t)})});
+    </script>
+</body>
+</html>

@@ -505,14 +505,42 @@ function dropdown($id, $status = null) {
 
 function status($statusId) {
     $statuses = [
-        1 => '<span class="badge bg-success">Activo</span>',
-        2 => '<span class="badge bg-danger">Inactivo</span>',
-        3 => '<span class="badge bg-warning">Pendiente</span>'
+        'activo'    => ['bg' => 'bg-green-100',  'text' => 'text-green-700',  'label' => 'Activo'],
+        'inactivo'  => ['bg' => 'bg-red-100',    'text' => 'text-red-700',    'label' => 'Inactivo'],
+        'pendiente' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-700', 'label' => 'Pendiente']
     ];
 
-    return $statuses[$statusId] ?? '<span class="badge bg-secondary">Desconocido</span>';
+    $style = $statuses[$statusId] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-700', 'label' => 'Desconocido'];
+
+    return '<span class="px-3 py-1 rounded-full text-xs font-bold ' . $style['bg'] . ' ' . $style['text'] . '">' . $style['label'] . '</span>';
+}
+
+function rolBadge($rol) {
+    $map = [
+        'admin'             => ['bg' => 'bg-purple-200', 'text' => 'text-purple-700', 'label' => 'Administrador'],
+        'editor'            => ['bg' => 'bg-blue-100',   'text' => 'text-blue-700',   'label' => 'Editor'],
+        'viewer'            => ['bg' => 'bg-gray-100',   'text' => 'text-gray-700',   'label' => 'Lector'],
+        'Direccion General' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-700', 'label' => 'Direccion General'],
+        'Finanzas'          => ['bg' => 'bg-emerald-100','text' => 'text-emerald-700','label' => 'Finanzas'],
+        'Mantenimiento'     => ['bg' => 'bg-amber-100',  'text' => 'text-amber-700',  'label' => 'Mantenimiento'],
+        'Administrativo'    => ['bg' => 'bg-blue-100',   'text' => 'text-blue-700',   'label' => 'Administrativo'],
+        'Cultivo'           => ['bg' => 'bg-teal-100',   'text' => 'text-teal-700',   'label' => 'Cultivo']
+    ];
+    $style = $map[$rol] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-700', 'label' => ($rol ?: '-')];
+    return '<span class="px-3 py-1 rounded-full text-xs font-bold ' . $style['bg'] . ' ' . $style['text'] . '">' . $style['label'] . '</span>';
 }
 ```
+
+**Patrón de badges con label custom (light theme):**
+
+Tanto `status()` como `rolBadge()` siguen el mismo patron `['bg' => ..., 'text' => ..., 'label' => ...]`. Útil cuando:
+- La key (value de BD) NO debe mostrarse al usuario tal cual (ej: `admin` → `Administrador`).
+- Se trabaja sobre **light theme** (colores sólidos `bg-X-100/200 text-X-700`, no opacidad `/15`).
+- Se necesita un fallback que preserve el value original: `['label' => ($rol ?: '-')]`.
+
+Estilo HTML uniforme: `px-3 py-1 rounded-full text-xs font-bold`.
+
+Paleta sólida disponible (light theme): purple, blue, green, emerald, red, yellow, amber, teal, gray (fallback).
 
 **Reglas para funciones auxiliares:**
 

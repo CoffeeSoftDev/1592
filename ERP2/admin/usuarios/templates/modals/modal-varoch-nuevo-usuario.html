@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modal - Nuevo Usuario</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../src/css/coffee-varoch.css">
+<style>body{font-family:'Inter',system-ui,sans-serif;}</style>
+</head>
+<body class="coffee-varoch" data-theme="dark">
+
+<div class="cv-overlay fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="cv-card w-full max-w-[720px] max-h-[92vh] overflow-y-auto cv-scroll relative">
+
+    <!-- Header -->
+    <div class="px-5 py-4 flex items-center justify-between border-b border-[var(--cv-border-dk)] sticky top-0 z-10" style="background:var(--cv-card-dk)">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(37,99,235,.15);color:var(--cv-action)">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        </div>
+        <div>
+          <div class="cv-title text-base">Nuevo Usuario</div>
+          <div class="cv-muted">Completa los datos para crear un acceso</div>
+        </div>
+      </div>
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost p-1.5" title="Cerrar">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 space-y-5">
+
+      <!-- Avatar uploader -->
+      <div class="flex items-center gap-4 cv-card p-4">
+        <div class="cv-avatar" style="width:60px;height:60px;font-size:18px">NU</div>
+        <div class="flex-1">
+          <div class="cv-title text-sm">Foto de perfil</div>
+          <div class="cv-muted">PNG o JPG, max 2MB</div>
+        </div>
+        <button class="cv-btn cv-btn-outline-action">Cambiar</button>
+      </div>
+
+      <!-- Datos personales -->
+      <div>
+        <div class="cv-label mb-2">Datos personales</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="cv-label">Nombre(s) *</label>
+            <input class="cv-input mt-1" placeholder="Maria">
+          </div>
+          <div>
+            <label class="cv-label">Apellidos *</label>
+            <input class="cv-input mt-1" placeholder="Hernandez Cruz">
+          </div>
+          <div>
+            <label class="cv-label">Email corporativo *</label>
+            <input class="cv-input mt-1" placeholder="usuario@empresa.com" type="email">
+          </div>
+          <div>
+            <label class="cv-label">Telefono</label>
+            <input class="cv-input mt-1" placeholder="+52 ___ ___ ____">
+          </div>
+        </div>
+      </div>
+
+      <!-- Acceso -->
+      <div>
+        <div class="cv-label mb-2">Acceso al sistema</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="cv-label">Usuario *</label>
+            <input class="cv-input mt-1" placeholder="@maria.h">
+          </div>
+          <div>
+            <label class="cv-label">Contrasena temporal *</label>
+            <input class="cv-input mt-1" placeholder="********" type="password">
+          </div>
+          <div>
+            <label class="cv-label">Departamento *</label>
+            <select class="cv-input mt-1">
+              <option>Selecciona...</option><option>Sistemas</option><option>Finanzas</option>
+              <option>RRHH</option><option>Ventas</option><option>Compras</option>
+              <option>Almacen</option><option>Marketing</option>
+            </select>
+          </div>
+          <div>
+            <label class="cv-label">Rol *</label>
+            <select class="cv-input mt-1">
+              <option>Selecciona...</option><option>Super Admin</option><option>Admin</option>
+              <option>Supervisor</option><option>Operador</option><option>Consulta</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opciones -->
+      <div>
+        <div class="cv-label mb-2">Opciones</div>
+        <div class="space-y-2 cv-card p-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="cv-check" checked>
+            <span class="cv-text">Forzar cambio de contrasena al primer ingreso</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="cv-check" checked>
+            <span class="cv-text">Enviar correo de bienvenida</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="cv-check">
+            <span class="cv-text">Activar autenticacion de dos factores (2FA)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="cv-check">
+            <span class="cv-text">Restringir acceso por IP</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 flex items-center justify-end gap-2 border-t border-[var(--cv-border-dk)] sticky bottom-0" style="background:var(--cv-card-dk)">
+      <button onclick="window.close()" class="cv-btn cv-btn-ghost">Cancelar</button>
+      <button class="cv-btn cv-btn-outline-action">Guardar borrador</button>
+      <button class="cv-btn cv-btn-action">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Crear usuario
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const KEY = 'huubie-theme';
+  document.body.setAttribute('data-theme', localStorage.getItem(KEY) || 'dark');
+</script>
+</body>
+</html>

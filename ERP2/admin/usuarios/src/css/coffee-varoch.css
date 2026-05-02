@@ -1,0 +1,294 @@
+/**
+ * ============================================================
+ * Coffee-Varoch Theme Configuration
+ * ============================================================
+ * Uso: Importar en cualquier template con:
+ * <link rel="stylesheet" href="../src/css/coffee-varoch.css">
+ *
+ * Generado para ERP2 / CoffeeSoft Framework
+ * Conjurado por CoffeeMagic - Modulo Admin Usuarios
+ * Incluye fixes de contraste para tema light en badges y botones
+ * ============================================================
+ */
+
+/* ---------- Variables Globales ---------- */
+:root {
+    /* Brand */
+    --cv-primary:       #103B60;
+    --cv-secondary:     #8CC63F;
+    --cv-bg:            #DBDBDC;
+
+    /* Acciones */
+    --cv-action:        #2563EB;
+    --cv-action-hover:  #1D4ED8;
+    --cv-danger:        #DC2626;
+    --cv-success:       #166534;
+
+    /* Grises Light */
+    --cv-card:          #FFFFFF;
+    --cv-card-alt:      #F8F9FA;
+    --cv-border:        #E2E8F0;
+    --cv-text:          #1E293B;
+    --cv-text-2:        #64748B;
+    --cv-text-muted:    #94A3B8;
+
+    /* Grises Dark */
+    --cv-body-dk:       #111928;
+    --cv-sidebar-dk:    #0F172A;
+    --cv-header-dk:     #141D2B;
+    --cv-card-dk:       #1F2A37;
+    --cv-input-dk:      #1A2332;
+    --cv-border-dk:     rgba(55,65,81,.6);
+    --cv-text-dk:       #FFFFFF;
+    --cv-text-2-dk:     #94A3B8;
+
+    /* Extras ERP */
+    --cv-info:          #0078D7;
+    --cv-warning:       #FFC107;
+    --cv-soft:          #FE9834;
+    --cv-alert-bg:      #F24444;
+}
+
+/* ---------- Reset Base ---------- */
+.coffee-varoch,
+.coffee-varoch * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.coffee-varoch {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--cv-body-dk);
+    color: var(--cv-text-dk);
+    min-height: 100vh;
+}
+
+/* ---------- Layouts ---------- */
+.cv-page    { background: var(--cv-body-dk); color: var(--cv-text-dk); min-height:100vh; }
+.cv-sidebar { background: var(--cv-sidebar-dk); border-right: 1px solid var(--cv-border-dk); }
+.cv-header  { background: var(--cv-header-dk); border-bottom: 1px solid var(--cv-border-dk); }
+.cv-card    { background: var(--cv-card-dk); border: 1px solid var(--cv-border-dk); border-radius: 12px; }
+.cv-input   { background: var(--cv-input-dk); border: 1px solid #374151; border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #d1d5db; width: 100%; }
+.cv-input:focus { outline: none; border-color: var(--cv-action); }
+.cv-input::placeholder { color: #6b7280; }
+
+/* ---------- Scrollbar ---------- */
+.cv-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.cv-scroll::-webkit-scrollbar-track { background: transparent; }
+.cv-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+/* ---------- Sidebar Items ---------- */
+.cv-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px;
+    font-size: 12px; color: var(--cv-text-2-dk);
+    cursor: pointer; text-decoration: none;
+    transition: all .15s ease; position: relative;
+}
+.cv-nav-item:hover {
+    background: rgba(37,99,235,.12);
+    color: #DBEAFE;
+}
+.cv-nav-item.active {
+    color: #FFFFFF;
+    background: linear-gradient(90deg, rgba(37,99,235,.25) 0%, rgba(16,59,96,.2) 100%);
+    font-weight: 600;
+}
+.cv-nav-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+    background: linear-gradient(180deg, #2563EB 0%, #0078D7 100%);
+    border-radius: 0 3px 3px 0;
+}
+.cv-nav-item svg { transition: color .15s; }
+.cv-nav-item:hover svg { color: #60A5FA; }
+.cv-nav-item.active svg { color: #60A5FA; }
+
+/* ---------- Badges ---------- */
+.cv-badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 10px; border-radius: 9999px;
+    font-size: 10px; font-weight: 700; border: 1px solid;
+    line-height: 1.4;
+}
+.cv-badge-success {
+    background: rgba(140,198,63,.15);
+    color: var(--cv-secondary);
+    border-color: rgba(140,198,63,.35);
+}
+.cv-badge-warning {
+    background: rgba(251,191,36,.15);
+    color: #FBBF24;
+    border-color: rgba(251,191,36,.3);
+}
+.cv-badge-danger {
+    background: rgba(234,2,52,.15);
+    color: #EA0234;
+    border-color: rgba(234,2,52,.35);
+}
+.cv-badge-info {
+    background: rgba(37,99,235,.15);
+    color: var(--cv-action);
+    border-color: rgba(37,99,235,.35);
+}
+.cv-badge-neutral {
+    background: rgba(148,163,184,.15);
+    color: var(--cv-text-muted);
+    border-color: rgba(148,163,184,.3);
+}
+.cv-badge-purple {
+    background: rgba(139,92,246,.15);
+    color: #A78BFA;
+    border-color: rgba(139,92,246,.35);
+}
+
+/* ---------- Buttons ---------- */
+.cv-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 6px 16px; border-radius: 8px;
+    font-size: 12px; font-weight: 600;
+    border: none; cursor: pointer; transition: all .15s;
+    white-space: nowrap;
+}
+.cv-btn-primary  { background: var(--cv-primary); color: #fff !important; }
+.cv-btn-primary:hover  { background: #0a2a4a; color: #fff !important; }
+.cv-btn-action   { background: var(--cv-action); color: #fff !important; }
+.cv-btn-action:hover   { background: var(--cv-action-hover); color: #fff !important; }
+.cv-btn-success  { background: var(--cv-success); color: #fff !important; }
+.cv-btn-success:hover  { background: #14522d; color: #fff !important; }
+.cv-btn-danger   { background: var(--cv-danger); color: #fff !important; }
+.cv-btn-danger:hover   { background: #b91c1c; color: #fff !important; }
+.cv-btn-outline-action {
+    background: rgba(37,99,235,.12);
+    color: var(--cv-action);
+    border: 1px solid rgba(37,99,235,.35);
+}
+.cv-btn-outline-action:hover { background: rgba(37,99,235,.2); }
+.cv-btn-ghost    { background: transparent; color: var(--cv-text-2-dk); }
+.cv-btn-ghost:hover { background: rgba(255,255,255,.05); color: #fff; }
+
+/* ---------- Typography helpers ---------- */
+.cv-label  { font-size: 11px; font-weight: 600; color: var(--cv-text-2-dk); text-transform: uppercase; letter-spacing: 0.05em; }
+.cv-title  { font-size: 14px; font-weight: 700; color: #fff; }
+.cv-text   { font-size: 12px; color: var(--cv-text-2-dk); }
+.cv-muted  { font-size: 11px; color: var(--cv-text-muted); }
+
+/* ---------- Tables ---------- */
+.cv-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cv-table thead { position: sticky; top: 0; z-index: 1; }
+.cv-table thead th {
+    background: var(--cv-header-dk);
+    color: var(--cv-text-2-dk);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cv-border-dk);
+    text-transform: uppercase;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+}
+.cv-table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cv-border-dk);
+    color: #d1d5db;
+}
+.cv-table tbody tr:hover td { background: rgba(26,35,50,.55); }
+
+/* ---------- Avatar ---------- */
+.cv-avatar {
+    width: 32px; height: 32px; border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, var(--cv-primary) 0%, var(--cv-action) 100%);
+    flex-shrink: 0;
+}
+
+/* ---------- Light Theme Overrides ---------- */
+body[data-theme="light"] .coffee-varoch,
+body[data-theme="light"] .cv-page    { background: var(--cv-bg); color: var(--cv-text); }
+body[data-theme="light"] .cv-sidebar { background: var(--cv-card) !important; border-color: var(--cv-border) !important; }
+body[data-theme="light"] .cv-header  { background: var(--cv-card) !important; border-color: var(--cv-border) !important; }
+body[data-theme="light"] .cv-card    { background: var(--cv-card) !important; border-color: var(--cv-border) !important; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+body[data-theme="light"] .cv-input   { background: var(--cv-card-alt) !important; border-color: var(--cv-border) !important; color: var(--cv-text) !important; }
+body[data-theme="light"] .cv-input::placeholder { color: var(--cv-text-muted) !important; }
+body[data-theme="light"] .cv-nav-item { color: var(--cv-text-2) !important; }
+body[data-theme="light"] .cv-nav-item:hover { background: rgba(37,99,235,.08) !important; color: var(--cv-primary) !important; }
+body[data-theme="light"] .cv-nav-item.active { color: var(--cv-primary) !important; background: linear-gradient(90deg, rgba(37,99,235,.10) 0%, rgba(16,59,96,.04) 100%) !important; }
+body[data-theme="light"] .cv-nav-item.active::before { background: linear-gradient(180deg, #2563EB 0%, #0078D7 100%); }
+body[data-theme="light"] .cv-text    { color: var(--cv-text-2) !important; }
+body[data-theme="light"] .cv-muted    { color: var(--cv-text-muted) !important; }
+body[data-theme="light"] .cv-title    { color: var(--cv-primary) !important; }
+body[data-theme="light"] .cv-label    { color: var(--cv-text-2) !important; }
+body[data-theme="light"] .cv-btn-ghost { color: var(--cv-text-2); }
+body[data-theme="light"] .cv-btn-ghost:hover { background: rgba(0,0,0,.04); color: var(--cv-text); }
+body[data-theme="light"] .cv-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; }
+
+/* Tabla light */
+body[data-theme="light"] .cv-table thead th { background: #F8FAFC !important; color: var(--cv-text-2) !important; border-color: var(--cv-border) !important; }
+body[data-theme="light"] .cv-table tbody td { color: var(--cv-text) !important; border-color: var(--cv-border) !important; }
+body[data-theme="light"] .cv-table tbody tr:hover td { background: rgba(37,99,235,.05) !important; }
+
+/* === FIX CONTRASTE LIGHT — botones azul/morado mantienen blanco === */
+body[data-theme="light"] .cv-btn-primary,
+body[data-theme="light"] .cv-btn-action,
+body[data-theme="light"] .cv-btn-success,
+body[data-theme="light"] .cv-btn-danger { color: #fff !important; }
+body[data-theme="light"] .cv-btn-primary:hover,
+body[data-theme="light"] .cv-btn-action:hover,
+body[data-theme="light"] .cv-btn-success:hover,
+body[data-theme="light"] .cv-btn-danger:hover { color: #fff !important; }
+
+/* === FIX CONTRASTE LIGHT — badges con mayor legibilidad === */
+body[data-theme="light"] .cv-badge-success {
+    background: rgba(22,101,52,.12) !important;
+    color: #166534 !important;
+    border-color: rgba(22,101,52,.40) !important;
+}
+body[data-theme="light"] .cv-badge-warning {
+    background: rgba(180,83,9,.12) !important;
+    color: #B45309 !important;
+    border-color: rgba(180,83,9,.40) !important;
+}
+body[data-theme="light"] .cv-badge-danger {
+    background: rgba(185,28,28,.10) !important;
+    color: #B91C1C !important;
+    border-color: rgba(185,28,28,.40) !important;
+}
+body[data-theme="light"] .cv-badge-info {
+    background: rgba(29,78,216,.10) !important;
+    color: #1D4ED8 !important;
+    border-color: rgba(29,78,216,.40) !important;
+}
+body[data-theme="light"] .cv-badge-neutral {
+    background: rgba(71,85,105,.10) !important;
+    color: #475569 !important;
+    border-color: rgba(71,85,105,.35) !important;
+}
+body[data-theme="light"] .cv-badge-purple {
+    background: rgba(109,40,217,.10) !important;
+    color: #6D28D9 !important;
+    border-color: rgba(109,40,217,.40) !important;
+}
+
+/* Avatar permanece con gradiente brand */
+body[data-theme="light"] .cv-avatar { color: #fff !important; }
+
+/* Card hover */
+.cv-card-hover { transition: all .18s ease; }
+.cv-card-hover:hover { transform: translateY(-2px); border-color: rgba(37,99,235,.5); box-shadow: 0 10px 30px rgba(0,0,0,.30); }
+body[data-theme="light"] .cv-card-hover:hover { box-shadow: 0 10px 24px rgba(15,23,42,.10); border-color: rgba(37,99,235,.45); }
+
+/* Divider */
+.cv-divider { height:1px; background: var(--cv-border-dk); }
+body[data-theme="light"] .cv-divider { background: var(--cv-border) !important; }
+
+/* Modal overlay */
+.cv-overlay { background: rgba(2,6,23,.65); backdrop-filter: blur(2px); }
+body[data-theme="light"] .cv-overlay { background: rgba(15,23,42,.45); }
+
+/* Checkbox custom */
+.cv-check { width: 14px; height: 14px; accent-color: var(--cv-action); cursor: pointer; }
+
+/* Select arrow */
+select.cv-input { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }

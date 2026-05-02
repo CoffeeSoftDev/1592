@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ERP2 - Administrador de Usuarios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/css/coffee-varoch.css">
+<style>
+  body { font-family:'Inter',system-ui,sans-serif; }
+  .kpi-icon { width:38px; height:38px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; }
+</style>
+</head>
+<body class="coffee-varoch" data-theme="dark">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- ============== SIDEBAR ============== -->
+  <aside class="cv-sidebar w-56 flex-shrink-0 flex flex-col">
+    <div class="px-4 h-14 flex items-center gap-2 border-b border-[var(--cv-border-dk)]">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--cv-primary)] to-[var(--cv-action)] flex items-center justify-center text-white font-bold text-sm">E2</div>
+      <div>
+        <div class="text-white font-bold text-[13px] leading-tight" id="brandText">ERP2</div>
+        <div class="cv-muted leading-tight">Admin Suite</div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto cv-scroll p-3 space-y-1">
+      <div class="cv-label px-2 mb-1">Modulo</div>
+      <a href="#" class="cv-nav-item">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="usuarios-varoch-admin.html" class="cv-nav-item active">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Usuarios
+      </a>
+      <a href="departamentos-varoch-admin.html" class="cv-nav-item">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+        Departamentos
+      </a>
+      <a href="roles-varoch-admin.html" class="cv-nav-item">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Roles
+      </a>
+      <a href="#" class="cv-nav-item">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Auditoria
+      </a>
+      <a href="#" class="cv-nav-item">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Configuracion
+      </a>
+    </nav>
+    <div class="border-t border-[var(--cv-border-dk)] p-3">
+      <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 cursor-pointer">
+        <div class="cv-avatar" style="width:28px;height:28px;font-size:10px">AD</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[12px] text-white font-semibold leading-tight truncate">Admin</div>
+          <div class="cv-muted leading-tight truncate">admin@erp2</div>
+        </div>
+        <svg class="w-3.5 h-3.5 cv-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============== MAIN ============== -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="cv-header h-14 flex items-center justify-between px-6">
+      <div class="flex items-center gap-3 flex-1 max-w-md">
+        <div class="relative w-full">
+          <svg class="w-4 h-4 cv-text absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Buscar usuario, email, departamento..." class="cv-input pl-9">
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" class="cv-btn cv-btn-ghost" title="Tema">
+          <svg id="iconMoon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="iconSun" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button class="cv-btn cv-btn-ghost relative" title="Notificaciones">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[var(--cv-action)]"></span>
+        </button>
+        <div class="flex items-center gap-2 pl-3 border-l border-[var(--cv-border-dk)]">
+          <div class="cv-avatar">AD</div>
+          <div class="leading-tight hidden md:block">
+            <div class="text-[12px] font-semibold cv-title">Admin</div>
+            <div class="cv-muted">Super User</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Subheader -->
+    <div class="cv-header border-b-0 px-6 py-4 flex items-center justify-between">
+      <div>
+        <div class="cv-label mb-1">Modulo</div>
+        <h1 class="cv-title text-lg">Administrador de Usuarios</h1>
+        <p class="cv-text">Gestiona los accesos, departamentos y roles de los colaboradores del ERP2.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="cv-btn cv-btn-outline-action">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar
+        </button>
+        <button class="cv-btn cv-btn-action">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nuevo Usuario
+        </button>
+      </div>
+    </div>
+
+    <!-- Content scroll -->
+    <div class="flex-1 overflow-y-auto cv-scroll p-6 space-y-6">
+
+      <!-- KPIs -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="cv-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="kpi-icon" style="background:rgba(37,99,235,.15); color:var(--cv-action)">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <span class="cv-badge cv-badge-info">Total</span>
+          </div>
+          <div class="cv-label mb-1">Usuarios totales</div>
+          <div class="text-2xl font-bold cv-title">128</div>
+          <div class="cv-muted mt-1">+6 este mes</div>
+        </div>
+
+        <div class="cv-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="kpi-icon" style="background:rgba(140,198,63,.15); color:var(--cv-secondary)">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="cv-badge cv-badge-success">Activos</span>
+          </div>
+          <div class="cv-label mb-1">Usuarios activos</div>
+          <div class="text-2xl font-bold cv-title">112</div>
+          <div class="cv-muted mt-1">87.5% del total</div>
+        </div>
+
+        <div class="cv-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="kpi-icon" style="background:rgba(220,38,38,.15); color:#EF4444">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <span class="cv-badge cv-badge-danger">Inactivos</span>
+          </div>
+          <div class="cv-label mb-1">Usuarios inactivos</div>
+          <div class="text-2xl font-bold cv-title">16</div>
+          <div class="cv-muted mt-1">12.5% del total</div>
+        </div>
+
+        <div class="cv-card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="kpi-icon" style="background:rgba(139,92,246,.15); color:#A78BFA">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="cv-badge cv-badge-purple">Admin</span>
+          </div>
+          <div class="cv-label mb-1">Administradores</div>
+          <div class="text-2xl font-bold cv-title">7</div>
+          <div class="cv-muted mt-1">Acceso total</div>
+        </div>
+      </section>
+
+      <!-- Filtros -->
+      <section class="cv-card p-4">
+        <div class="flex flex-wrap items-end gap-3">
+          <div class="flex-1 min-w-[180px]">
+            <div class="cv-label mb-1">Departamento</div>
+            <select class="cv-input">
+              <option>Todos</option><option>Sistemas</option><option>Finanzas</option><option>RRHH</option>
+              <option>Ventas</option><option>Compras</option><option>Almacen</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[180px]">
+            <div class="cv-label mb-1">Rol</div>
+            <select class="cv-input">
+              <option>Todos</option><option>Super Admin</option><option>Admin</option>
+              <option>Supervisor</option><option>Operador</option><option>Consulta</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[180px]">
+            <div class="cv-label mb-1">Estatus</div>
+            <select class="cv-input">
+              <option>Todos</option><option>Activo</option><option>Inactivo</option><option>Suspendido</option>
+            </select>
+          </div>
+          <button class="cv-btn cv-btn-outline-action">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Aplicar
+          </button>
+        </div>
+      </section>
+
+      <!-- Tabla -->
+      <section class="cv-card overflow-hidden">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-[var(--cv-border-dk)]">
+          <div>
+            <div class="cv-title text-sm">Listado de usuarios</div>
+            <div class="cv-muted">10 de 128 mostrados</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="cv-btn cv-btn-ghost">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              Columnas
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto cv-scroll">
+          <table class="cv-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="cv-check"></th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Departamento</th>
+                <th>Rol</th>
+                <th>Estatus</th>
+                <th>Ultimo login</th>
+                <th class="text-right pr-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 1 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar">RM</div>
+                    <div>
+                      <div class="font-semibold text-white">Rosy Mendez</div>
+                      <div class="cv-muted">@rosy.mendez</div>
+                    </div>
+                  </div>
+                </td>
+                <td>rosy.mendez@coffeesoft.mx</td>
+                <td>Sistemas</td>
+                <td><span class="cv-badge cv-badge-purple">Super Admin</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Hoy, 09:42</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 2 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#7c3aed,#2563EB)">SO</div>
+                    <div>
+                      <div class="font-semibold text-white">Somx Olvera</div>
+                      <div class="cv-muted">@somx</div>
+                    </div>
+                  </div>
+                </td>
+                <td>somx@coffeesoft.mx</td>
+                <td>Sistemas</td>
+                <td><span class="cv-badge cv-badge-purple">Super Admin</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Hoy, 08:11</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 3 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#FE9834,#DC2626)">LP</div>
+                    <div>
+                      <div class="font-semibold text-white">Laura Perez</div>
+                      <div class="cv-muted">@laura.perez</div>
+                    </div>
+                  </div>
+                </td>
+                <td>laura.perez@empresa.com</td>
+                <td>Finanzas</td>
+                <td><span class="cv-badge cv-badge-info">Admin</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Ayer, 17:22</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 4 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#0078D7,#103B60)">MR</div>
+                    <div>
+                      <div class="font-semibold text-white">Miguel Reyes</div>
+                      <div class="cv-muted">@miguel.r</div>
+                    </div>
+                  </div>
+                </td>
+                <td>miguel.reyes@empresa.com</td>
+                <td>Ventas</td>
+                <td><span class="cv-badge cv-badge-info">Supervisor</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Ayer, 14:08</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 5 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#8CC63F,#166534)">JG</div>
+                    <div>
+                      <div class="font-semibold text-white">Julieta Garcia</div>
+                      <div class="cv-muted">@juli.g</div>
+                    </div>
+                  </div>
+                </td>
+                <td>julieta.garcia@empresa.com</td>
+                <td>RRHH</td>
+                <td><span class="cv-badge cv-badge-info">Admin</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>2 dias, 11:30</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 6 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#FBBF24,#FE9834)">CT</div>
+                    <div>
+                      <div class="font-semibold text-white">Carlos Tovar</div>
+                      <div class="cv-muted">@carlos.t</div>
+                    </div>
+                  </div>
+                </td>
+                <td>carlos.tovar@empresa.com</td>
+                <td>Compras</td>
+                <td><span class="cv-badge cv-badge-neutral">Operador</span></td>
+                <td><span class="cv-badge cv-badge-warning">Suspendido</span></td>
+                <td>5 dias, 16:45</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 7 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">AL</div>
+                    <div>
+                      <div class="font-semibold text-white">Andrea Lopez</div>
+                      <div class="cv-muted">@andrea.l</div>
+                    </div>
+                  </div>
+                </td>
+                <td>andrea.lopez@empresa.com</td>
+                <td>Almacen</td>
+                <td><span class="cv-badge cv-badge-info">Supervisor</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Hoy, 07:50</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 8 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#EA0234,#DC2626)">DV</div>
+                    <div>
+                      <div class="font-semibold text-white">Daniel Vega</div>
+                      <div class="cv-muted">@daniel.v</div>
+                    </div>
+                  </div>
+                </td>
+                <td>daniel.vega@empresa.com</td>
+                <td>Ventas</td>
+                <td><span class="cv-badge cv-badge-neutral">Operador</span></td>
+                <td><span class="cv-badge cv-badge-danger">Inactivo</span></td>
+                <td>14 dias, 10:00</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 9 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#0078D7,#2563EB)">PR</div>
+                    <div>
+                      <div class="font-semibold text-white">Patricia Romero</div>
+                      <div class="cv-muted">@patty.r</div>
+                    </div>
+                  </div>
+                </td>
+                <td>patricia.romero@empresa.com</td>
+                <td>Finanzas</td>
+                <td><span class="cv-badge cv-badge-neutral">Consulta</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Hoy, 10:18</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- 10 -->
+              <tr>
+                <td><input type="checkbox" class="cv-check"></td>
+                <td>
+                  <div class="flex items-center gap-2.5">
+                    <div class="cv-avatar" style="background:linear-gradient(135deg,#166534,#8CC63F)">FH</div>
+                    <div>
+                      <div class="font-semibold text-white">Fernando Herrera</div>
+                      <div class="cv-muted">@fernando.h</div>
+                    </div>
+                  </div>
+                </td>
+                <td>fernando.herrera@empresa.com</td>
+                <td>Sistemas</td>
+                <td><span class="cv-badge cv-badge-info">Admin</span></td>
+                <td><span class="cv-badge cv-badge-success">Activo</span></td>
+                <td>Hoy, 09:05</td>
+                <td class="text-right pr-4">
+                  <div class="inline-flex gap-1">
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="cv-btn cv-btn-ghost p-1.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-4 py-3 flex items-center justify-between border-t border-[var(--cv-border-dk)]">
+          <div class="cv-text">Showing <span class="text-white font-semibold">1-10</span> of <span class="text-white font-semibold">128</span></div>
+          <div class="flex items-center gap-1">
+            <button class="cv-btn cv-btn-ghost px-3">&laquo;</button>
+            <button class="cv-btn cv-btn-action px-3">1</button>
+            <button class="cv-btn cv-btn-ghost px-3">2</button>
+            <button class="cv-btn cv-btn-ghost px-3">3</button>
+            <button class="cv-btn cv-btn-ghost px-3">...</button>
+            <button class="cv-btn cv-btn-ghost px-3">13</button>
+            <button class="cv-btn cv-btn-ghost px-3">&raquo;</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const KEY = 'huubie-theme';
+  const body = document.body;
+  const iconMoon = document.getElementById('iconMoon');
+  const iconSun  = document.getElementById('iconSun');
+  function applyTheme(t) {
+    body.setAttribute('data-theme', t);
+    if (t === 'light') { iconMoon.classList.add('hidden'); iconSun.classList.remove('hidden'); }
+    else { iconSun.classList.add('hidden'); iconMoon.classList.remove('hidden'); }
+  }
+  applyTheme(localStorage.getItem(KEY) || 'dark');
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(KEY, next);
+    applyTheme(next);
+  });
+</script>
+</body>
+</html>
