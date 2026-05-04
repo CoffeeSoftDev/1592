@@ -93,7 +93,7 @@ switch ($opc) {
 
 
  $pax     = $fin->Buscar_en_bitacora($date,$id,$campo);
- $existe  = count($pax);
+ $existe  = is_array($pax) ? count($pax) : 0;
  // $existe  = $pax ;
 
 
@@ -161,7 +161,7 @@ switch ($opc) {
  $udn    = $_SESSION['udn'];
 
  $pax     = $fin->Buscar_en_bitacora($date,$id,$campo);
- $existe  = count($pax);
+ $existe  = is_array($pax) ? count($pax) : 0;
 
  if ($existe!=0) { // Se encuentran algunos datos
 

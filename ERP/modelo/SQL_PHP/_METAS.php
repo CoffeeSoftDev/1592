@@ -136,7 +136,7 @@
 
   function VER_FORMAS_PAGO(){
    $rs = "";
-   $array = array(null);
+   $array = null;
 
    $sql = "
    SELECT

@@ -1046,7 +1046,7 @@ class Categorias extends Templates {
             bootbox: {
                 title: 'Nueva Categoría',
                 closeButton: true,
-                size: 'large'
+              
             },
             json: this.jsonCategoria(),
             success: (response) => {
@@ -1092,7 +1092,7 @@ class Categorias extends Templates {
             bootbox: {
                 title: `Editar Categoría: ${autofill.nombre || ''}`,
                 closeButton: true,
-                size: 'large'
+              
             },
             autofill: autofill,
             json: this.jsonCategoria(),
