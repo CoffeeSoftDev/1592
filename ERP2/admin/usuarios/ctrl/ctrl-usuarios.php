@@ -9,22 +9,16 @@ class ctrl extends mdl {
 
     function init() {
         return [
-            'roles'         => $this->lsNivel(),
-            'estados'       => $this->lsEstados(),
-            'departamentos' => $this->lsDepartamentos()
-        ];
-    }
-
-    function initTabs() {
-        return [
-            'rolesDB'       => $this->lsRolesDB(),
-            'departamentos'  => $this->lsDepartamentos()
+            'roles'           => $this->lsNivel(),
+            'estados'         => $this->lsEstados(),
+            'departamentos'   => parent::lsDepartamentos(),
+            'tiposMovimiento' => $this->lsTiposMovimiento()
         ];
     }
 
     function lsUsuarios() {
         $__row = [];
-        $ls = $this->listUsuarios([$_POST['rol']]);
+        $ls = $this->listUsuarios([$_POST['rol'], $_POST['active']]);
 
         foreach ($ls as $usuario) {
             $__row[] = [
@@ -160,26 +154,19 @@ class ctrl extends mdl {
         ];
     }
 
-    function statusUsuario() {
-        return [
-            'status'  => 200,
-            'message' => 'La tabla legacy no maneja estado; operacion omitida'
-        ];
-    }
-
-    function deleteUsuario() {
+    function disableUsuario() {
         $status  = 500;
-        $message = 'Error al eliminar usuario';
+        $message = 'Error al desactivar usuario';
 
-        $id     = $_POST['id'];
-        $delete = $this->deleteUsuarioById([
+        $id      = $_POST['id'];
+        $disable = $this->disableUsuarioById([
             'where' => ['idUsuario'],
             'data'  => [$id]
         ]);
 
-        if ($delete === true) {
+        if ($disable === true) {
             $status  = 200;
-            $message = 'Usuario eliminado correctamente';
+            $message = 'Usuario desactivado correctamente';
         }
 
         return [
@@ -192,28 +179,28 @@ class ctrl extends mdl {
 
     function lsRoles() {
         $__row = [];
-        $ls    = $this->lsRolesDB();
+        $ls    = $this->listRoles($_POST['active']);
 
         foreach ($ls as $rol) {
             $a = [];
 
             $a[] = [
                 'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
-                'html'    => '<i data-lucide="pencil" class="w-4 h-4"></i>',
+                'html'    => '<i class="icon-pencil"></i>',
                 'onclick' => 'roles.editRol(' . $rol['id'] . ')'
             ];
 
             $a[] = [
                 'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
-                'html'    => '<i data-lucide="trash-2" class="w-4 h-4"></i>',
-                'onclick' => 'roles.deleteRol(' . $rol['id'] . ')'
+                'html'    => '<i class="icon-block"></i>',
+                'onclick' => 'roles.disableRol(' . $rol['id'] . ')'
             ];
 
             $__row[] = [
-                'id'     => $rol['id'],
-                'ID'     => '#' . str_pad($rol['id'], 4, '0', STR_PAD_LEFT),
-                'Rol'    => '<span class="font-semibold text-primary">' . htmlspecialchars($rol['nombre']) . '</span>',
-                'a'      => $a
+                'id'  => $rol['id'],
+                'ID'  => '#' . str_pad($rol['id'], 4, '0', STR_PAD_LEFT),
+                'Rol' => '<span class="font-semibold text-primary">' . $rol['nombre'] . '</span>',
+                'a'   => $a
             ];
         }
 
@@ -298,19 +285,19 @@ class ctrl extends mdl {
         ];
     }
 
-    function deleteRol() {
+    function disableRol() {
         $status  = 500;
-        $message = 'Error al eliminar rol';
+        $message = 'Error al desactivar rol';
         $id      = $_POST['id'];
 
-        $delete = $this->deleteRolById([
+        $disable = $this->disableRolById([
             'where' => ['idNivel'],
             'data'  => [$id]
         ]);
 
-        if ($delete === true) {
+        if ($disable === true) {
             $status  = 200;
-            $message = 'Rol eliminado correctamente';
+            $message = 'Rol desactivado correctamente';
         }
 
         return [
@@ -323,36 +310,32 @@ class ctrl extends mdl {
 
     function lsDepartamentos() {
         $__row = [];
-        $ls    = $this->listDepartamentos();
+        $ls    = $this->listDepartamentos($_POST['active']);
 
         foreach ($ls as $depto) {
             $a = [];
 
             $a[] = [
                 'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
-                'html'    => '<i data-lucide="pencil" class="w-4 h-4"></i>',
+                'html'    => '<i class="icon-pencil"></i>',
                 'onclick' => 'departamentos.editDepartamento(' . $depto['id'] . ')'
             ];
 
             $a[] = [
                 'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
-                'html'    => '<i data-lucide="trash-2" class="w-4 h-4"></i>',
-                'onclick' => 'departamentos.deleteDepartamento(' . $depto['id'] . ')'
+                'html'    => '<i class="icon-block"></i>',
+                'onclick' => 'departamentos.disableDepartamento(' . $depto['id'] . ')'
             ];
 
             $__row[] = [
                 'id'           => $depto['id'],
                 'ID'           => '#' . str_pad($depto['id'], 4, '0', STR_PAD_LEFT),
-                // 'Departamento' => '<span class="font-semibold text-primary">' . $depto['nombre'] ?? '' . '</span>',
+                'Departamento' => '<span class="font-semibold text-primary">' . $depto['nombre'] . '</span>',
                 'a'            => $a
             ];
         }
 
         return ['row' => $__row, 'thead' => ''];
-    }
-
-    function listDepartamentos() {
-        return parent::lsDepartamentos();
     }
 
     function getDepartamento() {
@@ -433,19 +416,304 @@ class ctrl extends mdl {
         ];
     }
 
-    function deleteDepartamento() {
+    function disableDepartamento() {
         $status  = 500;
-        $message = 'Error al eliminar departamento';
+        $message = 'Error al desactivar departamento';
         $id      = $_POST['id'];
 
-        $delete = $this->deleteDepartamentoById([
+        $disable = $this->disableDepartamentoById([
             'where' => ['idArea'],
             'data'  => [$id]
         ]);
 
-        if ($delete === true) {
+        if ($disable === true) {
             $status  = 200;
-            $message = 'Departamento eliminado correctamente';
+            $message = 'Departamento desactivado correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    // === CATEGORÍAS FINANZAS ===
+
+    function lsCategorias() {
+        $__row = [];
+        $tipoMovimiento = $_POST['tipoMovimiento'];
+        $activeCat = $_POST['activeCat'];
+        $ls    = $this->listCategorias($tipoMovimiento, $activeCat);
+
+        foreach ($ls as $cat) {
+            $a = [];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-amber-100 hover:bg-amber-200 text-amber-700',
+                'html'    => '<i class="icon-folder-open"></i>',
+                'onclick' => 'categorias.selectCategoria(' . $cat['id'] . ', "' . addslashes($cat['nombre']) . '")'
+            ];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
+                'html'    => '<i class="icon-pencil"></i>',
+                'onclick' => 'categorias.editCategoria(' . $cat['id'] . ')'
+            ];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
+                'html'    => '<i class="icon-block"></i>',
+                'onclick' => 'categorias.disableCategoria(' . $cat['id'] . ')'
+            ];
+
+            $__row[] = [
+                'id'             => $cat['id'],
+                'ID'             => '#' . str_pad($cat['id'], 4, '0', STR_PAD_LEFT),
+                'Categoría'      => '<span class="font-semibold text-primary">' . $cat['nombre'] . '</span>',
+                'Tipo Movimiento'=> tipoMovimientoBadge($cat['tipo_movimiento']),
+                'a'              => $a
+            ];
+        }
+
+        return ['row' => $__row, 'thead' => ''];
+    }
+
+    function getCategoria() {
+        $id      = $_POST['id'];
+        $status  = 500;
+        $message = 'Error al obtener los datos';
+        $getData = $this->getCategoriaById([$id]);
+
+        if ($getData) {
+            $status  = 200;
+            $message = 'Datos obtenidos correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $getData
+        ];
+    }
+
+    function addCategoria() {
+        $status  = 500;
+        $message = 'No se pudo agregar la categoría';
+        $nombre  = $_POST['nombre'];
+        $tipo    = $_POST['tipoMovimiento'];
+
+        if ($this->existsCategoriaByName([$nombre])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe una categoría con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Categoria'     => $nombre,
+            'id_TMovimiento'=> $tipo,
+            'Stado'         => 1,
+            'id_UDN'        => 1
+        ];
+
+        $create = $this->createCategoria($this->util->sql($payload));
+
+        if ($create === true) {
+            $status  = 200;
+            $message = 'Categoría creada correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function editCategoria() {
+        $status  = 500;
+        $message = 'Error al editar categoría';
+        $id      = $_POST['id'];
+        $nombre  = $_POST['nombre'];
+        $tipo    = $_POST['tipoMovimiento'];
+
+        if ($this->existsOtherCategoriaByName([$nombre, $id])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe otra categoría con ese nombre'
+            ];
+        }
+
+        $payload = [
+            'Categoria'      => $nombre,
+            'id_TMovimiento' => $tipo,
+            'idCategoria'    => $id
+        ];
+
+        $edit = $this->updateCategoria($this->util->sql($payload, 1));
+
+        if ($edit === true) {
+            $status  = 200;
+            $message = 'Categoría actualizada correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function disableCategoria() {
+        $status  = 500;
+        $message = 'Error al desactivar categoría';
+        $id      = $_POST['id'];
+
+        $disable = $this->disableCategoriaById([
+            'where' => ['idCategoria'],
+            'data'  => [$id]
+        ]);
+
+        if ($disable === true) {
+            $status  = 200;
+            $message = 'Categoría desactivada correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    // === SUBCATEGORÍAS ===
+
+    function lsSubcategorias() {
+        $__row       = [];
+        $idCategoria = $_POST['idCategoria'];
+        $active      = $_POST['activeSub'];
+        $ls          = $this->listSubcategorias($idCategoria, $active);
+
+        foreach ($ls as $sub) {
+            $a = [];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500',
+                'html'    => '<i class="icon-pencil"></i>',
+                'onclick' => 'categorias.editSubcategoria(' . $sub['id'] . ')'
+            ];
+
+            $a[] = [
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
+                'html'    => '<i class="icon-block"></i>',
+                'onclick' => 'categorias.disableSubcategoria(' . $sub['id'] . ')'
+            ];
+
+            $__row[] = [
+                'id'            => $sub['id'],
+                'ID'            => '#' . str_pad($sub['id'], 4, '0', STR_PAD_LEFT),
+                'Subcategoría'  => '<span class="font-semibold">' . $sub['nombre'] . '</span>',
+                'Tarifa'        => $sub['tarifa'] ? evaluar($sub['tarifa']) : '-',
+                'a'             => $a
+            ];
+        }
+
+        return ['row' => $__row, 'thead' => ''];
+    }
+
+    function getSubcategoria() {
+        $id      = $_POST['id'];
+        $status  = 500;
+        $message = 'Error al obtener los datos';
+        $getData = $this->getSubcategoriaById([$id]);
+
+        if ($getData) {
+            $status  = 200;
+            $message = 'Datos obtenidos correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $getData
+        ];
+    }
+
+    function addSubcategoria() {
+        $status      = 500;
+        $message     = 'No se pudo agregar la subcategoría';
+        $nombre      = $_POST['nombre'];
+        $idCategoria = $_POST['idCategoria'];
+        $tarifa      = $_POST['tarifa'];
+        $activo      = $_POST['activo'];
+
+        if ($this->existsSubcategoriaByName([$nombre, $idCategoria])) {
+            return [
+                'status'  => 409,
+                'message' => 'Ya existe una subcategoría con ese nombre en esta categoría'
+            ];
+        }
+
+        $payload = [
+            'Subcategoria' => $nombre,
+            'id_Categoria' => $idCategoria,
+            'tarifa'       => $tarifa ?: 0,
+            'activo'       => $activo,
+            'Stado'        => 1,
+            'id_grupo'     => 1
+        ];
+
+        $create = $this->createSubcategoria($this->util->sql($payload));
+
+        if ($create === true) {
+            $status  = 200;
+            $message = 'Subcategoría creada correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function editSubcategoria() {
+        $status  = 500;
+        $message = 'Error al editar subcategoría';
+        $id      = $_POST['id'];
+        $nombre  = $_POST['nombre'];
+        $tarifa  = $_POST['tarifa'];
+        $activo  = $_POST['activo'];
+
+        $payload = [
+            'Subcategoria'   => $nombre,
+            'tarifa'         => $tarifa ?: 0,
+            'activo'         => $activo,
+            'idSubcategoria' => $id
+        ];
+
+        $edit = $this->updateSubcategoria($this->util->sql($payload, 1));
+
+        if ($edit === true) {
+            $status  = 200;
+            $message = 'Subcategoría actualizada correctamente';
+        }
+
+        return [
+            'status'  => $status,
+            'message' => $message
+        ];
+    }
+
+    function disableSubcategoria() {
+        $status  = 500;
+        $message = 'Error al desactivar subcategoría';
+        $id      = $_POST['id'];
+
+        $disable = $this->disableSubcategoriaById([
+            'where' => ['idSubcategoria'],
+            'data'  => [$id]
+        ]);
+
+        if ($disable === true) {
+            $status  = 200;
+            $message = 'Subcategoría desactivada correctamente';
         }
 
         return [
@@ -538,20 +806,34 @@ function actionButtons($id) {
     return [
         [
             'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-green-100 hover:bg-green-200 text-green-700',
-            'html'    => '<i data-lucide="eye" class="w-4 h-4"></i>',
+            'html'    => '<i class="icon-eye"></i>',
             'onclick' => "usuarios.getUsuario($id)"
         ],
         [
             'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-blue-100 hover:bg-blue-200 text-blue-500 ',
-            'html'    => '<i data-lucide="pencil" class="w-4 h-4"></i>',
+            'html'    => '<i class="icon-pencil"></i>',
             'onclick' => "usuarios.editUsuario($id)"
         ],
         [
             'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
-            'html'    => '<i data-lucide="trash-2" class="w-4 h-4"></i>',
-            'onclick' => "usuarios.deleteUsuario($id)"
+            'html'    => '<i class="icon-block"></i>',
+            'onclick' => "usuarios.disableUsuario($id)"
         ]
     ];
+}
+
+function tipoMovimientoBadge($tipo) {
+    $map = [
+        'Ingreso' => ['bg' => 'bg-green-100', 'text' => 'text-green-700', 'icon' => '↑'],
+        'Egreso'  => ['bg' => 'bg-red-100',   'text' => 'text-red-700',   'icon' => '↓'],
+        'Neutro'  => ['bg' => 'bg-gray-100',  'text' => 'text-gray-700',  'icon' => '↔']
+    ];
+    
+    $style = $map[$tipo] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-700', 'icon' => '•'];
+    
+    return '<span class="px-3 py-1 rounded-full text-xs font-bold ' . $style['bg'] . ' ' . $style['text'] . '">' 
+         . $style['icon'] . ' ' . ($tipo ?: 'Sin tipo') 
+         . '</span>';
 }
 
 $obj = new ctrl();

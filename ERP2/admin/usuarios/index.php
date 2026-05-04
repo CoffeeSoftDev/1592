@@ -35,7 +35,7 @@ if (empty($_COOKIE["IDU"])) {
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item text-uppercase text-muted">Administracion</li>
-                    <li class="breadcrumb-item fw-bold active">Usuarios, Roles y Departamentos</li>
+                    <li class="breadcrumb-item fw-bold active">Usuarios, Roles, Departamentos y Categorías</li>
                 </ol>
             </nav>
 

@@ -2,7 +2,7 @@
 
 > Mapa de secciones para Read(file, offset, limit). Generado por regenerar_indice.py
 
-**Generado:** 2026-05-02
+**Generado:** 2026-05-03
 **Ubicacion:** `c:\wamp64\www\1592\.kiro\steering`
 **Archivos indexados:** 7
 
@@ -68,7 +68,7 @@
 | 13 | Notas Importantes | 703 | 37 |
 | 14 | Soporte y Recursos | 740 | 12 |
 
-## FRONT-JS.md (384 lineas)
+## FRONT-JS.md (447 lineas)
 
 `c:/wamp64/www/1592/.kiro/steering/FRONT-JS.md`
 
@@ -76,7 +76,7 @@
 |---|---|---|---|
 | 1 | Objetivo General | 1 | 41 |
 | 2 | Rules | 42 | 32 |
-| 3 | La clase debe implementar los siguientes métodos: | 74 | 311 |
+| 3 | La clase debe implementar los siguientes métodos: | 74 | 374 |
 
 ## MDL.md (417 lineas)
 

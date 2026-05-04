@@ -5,7 +5,7 @@
       "args": [
         "run",
         "--directory",
-        "C:/wamp64/www/ERP-GV/ERP-GV/DEV/mcp-mysql-server",
+        "C:/wamp64/www/ERP-GV/DEV/mcp-mysql-server",
         "mcp-mysql-server"
       ],
       "env": {

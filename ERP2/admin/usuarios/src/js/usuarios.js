@@ -1,27 +1,31 @@
 let api = 'ctrl/ctrl-usuarios.php';
-let usuarios, roles, departamentos;
+let app, usuarios, roles, departamentos, categorias;
 
 $(async () => {
     const data = await useFetch({ url: api, data: { opc: "init" } });
-    const dataTabs = await useFetch({ url: api, data: { opc: "initTabs" } });
+
+    app = new App(api, 'root');
 
     usuarios = new Usuarios(api, 'root');
-    usuarios.roles = data.roles || [];
-    usuarios.estados = data.estados || [];
-    usuarios.departamentosData = data.departamentos || [];
-    usuarios.rolesDB = dataTabs.rolesDB || [];
-    usuarios.departamentosTab = dataTabs.departamentos || [];
+    usuarios.roles         = data.roles         || [];
+    usuarios.estados       = data.estados       || [];
+    usuarios.departamentos = data.departamentos || [];
 
-    roles = new Roles(api, 'root');
+    roles         = new Roles(api, 'root');
     departamentos = new Departamentos(api, 'root');
+    
+    categorias = new Categorias(api, 'root');
+    categorias.tiposMovimiento = data.tiposMovimiento || [];
 
-    usuarios.init();
+    app.init();
 });
+
+// -- Clase principal --
 
 class App extends Templates {
     constructor(link, div_modulo) {
         super(link, div_modulo);
-        this.PROJECT_NAME = "App";
+        this.PROJECT_NAME = "Admin";
     }
 
     init() {
@@ -30,10 +34,9 @@ class App extends Templates {
 
     render() {
         this.layout();
-        this.filterBar();
-        // this.renderInfoCards();
-        this.lsUsuarios();
-        lucide.createIcons();
+        this.renderHeader();
+        this.renderTabs();
+        this.renderActiveTab();
     }
 
     layout() {
@@ -42,17 +45,12 @@ class App extends Templates {
             design: false,
             data: {
                 id: this.PROJECT_NAME,
-                class: 'au-wrapper p-3',
+                class: 'w-full p-3',
                 container: [
                     {
                         type: 'div',
-                        id: `filterBar${this.PROJECT_NAME}`,
-                        class: 'w-full mb-3 py-2'
-                    },
-                    {
-                        type: 'div',
-                        id: `cards${this.PROJECT_NAME}`,
-                        class: 'w-full mb-4'
+                        id: `header${this.PROJECT_NAME}`,
+                        class: 'w-full mb-3'
                     },
                     {
                         type: 'div',
@@ -62,45 +60,114 @@ class App extends Templates {
                 ]
             }
         });
-
-        this.layoutTabs();
-        roles.filterBarRoles();
-        departamentos.filterBarDepartamentos();
     }
 
-    layoutTabs() {
+    renderHeader() {
+        $(`#header${this.PROJECT_NAME}`).html('<h2 class="text-2xl font-semibold">Administracion</h2><p class="text-gray-400">Gestiona usuarios, roles y departamentos.</p>');
+    }
+
+    renderTabs() {
+        const activeModule = localStorage.getItem('admin-module') || 'usuarios';
+
         this.tabLayout({
             parent: `container${this.PROJECT_NAME}`,
-            id: "tabsAdmin",
-            content: { class: "" },
-            theme: "light",
+            id: 'tabsAdmin',
+            theme: 'light',
             type: 'short',
+            showBorder: false,
             json: [
                 {
-                    id: "usuarios",
-                    tab: "Usuarios",
-                    class: 'mb-1',
-                    onClick: () => this.lsUsuarios(),
-                    active: true,
+                    id: 'usuarios',
+                    tab: 'Usuarios',
+                    icon: 'icon-users',
+                    iconColor: 'text-blue-600',
+                    active: activeModule === 'usuarios',
+                    onClick: () => {
+                        localStorage.setItem('admin-module', 'usuarios');
+                        usuarios.render();
+                    }
                 },
                 {
-                    id: "roles",
-                    tab: "Roles",
-                    onClick: () => roles.lsRoles()
+                    id: 'roles',
+                    tab: 'Roles',
+                    icon: 'icon-shield',
+                    iconColor: 'text-purple-600',
+                    active: activeModule === 'roles',
+                    onClick: () => {
+                        localStorage.setItem('admin-module', 'roles');
+                        roles.render();
+                    }
                 },
                 {
-                    id: "departamentos",
-                    tab: "Departamentos",
-                    onClick: () => departamentos.lsDepartamentos()
+                    id: 'departamentos',
+                    tab: 'Departamentos',
+                    icon: 'icon-building',
+                    iconColor: 'text-emerald-600',
+                    active: activeModule === 'departamentos',
+                    onClick: () => {
+                        localStorage.setItem('admin-module', 'departamentos');
+                        departamentos.render();
+                    }
+                },
+                {
+                    id: 'categorias',
+                    tab: 'Categorías Finanzas',
+                    icon: 'icon-wallet',
+                    iconColor: 'text-amber-600',
+                    active: activeModule === 'categorias',
+                    onClick: () => {
+                        localStorage.setItem('admin-module', 'categorias');
+                        categorias.render();
+                    }
                 }
             ]
         });
+    }
 
-        $(`#container${this.PROJECT_NAME}`).prepend(`
-        <div class="px-4 pt-3 pb-3">
-            <h2 class="text-2xl font-semibold">Administracion</h2>
-            <p class="text-gray-400">Gestiona usuarios, roles y departamentos.</p>
-        </div>`);
+    renderActiveTab(module) {
+        const activeModule = module || localStorage.getItem('admin-module') || 'usuarios';
+
+        const tabActions = {
+            'usuarios':      () => usuarios.render(),
+            'roles':         () => roles.render(),
+            'departamentos': () => departamentos.render(),
+            'categorias':    () => categorias.render()
+        };
+
+        if (tabActions[activeModule]) tabActions[activeModule]();
+    }
+}
+
+// -- Usuarios --
+
+class Usuarios extends Templates {
+    constructor(link, div_modulo) {
+        super(link, div_modulo);
+        this.PROJECT_NAME = "Usuarios";
+    }
+
+    render() {
+        this.layout();
+        this.filterBar();
+        this.lsUsuarios();
+    }
+
+    layout() {
+        this.primaryLayout({
+            parent: 'container-usuarios',
+            id: this.PROJECT_NAME,
+            class: 'p-2',
+            card: {
+                filterBar: {
+                    class: 'w-full mb-3',
+                    id: `filterBar${this.PROJECT_NAME}`
+                },
+                container: {
+                    class: 'w-full my-3 h-full',
+                    id: `container${this.PROJECT_NAME}`
+                }
+            }
+        });
     }
 
     filterBar() {
@@ -112,12 +179,24 @@ class App extends Templates {
                     opc: "select",
                     id: "rol",
                     lbl: "Rol",
-                    class: "col-sm-3",
+                    class: "col-sm-2",
                     data: [
                         { id: "", valor: "Todos" },
                         ...this.roles
                     ],
-                    onchange: `${this.PROJECT_NAME.toLowerCase()}.lsUsuarios()`
+                    onchange: "usuarios.lsUsuarios()"
+                },
+                {
+                    opc: "select",
+                    id: "active",
+                    lbl: "Estado",
+                    class: "col-sm-2",
+                    data: [
+                        { id: "1", valor: "Activos" },
+                        { id: "0", valor: "Inactivos" },
+                        { id: "",  valor: "Todos" }
+                    ],
+                    onchange: "usuarios.lsUsuarios()"
                 },
                 {
                     opc: "btn",
@@ -125,97 +204,21 @@ class App extends Templates {
                     color_btn: "primary",
                     id: "btnNuevoUsuario",
                     text: "Nuevo usuario",
-                    lucideIcon: "user-plus",
-                    fn: `${this.PROJECT_NAME.toLowerCase()}.addUsuario()`
+                    icon: "icon-user-add",
+                    fn: "usuarios.addUsuario()"
                 },
-                {
-                    opc: "btn",
-                    class: "col-sm-2",
-                    color_btn: "secondary",
-                    id: "btnRefreshUsuarios",
-                    text: "Actualizar",
-                    lucideIcon: "refresh-cw",
-                    fn: `${this.PROJECT_NAME.toLowerCase()}.refresh()`
-                }
+              
             ]
         });
-    }
-
-    async renderInfoCards() {
-        const response = await useFetch({ url: this._link, data: { opc: "showUsuarios" } });
-        const counts = (response && response.counts) ? response.counts : { total: 0, activos: 0, inactivos: 0, administradores: 0 };
-        const pctActivos = counts.total > 0 ? Math.round((counts.activos / counts.total) * 100) : 0;
-        const pctInactivos = counts.total > 0 ? Math.round((counts.inactivos / counts.total) * 100) : 0;
-
-        this.infoCard({
-            parent: `cards${this.PROJECT_NAME}`,
-            theme: "light",
-            style: "file",
-            class: "pt-1 pb-2",
-            json: [
-                {
-                    id: "kpiTotalUsuarios",
-                    title: "Total usuarios",
-                    subtitle: "Registrados",
-                    bgColor: "bg-blue-50",
-                    borderColor: "border-blue-200",
-                    data: {
-                        value: counts.total,
-                        color: "text-blue-700"
-                    }
-                },
-                {
-                    id: "kpiActivosUsuarios",
-                    title: "Activos",
-                    subtitle: `${pctActivos}% del total`,
-                    bgColor: "bg-green-50",
-                    borderColor: "border-green-200",
-                    data: {
-                        value: counts.activos,
-                        color: "text-green-700"
-                    }
-                },
-                {
-                    id: "kpiInactivosUsuarios",
-                    title: "Inactivos",
-                    subtitle: `${pctInactivos}% del total`,
-                    bgColor: "bg-red-50",
-                    borderColor: "border-red-200",
-                    data: {
-                        value: counts.inactivos,
-                        color: "text-red-700"
-                    }
-                },
-                {
-                    id: "kpiAdminUsuarios",
-                    title: "Administradores",
-                    subtitle: "Acceso total",
-                    bgColor: "bg-purple-50",
-                    borderColor: "border-purple-200",
-                    data: {
-                        value: counts.administradores,
-                        color: "text-purple-700"
-                    }
-                }
-            ]
-        });
-    }
-
-    toggleTheme() {
-        const current = document.documentElement.getAttribute('data-au-theme') || 'light';
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-au-theme', next);
-        localStorage.setItem('au-theme', next);
     }
 
     refresh() {
-        this.renderInfoCards();
         this.lsUsuarios();
     }
 
     lsUsuarios() {
         this.createTable({
-            parent: `container-usuarios`,
+            parent: `container${this.PROJECT_NAME}`,
             idFilterBar: `filterBar${this.PROJECT_NAME}`,
             data: { opc: "lsUsuarios" },
             conf: { datatable: true, pag: 10 },
@@ -225,66 +228,8 @@ class App extends Templates {
                 theme: 'corporativo',
                 center: [1, 4],
                 right: [8]
-            },
-            success: () => {
-                if (typeof lucide !== 'undefined') lucide.createIcons();
             }
         });
-    }
-}
-
-class Usuarios extends App {
-    constructor(link, div_modulo) {
-        super(link, div_modulo);
-        this.PROJECT_NAME = "Usuarios";
-    }
-
-    // init() {
-    //     this.render();
-    // }
-
-    // render() {
-    //     this.layout();
-    //     this.filterBar();
-    //     // this.renderInfoCards();
-    //     this.lsUsuarios();
-    //     lucide.createIcons();
-    // }
-
-    render(){
-        this.layout();
-    }
-
-    layout() {
-        this.createLayout({
-            parent: 'container-usuarios',
-            design: false,
-            data: {
-                id: 'content'.this.PROJECT_NAME,
-                class: 'au-wrapper p-3',
-                container: [
-                    {
-                        type: 'div',
-                        id: `filterBar${this.PROJECT_NAME}`,
-                        class: 'w-full mb-3 py-2'
-                    },
-                    {
-                        type: 'div',
-                        id: `cards${this.PROJECT_NAME}`,
-                        class: 'w-full mb-4'
-                    },
-                    {
-                        type: 'div',
-                        id: `container${this.PROJECT_NAME}`,
-                        class: 'w-full h-full'
-                    }
-                ]
-            }
-        });
-
-        this.layoutTabs();
-        roles.filterBarRoles();
-        departamentos.filterBarDepartamentos();
     }
 
     addUsuario() {
@@ -369,47 +314,49 @@ class Usuarios extends App {
         this.setupPasswordToggle('frmEditUsuario');
     }
 
-    setupPasswordToggle(formId) {
-        const $pwd = $(`#${formId} [name="password"]`);
-        if (!$pwd.length) return;
-        $pwd.attr('type', 'password');
-
-        $pwd.wrap($("<div>", { class: "input-group" }));
-        const $btn = $("<button>", {
-            type: 'button',
-            class: 'btn btn-outline-secondary',
-            tabindex: -1
-        });
-        $("<i>", { "data-lucide": "eye", class: "w-4 h-4" }).appendTo($btn);
-        $btn.on('click', function () {
-            const isPassword = $pwd.attr('type') === 'password';
-            $pwd.attr('type', isPassword ? 'text' : 'password');
-            const $icon = $(this).find('i');
-            $icon.attr('data-lucide', isPassword ? 'eye-off' : 'eye');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        });
-        $pwd.after($btn);
-    }
-
-    deleteUsuario(id) {
+    disableUsuario(id) {
         this.swalQuestion({
             opts: {
-                title: "¿Eliminar usuario?",
-                html: "Esta accion desactivara el acceso del usuario al sistema."
+                title: "¿Desactivar usuario?",
+                html: "Esta accion desactivara el acceso del usuario al sistema. Podras reactivarlo despues."
             },
-            data: { opc: "deleteUsuario", id },
+            data: { opc: "disableUsuario", id },
             methods: {
                 request: () => {
                     alert({
                         icon: "success",
-                        title: "Usuario eliminado",
-                        text: "El usuario fue eliminado correctamente.",
+                        title: "Usuario desactivado",
+                        text: "El usuario fue desactivado correctamente.",
                         btn1: true
                     });
                     this.refresh();
                 }
             }
         });
+    }
+
+    setupPasswordToggle(formId) {
+        const $pwd = $(`#${formId} [name="password"]`);
+        if (!$pwd.length) return;
+
+        $pwd.attr('type', 'password');
+        $pwd.wrap($('<div>', { class: 'input-group' }));
+
+        const $btn = $('<button>', {
+            type: 'button',
+            class: 'btn btn-outline-secondary',
+            tabindex: -1
+        });
+
+        $('<i>', { class: 'icon-eye' }).appendTo($btn);
+
+        $btn.on('click', function () {
+            const isPassword = $pwd.attr('type') === 'password';
+            $pwd.attr('type', isPassword ? 'text' : 'password');
+            $(this).find('i').attr('class', isPassword ? 'icon-eye-off' : 'icon-eye');
+        });
+
+        $pwd.after($btn);
     }
 
     jsonUsuario(isEdit = false) {
@@ -448,35 +395,21 @@ class Usuarios extends App {
                 lbl: "Departamento",
                 id: "departamento",
                 class: "col-12 col-md-6 mb-3",
-                data: [
-                    { id: "Direccion General", valor: "Direccion General" },
-                    { id: "Finanzas",          valor: "Finanzas" },
-                    { id: "Recursos Humanos",  valor: "Recursos Humanos" },
-                    { id: "Operaciones",       valor: "Operaciones" },
-                    { id: "Ventas",            valor: "Ventas" }
-                ]
+                data: this.departamentos
             },
             {
                 opc: "select",
                 lbl: "Rol",
                 id: "rol",
                 class: "col-12 col-md-6 mb-3",
-                data: [
-                    { id: "admin",  valor: "Administrador" },
-                    { id: "editor", valor: "Editor" },
-                    { id: "viewer", valor: "Lector" }
-                ]
+                data: this.roles
             },
             {
                 opc: "select",
                 lbl: "Estado",
                 id: "estado",
                 class: "col-12 col-md-6 mb-3",
-                data: [
-                    { id: "activo",    valor: "Activo" },
-                    { id: "inactivo",  valor: "Inactivo" },
-                    { id: "pendiente", valor: "Pendiente" }
-                ]
+                data: this.estados
             },
             {
                 opc: "input",
@@ -500,28 +433,63 @@ class Usuarios extends App {
     }
 }
 
+// -- Roles --
+
 class Roles extends Templates {
     constructor(link, div_modulo) {
         super(link, div_modulo);
         this.PROJECT_NAME = "Roles";
     }
 
-    filterBarRoles() {
-        const container = $("#container-roles");
-        container.html('<div id="filterbar-roles" class="mb-2"></div><div id="table-roles"></div>');
+    render() {
+        this.layout();
+        this.filterBar();
+        this.lsRoles();
+    }
 
+    layout() {
+        this.primaryLayout({
+            parent: 'container-roles',
+            id: this.PROJECT_NAME,
+            class: 'p-2',
+            card: {
+                filterBar: {
+                    class: 'w-full my-3 p-3 border rounded-lg',
+                    id: `filterBar${this.PROJECT_NAME}`
+                },
+                container: {
+                    class: 'w-full my-3 h-full',
+                    id: `container${this.PROJECT_NAME}`
+                }
+            }
+        });
+    }
+
+    filterBar() {
         this.createfilterBar({
-            parent: "filterbar-roles",
+            parent: `filterBar${this.PROJECT_NAME}`,
             coffeesoft: true,
             data: [
+                {
+                    opc: "select",
+                    id: "active",
+                    lbl: "Estado",
+                    class: "col-sm-2",
+                    data: [
+                        { id: "1", valor: "Activos" },
+                        { id: "0", valor: "Inactivos" },
+                        { id: "",  valor: "Todos" }
+                    ],
+                    onchange: "roles.lsRoles()"
+                },
                 {
                     opc: "btn",
                     class: "col-sm-3",
                     color_btn: "primary",
                     id: "btnNuevoRol",
                     text: "Nuevo Rol",
-                    lucideIcon: "plus",
-                    fn: 'roles.addRol()'
+                    icon: "icon-plus",
+                    fn: "roles.addRol()"
                 },
                 {
                     opc: "btn",
@@ -529,8 +497,8 @@ class Roles extends Templates {
                     color_btn: "secondary",
                     id: "btnRefreshRoles",
                     text: "Actualizar",
-                    lucideIcon: "refresh-cw",
-                    fn: 'roles.lsRoles()'
+                    icon: "icon-arrows-cw",
+                    fn: "roles.lsRoles()"
                 }
             ]
         });
@@ -538,20 +506,17 @@ class Roles extends Templates {
 
     lsRoles() {
         this.createTable({
-            parent: "table-roles",
-            idFilterBar: "filterbar-roles",
+            parent: `container${this.PROJECT_NAME}`,
+            idFilterBar: `filterBar${this.PROJECT_NAME}`,
             data: { opc: "lsRoles" },
-            coffeesoft: true,
             conf: { datatable: true, pag: 10 },
+            coffeesoft: true,
             attr: {
-                id: "tbRoles",
+                id: `tb${this.PROJECT_NAME}`,
                 theme: 'corporativo',
                 title: 'Roles del sistema',
                 subtitle: 'Lista de roles registrados',
                 center: [0]
-            },
-            success: () => {
-                if (typeof lucide !== 'undefined') lucide.createIcons();
             }
         });
     }
@@ -568,10 +533,21 @@ class Roles extends Templates {
             json: this.jsonRol(false),
             success: (response) => {
                 if (response.status === 200) {
-                    alert({ icon: "success", title: "Rol creado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    alert({
+                        icon: "success",
+                        title: "Rol creado",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
                     this.lsRoles();
                 } else {
-                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
                 }
             }
         });
@@ -581,7 +557,12 @@ class Roles extends Templates {
         const request = await useFetch({ url: this._link, data: { opc: "getRol", id } });
 
         if (request.status != 200 || !request.data || !request.data[0]) {
-            alert({ icon: "error", text: "No se pudo cargar el rol", btn1: true, btn1Text: "Ok" });
+            alert({
+                icon: "error",
+                text: "No se pudo cargar el rol",
+                btn1: true,
+                btn1Text: "Ok"
+            });
             return;
         }
 
@@ -599,25 +580,41 @@ class Roles extends Templates {
             json: this.jsonRol(true),
             success: (response) => {
                 if (response.status === 200) {
-                    alert({ icon: "success", title: "Rol actualizado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    alert({
+                        icon: "success",
+                        title: "Rol actualizado",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
                     this.lsRoles();
                 } else {
-                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
                 }
             }
         });
     }
 
-    deleteRol(id) {
+    disableRol(id) {
         this.swalQuestion({
             opts: {
-                title: "¿Eliminar rol?",
-                html: "Esta accion eliminara el rol del sistema. Los usuarios asignados a este rol podrian verse afectados."
+                title: "¿Desactivar rol?",
+                html: "Esta accion desactivara el rol. Los usuarios asignados a este rol podrian verse afectados."
             },
-            data: { opc: "deleteRol", id },
+            data: { opc: "disableRol", id },
             methods: {
                 request: () => {
-                    alert({ icon: "success", title: "Rol eliminado", text: "El rol fue eliminado correctamente.", btn1: true });
+                    alert({
+                        icon: "success",
+                        title: "Rol desactivado",
+                        text: "El rol fue desactivado correctamente.",
+                        btn1: true
+                    });
                     this.lsRoles();
                 }
             }
@@ -637,28 +634,63 @@ class Roles extends Templates {
     }
 }
 
+// -- Departamentos --
+
 class Departamentos extends Templates {
     constructor(link, div_modulo) {
         super(link, div_modulo);
         this.PROJECT_NAME = "Departamentos";
     }
 
-    filterBarDepartamentos() {
-        const container = $("#container-departamentos");
-        container.html('<div id="filterbar-departamentos" class="mb-2"></div><div id="table-departamentos"></div>');
+    render() {
+        this.layout();
+        this.filterBar();
+        this.lsDepartamentos();
+    }
 
+    layout() {
+        this.primaryLayout({
+            parent: 'container-departamentos',
+            id: this.PROJECT_NAME,
+            class: 'p-2',
+            card: {
+                filterBar: {
+                    class: 'w-full my-3 p-3 border rounded-lg',
+                    id: `filterBar${this.PROJECT_NAME}`
+                },
+                container: {
+                    class: 'w-full my-3 h-full',
+                    id: `container${this.PROJECT_NAME}`
+                }
+            }
+        });
+    }
+
+    filterBar() {
         this.createfilterBar({
-            parent: "filterbar-departamentos",
+            parent: `filterBar${this.PROJECT_NAME}`,
             coffeesoft: true,
             data: [
+                {
+                    opc: "select",
+                    id: "active",
+                    lbl: "Estado",
+                    class: "col-sm-2",
+                    data: [
+                        { id: "1", valor: "Activos" },
+                        { id: "0", valor: "Inactivos" },
+                        { id: "",  valor: "Todos" }
+                    ],
+                    onchange: "departamentos.lsDepartamentos()"
+                },
                 {
                     opc: "btn",
                     class: "col-sm-3",
                     color_btn: "primary",
                     id: "btnNuevoDepto",
                     text: "Nuevo Departamento",
-                    lucideIcon: "plus",
-                    fn: 'departamentos.addDepartamento()'
+                    icon: "icon-plus",
+                    fn: "departamentos.addDepartamento()"
                 },
                 {
                     opc: "btn",
@@ -666,8 +698,8 @@ class Departamentos extends Templates {
                     color_btn: "secondary",
                     id: "btnRefreshDepto",
                     text: "Actualizar",
-                    lucideIcon: "refresh-cw",
-                    fn: 'departamentos.lsDepartamentos()'
+                    icon: "icon-arrows-cw",
+                    fn: "departamentos.lsDepartamentos()"
                 }
             ]
         });
@@ -675,20 +707,17 @@ class Departamentos extends Templates {
 
     lsDepartamentos() {
         this.createTable({
-            parent: "table-departamentos",
-            idFilterBar: "filterbar-departamentos",
+            parent: `container${this.PROJECT_NAME}`,
+            idFilterBar: `filterBar${this.PROJECT_NAME}`,
             data: { opc: "lsDepartamentos" },
-            coffeesoft: true,
             conf: { datatable: true, pag: 10 },
+            coffeesoft: true,
             attr: {
-                id: "tbDepartamentos",
+                id: `tb${this.PROJECT_NAME}`,
                 theme: 'corporativo',
                 title: 'Departamentos del sistema',
                 subtitle: 'Lista de departamentos registrados',
                 center: [0]
-            },
-            success: () => {
-                if (typeof lucide !== 'undefined') lucide.createIcons();
             }
         });
     }
@@ -705,10 +734,21 @@ class Departamentos extends Templates {
             json: this.jsonDepartamento(false),
             success: (response) => {
                 if (response.status === 200) {
-                    alert({ icon: "success", title: "Departamento creado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    alert({
+                        icon: "success",
+                        title: "Departamento creado",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
                     this.lsDepartamentos();
                 } else {
-                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
                 }
             }
         });
@@ -718,7 +758,12 @@ class Departamentos extends Templates {
         const request = await useFetch({ url: this._link, data: { opc: "getDepartamento", id } });
 
         if (request.status != 200 || !request.data || !request.data[0]) {
-            alert({ icon: "error", text: "No se pudo cargar el departamento", btn1: true, btn1Text: "Ok" });
+            alert({
+                icon: "error",
+                text: "No se pudo cargar el departamento",
+                btn1: true,
+                btn1Text: "Ok"
+            });
             return;
         }
 
@@ -736,25 +781,41 @@ class Departamentos extends Templates {
             json: this.jsonDepartamento(true),
             success: (response) => {
                 if (response.status === 200) {
-                    alert({ icon: "success", title: "Departamento actualizado", text: response.message, btn1: true, btn1Text: "Aceptar" });
+                    alert({
+                        icon: "success",
+                        title: "Departamento actualizado",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
                     this.lsDepartamentos();
                 } else {
-                    alert({ icon: "error", text: response.message, btn1: true, btn1Text: "Ok" });
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
                 }
             }
         });
     }
 
-    deleteDepartamento(id) {
+    disableDepartamento(id) {
         this.swalQuestion({
             opts: {
-                title: "¿Eliminar departamento?",
-                html: "Esta accion eliminara el departamento del sistema. Los usuarios asignados a este departamento podrian verse afectados."
+                title: "¿Desactivar departamento?",
+                html: "Esta accion desactivara el departamento. Los usuarios asignados a este departamento podrian verse afectados."
             },
-            data: { opc: "deleteDepartamento", id },
+            data: { opc: "disableDepartamento", id },
             methods: {
                 request: () => {
-                    alert({ icon: "success", title: "Departamento eliminado", text: "El departamento fue eliminado correctamente.", btn1: true });
+                    alert({
+                        icon: "success",
+                        title: "Departamento desactivado",
+                        text: "El departamento fue desactivado correctamente.",
+                        btn1: true
+                    });
                     this.lsDepartamentos();
                 }
             }
@@ -769,6 +830,473 @@ class Departamentos extends Templates {
                 id: "nombre",
                 tipo: "texto",
                 class: "col-12 mb-3"
+            }
+        ];
+    }
+}
+
+
+// -- Categorías Finanzas --
+
+class Categorias extends Templates {
+    constructor(link, div_modulo) {
+        super(link, div_modulo);
+        this.PROJECT_NAME = "Categorias";
+        this.tiposMovimiento = [];
+        this.categoriaSeleccionada = null;
+    }
+
+    render() {
+        this.layout();
+        this.filterBar();
+        this.lsCategorias();
+    }
+
+    layout() {
+        this.createLayout({
+            parent: 'container-categorias',
+            design: false,
+            data: {
+                id: this.PROJECT_NAME,
+                class: 'p-2 flex gap-4',
+                container: [
+                    {
+                        type: 'div',
+                        id: `panelCategorias${this.PROJECT_NAME}`,
+                        class: 'w-1/2 rounded-lg p-3 h-full',
+                        children: [
+                            {
+                                id: `filterBar${this.PROJECT_NAME}`,
+                                class: 'mb-3'
+                            },
+                            {
+                                id: `container${this.PROJECT_NAME}`
+                            }
+                        ]
+                    },
+                    {
+                        type: 'div',
+                        id: `panelSubcategorias${this.PROJECT_NAME}`,
+                        class: 'w-1/2 rounded-lg p-3 h-full',
+                        children: [
+                            {
+                                id: `filterBarSub${this.PROJECT_NAME}`,
+                                class: 'mb-3'
+                            },
+                            {
+                                id: `containerSub${this.PROJECT_NAME}`
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+    }
+
+    filterBar() {
+        this.createfilterBar({
+            parent: `filterBar${this.PROJECT_NAME}`,
+            coffeesoft: true,
+            data: [
+                {
+                    opc: "select",
+                    id: "tipoMovimiento",
+                    lbl: "Tipo Movimiento",
+                    class: "col-sm-4",
+                    data: [
+                        { id: "", valor: "Todos" },
+                        ...this.tiposMovimiento
+                    ],
+                    onchange: "categorias.lsCategorias()"
+                },
+                {
+                    opc: "select",
+                    id: "activeCat",
+                    lbl: "Estado",
+                    class: "col-sm-3",
+                    data: [
+                        { id: "1", valor: "Activos" },
+                        { id: "0", valor: "Inactivos" },
+                        { id: "",  valor: "Todos" }
+                    ],
+                    onchange: "categorias.lsCategorias()"
+                },
+                {
+                    opc: "btn",
+                    class: "col-sm-4",
+                    color_btn: "primary",
+                    id: "btnNuevaCategoria",
+                    text: "Nueva Categoría",
+                    icon: "icon-plus",
+                    fn: "categorias.addCategoria()"
+                }
+            ]
+        });
+    }
+
+    lsCategorias() {
+        this.categoriaSeleccionada = null;
+        this.renderEmptySubcategorias();
+
+        const tipoMovimiento = $('#tipoMovimiento').val() || '';
+        const activeCat = $('#activeCat').val() || '1';
+
+        this.createTable({
+            parent: `container${this.PROJECT_NAME}`,
+            idFilterBar: `filterBar${this.PROJECT_NAME}`,
+            data: { 
+                opc: "lsCategorias",
+                tipoMovimiento: tipoMovimiento,
+                activeCat: activeCat
+            },
+            conf: { datatable: true, pag: 10 },
+            coffeesoft: true,
+            attr: {
+                id: `tb${this.PROJECT_NAME}`,
+                theme: 'corporativo',
+                title: 'Categorías',
+                subtitle: 'Conceptos de finanzas',
+                center: [0, 2]
+            }
+        });
+    }
+
+    renderEmptySubcategorias() {
+        $(`#filterBarSub${this.PROJECT_NAME}`).html('');
+        $(`#containerSub${this.PROJECT_NAME}`).html(`
+            <div class="text-center text-gray-400 py-10">
+                <i class="icon-folder-open" style="font-size:48px;opacity:0.5;display:block;margin-bottom:0.75rem"></i>
+                <p>Selecciona una categoría para ver sus subcategorías</p>
+            </div>
+        `);
+    }
+
+    selectCategoria(id, nombre) {
+        this.categoriaSeleccionada = { id, nombre };
+        this.filterBarSubcategorias();
+        this.lsSubcategorias();
+    }
+
+    filterBarSubcategorias() {
+        this.createfilterBar({
+            parent: `filterBarSub${this.PROJECT_NAME}`,
+            coffeesoft: true,
+            data: [
+                {
+                    opc: "label",
+                    id: "lblCategoria",
+                    text: `📂 ${this.categoriaSeleccionada.nombre}`,
+                    class: "col-sm-5 fw-bold"
+                },
+                {
+                    opc: "select",
+                    id: "activeSub",
+                    lbl: "Estado",
+                    class: "col-sm-3",
+                    data: [
+                        { id: "1", valor: "Activos" },
+                        { id: "0", valor: "Inactivos" },
+                        { id: "",  valor: "Todos" }
+                    ],
+                    onchange: "categorias.lsSubcategorias()"
+                },
+                {
+                    opc: "btn",
+                    class: "col-sm-4",
+                    color_btn: "success",
+                    id: "btnNuevaSubcategoria",
+                    text: "Nueva Subcategoría",
+                    icon: "icon-plus",
+                    fn: "categorias.addSubcategoria()"
+                }
+            ]
+        });
+    }
+
+    lsSubcategorias() {
+        if (!this.categoriaSeleccionada) return;
+
+        const activeSub = $('#activeSub').val() || '1';
+
+        this.createTable({
+            parent: `containerSub${this.PROJECT_NAME}`,
+            idFilterBar: `filterBarSub${this.PROJECT_NAME}`,
+            data: { 
+                opc: "lsSubcategorias",
+                idCategoria: this.categoriaSeleccionada.id,
+                activeSub: activeSub
+            },
+            conf: { datatable: true, pag: 10 },
+            coffeesoft: true,
+            attr: {
+                id: `tbSub${this.PROJECT_NAME}`,
+                theme: 'corporativo',
+                title: 'Subcategorías',
+                subtitle: `De: ${this.categoriaSeleccionada.nombre}`,
+                center: [0, 2],
+                right: [3]
+            }
+        });
+    }
+
+    addCategoria() {
+        this.createModalForm({
+            id: 'frmAddCategoria',
+            data: { opc: 'addCategoria' },
+            bootbox: {
+                title: 'Nueva Categoría',
+                closeButton: true,
+                size: 'large'
+            },
+            json: this.jsonCategoria(),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({
+                        icon: "success",
+                        title: "Categoría creada",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
+                    this.lsCategorias();
+                } else {
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
+                }
+            }
+        });
+    }
+
+    async editCategoria(id) {
+        const request = await useFetch({ url: this._link, data: { opc: "getCategoria", id } });
+
+        if (request.status != 200 || !request.data) {
+            alert({
+                icon: "error",
+                text: "No se pudo cargar la categoría",
+                btn1: true,
+                btn1Text: "Ok"
+            });
+            return;
+        }
+
+        const autofill = request.data;
+
+        this.createModalForm({
+            id: 'frmEditCategoria',
+            data: { opc: 'editCategoria', id },
+            bootbox: {
+                title: `Editar Categoría: ${autofill.nombre || ''}`,
+                closeButton: true,
+                size: 'large'
+            },
+            autofill: autofill,
+            json: this.jsonCategoria(),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({
+                        icon: "success",
+                        title: "Categoría actualizada",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
+                    this.lsCategorias();
+                } else {
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
+                }
+            }
+        });
+    }
+
+    disableCategoria(id) {
+        this.swalQuestion({
+            opts: {
+                title: "¿Desactivar categoría?",
+                html: "Esta acción desactivará la categoría y sus subcategorías asociadas."
+            },
+            data: { opc: "disableCategoria", id },
+            methods: {
+                request: () => {
+                    alert({
+                        icon: "success",
+                        title: "Categoría desactivada",
+                        text: "La categoría fue desactivada correctamente.",
+                        btn1: true
+                    });
+                    this.lsCategorias();
+                }
+            }
+        });
+    }
+
+    addSubcategoria() {
+        if (!this.categoriaSeleccionada) {
+            alert({
+                icon: "warning",
+                text: "Selecciona una categoría primero",
+                btn1: true,
+                btn1Text: "Ok"
+            });
+            return;
+        }
+
+        this.createModalForm({
+            id: 'frmAddSubcategoria',
+            data: { 
+                opc: 'addSubcategoria',
+                idCategoria: this.categoriaSeleccionada.id
+            },
+            bootbox: {
+                title: `Nueva Subcategoría en: ${this.categoriaSeleccionada.nombre}`,
+                closeButton: true,
+                size: 'large'
+            },
+            json: this.jsonSubcategoria(),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({
+                        icon: "success",
+                        title: "Subcategoría creada",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
+                    this.lsSubcategorias();
+                } else {
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
+                }
+            }
+        });
+    }
+
+    async editSubcategoria(id) {
+        const request = await useFetch({ url: this._link, data: { opc: "getSubcategoria", id } });
+
+        if (request.status != 200 || !request.data) {
+            alert({
+                icon: "error",
+                text: "No se pudo cargar la subcategoría",
+                btn1: true,
+                btn1Text: "Ok"
+            });
+            return;
+        }
+
+        const autofill = request.data;
+
+        this.createModalForm({
+            id: 'frmEditSubcategoria',
+            data: { opc: 'editSubcategoria', id },
+            bootbox: {
+                title: `Editar Subcategoría: ${autofill.nombre || ''}`,
+                closeButton: true,
+                size: 'large'
+            },
+            autofill: autofill,
+            json: this.jsonSubcategoria(),
+            success: (response) => {
+                if (response.status === 200) {
+                    alert({
+                        icon: "success",
+                        title: "Subcategoría actualizada",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Aceptar"
+                    });
+                    this.lsSubcategorias();
+                } else {
+                    alert({
+                        icon: "error",
+                        text: response.message,
+                        btn1: true,
+                        btn1Text: "Ok"
+                    });
+                }
+            }
+        });
+    }
+
+    disableSubcategoria(id) {
+        this.swalQuestion({
+            opts: {
+                title: "¿Desactivar subcategoría?",
+                html: "Esta acción desactivará la subcategoría seleccionada."
+            },
+            data: { opc: "disableSubcategoria", id },
+            methods: {
+                request: () => {
+                    alert({
+                        icon: "success",
+                        title: "Subcategoría desactivada",
+                        text: "La subcategoría fue desactivada correctamente.",
+                        btn1: true
+                    });
+                    this.lsSubcategorias();
+                }
+            }
+        });
+    }
+
+    jsonCategoria() {
+        return [
+            {
+                opc: "input",
+                lbl: "Nombre de la Categoría",
+                id: "nombre",
+                tipo: "texto",
+                class: "col-12 mb-3"
+            },
+            {
+                opc: "select",
+                lbl: "Tipo de Movimiento",
+                id: "tipoMovimiento",
+                class: "col-12 mb-3",
+                data: this.tiposMovimiento
+            }
+        ];
+    }
+
+    jsonSubcategoria() {
+        return [
+            {
+                opc: "input",
+                lbl: "Nombre de la Subcategoría",
+                id: "nombre",
+                tipo: "texto",
+                class: "col-12 mb-3"
+            },
+            {
+                opc: "input",
+                lbl: "Tarifa (opcional)",
+                id: "tarifa",
+                tipo: "cifra",
+                class: "col-12 col-md-6 mb-3",
+                required: false
+            },
+            {
+                opc: "select",
+                lbl: "Estado",
+                id: "activo",
+                class: "col-12 col-md-6 mb-3",
+                data: [
+                    { id: "1", valor: "Activo" },
+                    { id: "0", valor: "Inactivo" }
+                ]
             }
         ];
     }

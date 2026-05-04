@@ -78,16 +78,38 @@ debe llevar la siguiente nomenclatura
 - render()
   - Ejecuta los métodos layout() y filterBar().
 - layout()
-  - Se usa para crear la interfaz visual del sistema, se puede usar como referencia primaryLayout de CoffeeSoft
-  ```JS
-    layout() {
-        this.primaryLayout({
-            parent: `root`,
-            class: 'flex p-2',
-            id: this.PROJECT_NAME,
-        });
-    }
-  ```
+  - Se usa para crear la interfaz visual del sistema, se puede usar como referencia primaryLayout de CoffeeSoft.
+
+**OBLIGATORIO:** Esta es la configuración estándar al crear un `primaryLayout`. Usar exactamente este formato (multiline + clases sin border) salvo que el módulo requiera explícitamente otro estilo.
+
+```JS
+layout() {
+    this.primaryLayout({
+        parent: 'root',
+        id: this.PROJECT_NAME,
+        class: 'p-2',
+        card: {
+            filterBar: {
+                class: 'w-full mb-3',
+                id: `filterBar${this.PROJECT_NAME}`
+            },
+            container: {
+                class: 'w-full my-3 h-full',
+                id: `container${this.PROJECT_NAME}`
+            }
+        }
+    });
+}
+```
+
+**Reglas:**
+- `parent`: el contenedor donde se monta (`'root'` para módulo simple, o `container-[tab]` cuando el primaryLayout vive dentro de un tab).
+- `id`: siempre `this.PROJECT_NAME`.
+- `class: 'p-2'` para el wrapper exterior.
+- `filterBar.class: 'w-full mb-3'` — sin border ni padding extra.
+- `container.class: 'w-full my-3 h-full'`.
+- IDs siempre derivados de `PROJECT_NAME`: `` `filterBar${this.PROJECT_NAME}` `` y `` `container${this.PROJECT_NAME}` ``.
+- Formato vertical (una propiedad por línea), nunca contraído.
 - filterBar()
   - Implementa el filtro principal utilizando createfilterBar() y configura el componente dataPicker() para capturar rangos de fechas.
 ```JS
@@ -382,3 +404,44 @@ debe llevar la siguiente nomenclatura
 - Mantener consistencia entre Frontend (JS), Controlador (CTRL) y Modelo (MDL)
 - Los métodos `render[Nombre]()` solo para componentes complejos (dashboards, gráficas, etc.)
 - Esta nomenclatura es OBLIGATORIA para mantener la consistencia del framework CoffeeSoft
+
+### Comentarios separadores de módulos
+
+**OBLIGATORIO:** Para separar clases o secciones lógicas dentro del archivo, usar comentarios cortos de **una sola línea** con el formato:
+
+```javascript
+// -- Nombre --
+```
+
+- Colocar antes de cada clase principal (`App`, submódulos) y antes de bloques de funciones auxiliares globales si los hay.
+- Mantenerlos breves: 1–3 palabras descriptivas entre los guiones.
+- NO usar bloques con `===`, banners de varias líneas, ni `/* ... */` extensos.
+- NO añadir descripciones extra como `— Estructura con tabs` después del nombre.
+
+✅ **CORRECTO:**
+```javascript
+// -- Clase principal --
+class App extends Templates { ... }
+
+// -- Usuarios --
+class Usuarios extends Templates { ... }
+
+// -- Roles --
+class Roles extends Templates { ... }
+```
+
+❌ **INCORRECTO:**
+```javascript
+// ============================================================
+// CLASE PRINCIPAL — Estructura con tabs
+// ============================================================
+class App extends Templates { ... }
+
+/* ===== USUARIOS ===== */
+class Usuarios extends Templates { ... }
+
+//////////////// ROLES ////////////////
+class Roles extends Templates { ... }
+```
+
+> **Regla:** Esta es la **única** forma permitida de comentarios separadores de módulo dentro de archivos JS del framework CoffeeSoft. Aplica tanto a archivos nuevos como a refactors.

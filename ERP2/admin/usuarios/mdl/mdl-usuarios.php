@@ -6,10 +6,12 @@ class mdl extends CRUD {
 
     public $util;
     public $bd;
+    public $bdFinanzas;
 
     function __construct() {
-        $this->util = new Utileria();
-        $this->bd   = "hgpqgijw_usuarios.";
+        $this->util       = new Utileria();
+        $this->bd         = "hgpqgijw_usuarios.";
+        $this->bdFinanzas = "hgpqgijw_finanzas.";
     }
 
     function listUsuarios($array) {
@@ -19,6 +21,11 @@ class mdl extends CRUD {
         if (!empty($array[0])) {
             $where .= ' AND u.Nivel = ?';
             $data[] = $array[0];
+        }
+
+        if (isset($array[1]) && $array[1] !== '') {
+            $where .= ' AND u.active = ?';
+            $data[] = $array[1];
         }
 
         $query = "
@@ -138,20 +145,21 @@ class mdl extends CRUD {
         ]);
     }
 
-    function deleteUsuarioById($array) {
-        return $this->_Delete([
-            'table' => "hgpqgijw_usuarios.usuarios",
-            'where' => $array['where'],
-            'data'  => $array['data']
+    function disableUsuarioById($array) {
+        return $this->_Update([
+            'table'  => "hgpqgijw_usuarios.usuarios",
+            'values' => 'active = 0',
+            'where'  => $array['where'],
+            'data'   => $array['data']
         ]);
     }
 
     function lsNivel() {
-        return $this->_Read("SELECT idNivel AS id, Nombre_Nivel AS valor FROM hgpqgijw_usuarios.nivel ORDER BY Nombre_Nivel ASC", null);
+        return $this->_Read("SELECT idNivel AS id, Nombre_Nivel AS valor FROM hgpqgijw_usuarios.nivel WHERE active = 1 ORDER BY Nombre_Nivel ASC", null);
     }
 
     function lsArea() {
-        return $this->_Read("SELECT idArea AS id, Area AS valor FROM hgpqgijw_usuarios.area ORDER BY Area ASC", null);
+        return $this->_Read("SELECT idArea AS id, Area AS valor FROM hgpqgijw_usuarios.area WHERE active = 1 ORDER BY Area ASC", null);
     }
 
     function lsRoles() {
@@ -171,13 +179,29 @@ class mdl extends CRUD {
     }
 
     function lsDepartamentos() {
-        return $this->_Read("SELECT idArea AS id, Area AS valor FROM {$this->bd}area ORDER BY Area ASC", null);
+        return $this->_Read("SELECT idArea AS id, Area AS valor FROM {$this->bd}area WHERE active = 1 ORDER BY Area ASC", null);
+    }
+
+    function listDepartamentos($active = '1') {
+        $where = '';
+        $data  = null;
+        if ($active === '1' || $active === '0') {
+            $where = 'WHERE active = ?';
+            $data  = [$active];
+        }
+        return $this->_Read("SELECT idArea AS id, Area AS nombre FROM {$this->bd}area {$where} ORDER BY Area ASC", $data);
     }
 
     // === ROLES CRUD (tabla: nivel) ===
 
-    function lsRolesDB() {
-        return $this->_Read("SELECT idNivel AS id, Nombre_Nivel AS nombre FROM {$this->bd}nivel ORDER BY idNivel ASC", null);
+    function listRoles($active = '1') {
+        $where = '';
+        $data  = null;
+        if ($active === '1' || $active === '0') {
+            $where = 'WHERE active = ?';
+            $data  = [$active];
+        }
+        return $this->_Read("SELECT idNivel AS id, Nombre_Nivel AS nombre FROM {$this->bd}nivel {$where} ORDER BY idNivel ASC", $data);
     }
 
     function getRolById($array) {
@@ -214,11 +238,12 @@ class mdl extends CRUD {
         ]);
     }
 
-    function deleteRolById($array) {
-        return $this->_Delete([
-            'table' => "{$this->bd}nivel",
-            'where' => $array['where'],
-            'data'  => $array['data']
+    function disableRolById($array) {
+        return $this->_Update([
+            'table'  => "{$this->bd}nivel",
+            'values' => 'active = 0',
+            'where'  => $array['where'],
+            'data'   => $array['data']
         ]);
     }
 
@@ -258,11 +283,174 @@ class mdl extends CRUD {
         ]);
     }
 
-    function deleteDepartamentoById($array) {
-        return $this->_Delete([
-            'table' => "{$this->bd}area",
-            'where' => $array['where'],
-            'data'  => $array['data']
+    function disableDepartamentoById($array) {
+        return $this->_Update([
+            'table'  => "{$this->bd}area",
+            'values' => 'active = 0',
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    // === CATEGORÍAS FINANZAS (tabla: hgpqgijw_finanzas.categoria) ===
+
+    function lsTiposMovimiento() {
+        $query = "SELECT idTMovimiento AS id, TipoMovimiento AS valor FROM {$this->bdFinanzas}tipo_movimiento ORDER BY idTMovimiento ASC";
+        return $this->_Read($query, null);
+    }
+
+    function listCategorias($tipoMovimiento = '', $active = '1') {
+        $where = '1=1';
+        $data  = [];
+
+        if (!empty($tipoMovimiento)) {
+            $where .= ' AND c.id_TMovimiento = ?';
+            $data[] = $tipoMovimiento;
+        }
+
+        if ($active === '1' || $active === '0') {
+            $where .= ' AND c.Stado = ?';
+            $data[] = $active;
+        }
+
+        $query = "
+            SELECT
+                c.idCategoria AS id,
+                c.Categoria AS nombre,
+                COALESCE(tm.TipoMovimiento, '') AS tipo_movimiento,
+                c.id_TMovimiento AS tipo_movimiento_id,
+                c.Stado AS activo
+            FROM {$this->bdFinanzas}categoria c
+            LEFT JOIN {$this->bdFinanzas}tipo_movimiento tm ON tm.idTMovimiento = c.id_TMovimiento
+            WHERE {$where}
+            ORDER BY c.idCategoria ASC
+        ";
+
+        return $this->_Read($query, !empty($data) ? $data : null);
+    }
+
+    function getCategoriaById($array) {
+        $query = "
+            SELECT
+                c.idCategoria AS id,
+                c.Categoria AS nombre,
+                c.id_TMovimiento AS tipoMovimiento,
+                c.Stado AS activo
+            FROM {$this->bdFinanzas}categoria c
+            WHERE c.idCategoria = ?
+        ";
+        $result = $this->_Read($query, $array);
+        return !empty($result) ? $result[0] : null;
+    }
+
+    function existsCategoriaByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bdFinanzas}categoria WHERE LOWER(Categoria) = LOWER(?)";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function existsOtherCategoriaByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bdFinanzas}categoria WHERE LOWER(Categoria) = LOWER(?) AND idCategoria != ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function createCategoria($array) {
+        return $this->_Insert([
+            'table'  => "{$this->bdFinanzas}categoria",
+            'values' => $array['values'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function updateCategoria($array) {
+        return $this->_Update([
+            'table'  => "{$this->bdFinanzas}categoria",
+            'values' => $array['values'],
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function disableCategoriaById($array) {
+        return $this->_Update([
+            'table'  => "{$this->bdFinanzas}categoria",
+            'values' => 'Stado = 0',
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    // === SUBCATEGORÍAS (tabla: hgpqgijw_finanzas.subcategoria) ===
+
+    function listSubcategorias($idCategoria, $active = '1') {
+        $where = 'id_Categoria = ?';
+        $data  = [$idCategoria];
+
+        if ($active === '1' || $active === '0') {
+            $where .= ' AND activo = ?';
+            $data[] = $active;
+        }
+
+        $query = "
+            SELECT
+                idSubcategoria AS id,
+                Subcategoria AS nombre,
+                tarifa,
+                activo,
+                Stado
+            FROM {$this->bdFinanzas}subcategoria
+            WHERE {$where}
+            ORDER BY idSubcategoria ASC
+        ";
+
+        return $this->_Read($query, $data);
+    }
+
+    function getSubcategoriaById($array) {
+        $query = "
+            SELECT
+                idSubcategoria AS id,
+                Subcategoria AS nombre,
+                tarifa,
+                activo,
+                id_Categoria AS idCategoria
+            FROM {$this->bdFinanzas}subcategoria
+            WHERE idSubcategoria = ?
+        ";
+        $result = $this->_Read($query, $array);
+        return !empty($result) ? $result[0] : null;
+    }
+
+    function existsSubcategoriaByName($array) {
+        $query = "SELECT COUNT(*) AS count FROM {$this->bdFinanzas}subcategoria WHERE LOWER(Subcategoria) = LOWER(?) AND id_Categoria = ?";
+        $result = $this->_Read($query, $array);
+        return $result[0]['count'] > 0;
+    }
+
+    function createSubcategoria($array) {
+        return $this->_Insert([
+            'table'  => "{$this->bdFinanzas}subcategoria",
+            'values' => $array['values'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function updateSubcategoria($array) {
+        return $this->_Update([
+            'table'  => "{$this->bdFinanzas}subcategoria",
+            'values' => $array['values'],
+            'where'  => $array['where'],
+            'data'   => $array['data']
+        ]);
+    }
+
+    function disableSubcategoriaById($array) {
+        return $this->_Update([
+            'table'  => "{$this->bdFinanzas}subcategoria",
+            'values' => 'activo = 0',
+            'where'  => $array['where'],
+            'data'   => $array['data']
         ]);
     }
 }
