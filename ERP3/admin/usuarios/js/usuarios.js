@@ -201,8 +201,7 @@ class Usuarios extends App {
             id: 'frmAddUsuario',
             bootbox: {
                 title: 'Nuevo usuario',
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             data: { opc: "addUsuario" },
             json: this.jsonUsuario(false),
@@ -255,8 +254,7 @@ class Usuarios extends App {
             id: 'frmEditUsuario',
             bootbox: {
                 title: `Editar usuario: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             data: { opc: "editUsuario", id },
             autofill: autofill,

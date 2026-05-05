@@ -460,9 +460,12 @@ class ctrl extends mdl {
                 'onclick' => 'categorias.editCategoria(' . $cat['id'] . ')'
             ];
 
+            $toggleIcon = $cat['activo'] == '1' ? '<i class="icon-toggle-on text-emerald-600"></i>' : '<i class="icon-toggle-off text-gray-400"></i>';
+            $toggleClass = $cat['activo'] == '1' ? 'bg-emerald-100 hover:bg-emerald-200 text-emerald-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-500';
+
             $a[] = [
-                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded bg-red-100 hover:bg-red-200 text-red-500',
-                'html'    => '<i class="icon-block"></i>',
+                'class'   => 'inline-flex items-center px-2 py-2 text-sm rounded ' . $toggleClass,
+                'html'    => $toggleIcon,
                 'onclick' => 'categorias.disableCategoria(' . $cat['id'] . ')'
             ];
 
@@ -512,13 +515,13 @@ class ctrl extends mdl {
         $payload = [
             'Categoria'     => $nombre,
             'id_TMovimiento'=> $tipo,
-            'Stado'         => 1,
-            'id_UDN'        => 1
+            // 'Stado'         => 1,
+            // 'id_UDN'        => 1
         ];
 
         $create = $this->createCategoria($this->util->sql($payload));
 
-        if ($create === true) {
+        if ($create == true) {
             $status  = 200;
             $message = 'Categoría creada correctamente';
         }

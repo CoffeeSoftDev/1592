@@ -237,8 +237,7 @@ class Usuarios extends Templates {
             id: 'frmAddUsuario',
             bootbox: {
                 title: 'Nuevo usuario',
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             data: { opc: "addUsuario" },
             json: this.jsonUsuario(false),
@@ -285,8 +284,7 @@ class Usuarios extends Templates {
             id: 'frmEditUsuario',
             bootbox: {
                 title: `Editar usuario: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             data: { opc: "editUsuario", id },
             autofill: autofill,
@@ -527,8 +525,7 @@ class Roles extends Templates {
             data: { opc: 'addRol' },
             bootbox: {
                 title: 'Agregar Rol',
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             json: this.jsonRol(false),
             success: (response) => {
@@ -573,8 +570,7 @@ class Roles extends Templates {
             data: { opc: 'editRol', id },
             bootbox: {
                 title: `Editar Rol: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             autofill: autofill,
             json: this.jsonRol(true),
@@ -728,8 +724,7 @@ class Departamentos extends Templates {
             data: { opc: 'addDepartamento' },
             bootbox: {
                 title: 'Agregar Departamento',
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             json: this.jsonDepartamento(false),
             success: (response) => {
@@ -774,8 +769,7 @@ class Departamentos extends Templates {
             data: { opc: 'editDepartamento', id },
             bootbox: {
                 title: `Editar Departamento: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             autofill: autofill,
             json: this.jsonDepartamento(true),
@@ -956,7 +950,8 @@ class Categorias extends Templates {
                 theme: 'corporativo',
                 title: 'Categorías',
                 subtitle: 'Conceptos de finanzas',
-                center: [0, 2]
+                center: [1, 3],
+                bordered:true
             }
         });
     }
@@ -1045,8 +1040,7 @@ class Categorias extends Templates {
             data: { opc: 'addCategoria' },
             bootbox: {
                 title: 'Nueva Categoría',
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             json: this.jsonCategoria(),
             success: (response) => {
@@ -1091,8 +1085,7 @@ class Categorias extends Templates {
             data: { opc: 'editCategoria', id },
             bootbox: {
                 title: `Editar Categoría: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             autofill: autofill,
             json: this.jsonCategoria(),
@@ -1158,8 +1151,7 @@ class Categorias extends Templates {
             },
             bootbox: {
                 title: `Nueva Subcategoría en: ${this.categoriaSeleccionada.nombre}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             json: this.jsonSubcategoria(),
             success: (response) => {
@@ -1204,8 +1196,7 @@ class Categorias extends Templates {
             data: { opc: 'editSubcategoria', id },
             bootbox: {
                 title: `Editar Subcategoría: ${autofill.nombre || ''}`,
-                closeButton: true,
-                size: 'large'
+                closeButton: true
             },
             autofill: autofill,
             json: this.jsonSubcategoria(),
