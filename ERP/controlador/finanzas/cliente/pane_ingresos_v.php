@@ -56,6 +56,10 @@ switch ($opc) {
     <a class="text-warning" data-toggle="tab" href="#tab" onClick="cxc_view()"> <strong>CxC</strong></a>
    </li>
 
+   <li class="'.$active.'">
+    <a class="text-success" data-toggle="tab" href="#tab" onClick="cxr_view()"> <strong>CXR</strong></a>
+   </li>
+
 
    <li class="'.$active.'">
     <a class="text-warning" data-toggle="tab" href="#tab" onClick="GRAL()"> <strong>REPORTE GRAL</strong></a>

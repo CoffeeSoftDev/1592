@@ -838,3 +838,92 @@ function Edit_sub(idC, idS) {
   });
 
 }
+
+/*-----------------------------------*/
+/* Cuentas Recuperadas (CXR)
+/*-----------------------------------*/
+function cxr_view() {
+  $.ajax({
+    type: "POST",
+    url: 'controlador/finanzas/cliente/cxr_view.php',
+    data: 'opc=1&date=' + $('#date').val(),
+    beforeSend: function () { $('.tab_content_subcategoria').html(Load_sm()); },
+    success: function (rp) {
+      data = eval(rp);
+      $('.tab_content_subcategoria').html(data[0]);
+    }
+  });
+}
+
+function nuevaCXR() {
+  $('#cxrMsg').html('');
+  $('#cxrCliente').val('');
+  $('#cxrConcepto').val('');
+  $('#cxrMonto').val('');
+  $('#cxrCompromiso').val('');
+  $('#cxrCategoria').val('0');
+  $('#cxrSubcategoria').html('<option value="0">- Selecciona la cuenta -</option>');
+  $('#modalCXR').fadeIn(200);
+  $('body').css('overflow', 'hidden');
+}
+
+function cerrarModalCXR() {
+  $('#modalCXR').fadeOut(200);
+  $('body').css('overflow', 'auto');
+}
+
+function cargarSubcatCXR() {
+  idCat = $('#cxrCategoria').val();
+  if (idCat == 0) {
+    $('#cxrSubcategoria').html('<option value="0">- Selecciona la cuenta -</option>');
+    return;
+  }
+  $.ajax({
+    type: "POST",
+    url: 'controlador/finanzas/cliente/cxr_view.php',
+    data: 'opc=2&idCategoria=' + idCat,
+    success: function (rp) {
+      data = eval(rp);
+      $('#cxrSubcategoria').html(data[0]);
+    }
+  });
+}
+
+function guardarCXR() {
+  cliente    = $('#cxrCliente').val();
+  concepto   = $('#cxrConcepto').val();
+  monto      = $('#cxrMonto').val();
+  idSub      = $('#cxrSubcategoria').val();
+  compromiso = $('#cxrCompromiso').val();
+
+  if (idSub == 0)           { $('#cxrMsg').html(msgCXR('Selecciona la cuenta')); return; }
+  if (!cliente)             { $('#cxrMsg').html(msgCXR('El cliente es necesario')); return; }
+  if (!monto || monto <= 0) { $('#cxrMsg').html(msgCXR('Ingresa un monto válido')); return; }
+
+  $.ajax({
+    type: "POST",
+    url: 'controlador/finanzas/cliente/cxr_view.php',
+    data: {
+      opc: 3, date: $('#date').val(), cliente: cliente, concepto: concepto,
+      monto: monto, idSubcategoria: idSub, compromiso: compromiso
+    },
+    success: function (rp) {
+      data = eval(rp);
+      if (data[0] == 'ok') {
+        cerrarModalCXR();
+        cxr_view();
+      } else {
+        $('#cxrMsg').html(msgCXR('Error: ' + data[0]));
+      }
+    }
+  });
+}
+
+function msgCXR(txt) {
+  return '<label class="text-danger"><span class="icon-cancel"></span> ' + txt + '</label>';
+}
+
+// Abono de CXR — implementado en F3
+function abonarCXR(idCXR, cliente, saldo) {
+  alert('Abonos disponibles en la siguiente fase (F3).\nCuenta #' + idCXR + ' · ' + cliente + ' · saldo ' + saldo);
+}
