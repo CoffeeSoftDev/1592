@@ -923,7 +923,62 @@ function msgCXR(txt) {
   return '<label class="text-danger"><span class="icon-cancel"></span> ' + txt + '</label>';
 }
 
-// Abono de CXR — implementado en F3
 function abonarCXR(idCXR, cliente, saldo) {
-  alert('Abonos disponibles en la siguiente fase (F3).\nCuenta #' + idCXR + ' · ' + cliente + ' · saldo ' + saldo);
+  $('#abCXR').val(idCXR);
+  $('#abCliente').text(cliente);
+  $('#abSaldoTxt').text(saldo);
+  $('#abSaldoNum').val('0');
+  $('#abMonto').val('');
+  $('#abObs').val('');
+  $('#abMsg').html('');
+  $('#abHistorial').html('');
+  $('#abFecha').val($('#date').val());
+
+  // Cargar saldo crudo (validación) + historial
+  $.ajax({
+    type: "POST",
+    url: 'controlador/finanzas/cliente/cxr_view.php',
+    data: 'opc=4&idCXR=' + idCXR,
+    success: function (rp) {
+      data = eval(rp);
+      $('#abSaldoNum').val(data[0]);
+      $('#abHistorial').html(data[1]);
+    }
+  });
+
+  $('#modalAbonoCXR').fadeIn(200);
+  $('body').css('overflow', 'hidden');
+}
+
+function cerrarModalAbonoCXR() {
+  $('#modalAbonoCXR').fadeOut(200);
+  $('body').css('overflow', 'auto');
+}
+
+function registrarAbono() {
+  monto = parseFloat($('#abMonto').val());
+  saldo = parseFloat($('#abSaldoNum').val());
+  fp    = $('#abFormaPago').val();
+  fecha = $('#abFecha').val();
+  obs   = $('#abObs').val();
+  idCXR = $('#abCXR').val();
+
+  if (!monto || monto <= 0) { $('#abMsg').html(msgCXR('Ingresa un monto válido')); return; }
+  if (monto > saldo)        { $('#abMsg').html(msgCXR('El abono excede el saldo (' + saldo + ')')); return; }
+  if (!fecha)               { $('#abMsg').html(msgCXR('Selecciona la fecha del abono')); return; }
+
+  $.ajax({
+    type: "POST",
+    url: 'controlador/finanzas/cliente/cxr_view.php',
+    data: { opc: 5, idCXR: idCXR, monto: monto, formaPago: fp, fecha: fecha, observacion: obs },
+    success: function (rp) {
+      data = eval(rp);
+      if (data[0] == 'ok') {
+        cerrarModalAbonoCXR();
+        cxr_view();
+      } else {
+        $('#abMsg').html(msgCXR(data[1] ? data[1] : 'Error'));
+      }
+    }
+  });
 }

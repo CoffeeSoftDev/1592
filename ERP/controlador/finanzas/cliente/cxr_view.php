@@ -16,9 +16,10 @@ switch ($opc) {
   /* Case 1: Listado de CXR (saldo>0) + modal  */
   /*-------------------------------------------*/
   case 1:
-    $tabla  = lista_cxr($obj, $idUDN);
-    $modal  = modal_cxr($obj, $idUDN);
-    $encode = array($tabla . $modal);
+    $tabla   = lista_cxr($obj, $idUDN);
+    $modal   = modal_cxr($obj, $idUDN);
+    $modalAb = modal_abono($obj);
+    $encode  = array($tabla . $modal . $modalAb);
   break;
 
   /*-------------------------------------------*/
@@ -55,6 +56,50 @@ switch ($opc) {
       $cliente, $concepto, $monto, $monto, $date, $compromiso,
       $idUDN, $idSub, $idFolioOrigen, $encargado
     ));
+
+    $encode = array('ok');
+  break;
+
+  /*-------------------------------------------*/
+  /* Case 4: Datos del modal de abono          */
+  /*-------------------------------------------*/
+  case 4:
+    $idCXR     = $_POST['idCXR'];
+    $c         = $obj->getCXR(array($idCXR));
+    $saldo     = isset($c[0]['Saldo']) ? $c[0]['Saldo'] : 0;
+    $historial = tabla_historial($obj, $idCXR);
+    // [saldo crudo (validación JS), historial HTML]
+    $encode = array(number_format($saldo, 2, '.', ''), $historial);
+  break;
+
+  /*-------------------------------------------*/
+  /* Case 5: Registrar abono                   */
+  /*-------------------------------------------*/
+  case 5:
+    $idCXR = $_POST['idCXR'];
+    $monto = $_POST['monto'];
+    $idFP  = $_POST['formaPago'];
+    $fecha = $_POST['fecha'];
+    $obs   = trim($_POST['observacion']);
+
+    $c     = $obj->getCXR(array($idCXR));
+    $saldo = isset($c[0]['Saldo']) ? $c[0]['Saldo'] : 0;
+
+    if ($monto <= 0) {
+      $encode = array('err', 'El monto debe ser mayor a 0');
+      break;
+    }
+    if ($monto > $saldo + 0.001) { // tolerancia por redondeo
+      $encode = array('err', 'El abono ('.number_format($monto,2).') excede el saldo ('.number_format($saldo,2).')');
+      break;
+    }
+
+    $idFolio    = $obj->getFolioByFecha(array($fecha));
+    $idFolioVal = $idFolio != 0 ? $idFolio : null;
+
+    // [MontoAbono, FechaAbono, Observacion, id_CXR, id_Folio, id_FormasPago]
+    $obj->addAbono(array($monto, $fecha, $obs, $idCXR, $idFolioVal, $idFP));
+    $obj->recalcularSaldo(array($idCXR));
 
     $encode = array('ok');
   break;
@@ -188,6 +233,108 @@ function modal_cxr($obj, $idUDN) {
 HTML;
 
   return $html;
+}
+
+function modal_abono($obj) {
+  $fp = $obj->lsFormasPago();
+  $opc_fp = '';
+  foreach ($fp as $f) {
+    $opc_fp .= '<option value="'.$f[0].'">'.$f[1].'</option>';
+  }
+  $hoy = date('Y-m-d');
+
+  $html = <<<HTML
+  <div id="modalAbonoCXR" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:1060; overflow-y:auto;">
+    <div style="width:640px; margin:8vh auto; background:#fff; border-radius:12px; border:1px solid #e5e7eb; box-shadow:0 25px 50px rgba(0,0,0,.15); overflow:hidden;">
+
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid #e5e7eb; background:#f9fafb;">
+        <div>
+          <strong style="font-size:13px; color:#1f2937;">Registrar Abono</strong><br>
+          <span style="font-size:11px; color:#9ca3af;">Cliente: <span id="abCliente"></span></span>
+        </div>
+        <button onclick="cerrarModalAbonoCXR()" style="width:30px; height:30px; border:none; background:transparent; cursor:pointer; font-size:18px; color:#9ca3af;"><i class="bx bx-x">x</i></button>
+      </div>
+
+      <div style="padding:12px 20px; border-bottom:1px solid #e5e7eb; background:#f0f7ff; display:flex; gap:30px; align-items:center;">
+        <div><span style="color:#9ca3af; font-size:11px;">Saldo actual</span><br><strong id="abSaldoTxt" style="color:#1f2937; font-size:16px;">-</strong></div>
+      </div>
+
+      <input type="hidden" id="abCXR">
+      <input type="hidden" id="abSaldoNum" value="0">
+
+      <div style="padding:16px 20px;">
+        <div class="row">
+          <div class="form-group col-sm-6 col-xs-12">
+            <label style="font-size:11px; color:#6b7280; font-weight:600;">Monto a abonar *</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">\$</span>
+              <input type="number" step="0.01" id="abMonto" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group col-sm-6 col-xs-12">
+            <label style="font-size:11px; color:#6b7280; font-weight:600;">Forma de pago *</label>
+            <select id="abFormaPago" class="form-control input-sm">{$opc_fp}</select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-6 col-xs-12">
+            <label style="font-size:11px; color:#6b7280; font-weight:600;">Fecha del abono *</label>
+            <input type="date" id="abFecha" class="form-control input-sm" value="{$hoy}">
+          </div>
+          <div class="form-group col-sm-6 col-xs-12">
+            <label style="font-size:11px; color:#6b7280; font-weight:600;">Observación</label>
+            <input type="text" id="abObs" class="form-control input-sm" placeholder="Opcional">
+          </div>
+        </div>
+        <div id="abMsg" class="text-center"></div>
+
+        <div style="margin-top:8px;">
+          <label style="font-size:11px; color:#6b7280; font-weight:600;">Historial de abonos</label>
+          <div id="abHistorial"></div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; padding:12px 20px; border-top:1px solid #e5e7eb; background:#f9fafb;">
+        <button class="btn btn-default btn-sm" onclick="cerrarModalAbonoCXR()">Cancelar</button>
+        <button class="btn btn-success btn-sm" onclick="registrarAbono()"><i class="bx bx-check"></i> Registrar abono</button>
+      </div>
+
+    </div>
+  </div>
+HTML;
+
+  return $html;
+}
+
+function tabla_historial($obj, $idCXR) {
+  $ls = $obj->lsAbonos(array($idCXR));
+
+  if (empty($ls)) {
+    return '<div style="padding:10px; color:#9ca3af; font-size:12px;">Sin abonos registrados</div>';
+  }
+
+  $tb  = '<table class="table table-bordered table-xtra-condensed" style="font-size:.78em; font-weight:600; margin-top:4px;">';
+  $tb .= '<thead><tr>';
+  foreach (array('Fecha','Monto','Forma de pago','Observación') as $th) {
+    $tb .= '<th class="text-center">'.$th.'</th>';
+  }
+  $tb .= '</tr></thead><tbody>';
+
+  $total = 0;
+  foreach ($ls as $a) {
+    $total += $a['MontoAbono'];
+    $tb .= '<tr>';
+    $tb .= '<td class="text-center">'.date("d/m/Y", strtotime($a['FechaAbono'])).'</td>';
+    $tb .= '<td class="text-right">'.evaluar($a['MontoAbono']).'</td>';
+    $tb .= '<td class="text-center">'.($a['FormasPago'] ? $a['FormasPago'] : '-').'</td>';
+    $tb .= '<td>'.($a['Observacion'] ? $a['Observacion'] : '-').'</td>';
+    $tb .= '</tr>';
+  }
+  $tb .= '</tbody>';
+  $tb .= '<tfoot><tr class="bg-info"><td class="text-right"><strong>TOTAL</strong></td><td class="text-right"><strong>'.evaluar($total).'</strong></td><td colspan="2"></td></tr></tfoot>';
+  $tb .= '</table>';
+
+  return $tb;
 }
 
 

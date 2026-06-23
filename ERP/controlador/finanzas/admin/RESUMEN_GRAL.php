@@ -6,6 +6,9 @@ $obj        = new METAS;
 include_once("../../../modelo/SQL_PHP/_CXC.php");
 $cxc        = new CXC;
 
+include_once("../../../modelo/SQL_PHP/_CXR.php");
+$cxrObj     = new CXR;
+
 $fi         = $_POST['date1'];
 $ff         = $_POST['date2'];
 $udn        = $_POST['udn'];
@@ -220,6 +223,9 @@ $Anticipos = $obj -> VER_TIPOSPAGOS_FECHA(4,$fi,$ff);
 $cxcHab    = $obj -> formas_pago(3,$fi,$ff,2);
 $cxcOtros  = $cxcOtros + $Cargos_hab_des;
 
+// Abonos de Cuentas Recuperadas (CXR) del periodo -> impactan el reporte del día en que se cobran
+$abonosCXR = $cxrObj -> totalAbonos(array($fi,$ff,$udn));
+
 $formas_pago   .=  '
 <tr><td>EFECTIVO</td><td class="text-right">'.evaluar($Efec).'</td>'.$descripcion.'</tr>
 
@@ -227,9 +233,10 @@ $formas_pago   .=  '
 <tr><td>CxC OTROS SERVICIOS</td><td class="text-right">'.evaluar($cxcOtros).'</td></tr>
 <tr><td>ANTICIPOS</td><td class="text-right">'.evaluar($Anticipos).'</td></tr>
 <tr><td>CxC HABITACIONES </td><td class="text-right">'.evaluar($cxcHab).'</td></tr>
-<tr><td>CORTESIA Y COMIDA DE EMPLEADOS</td><td class="text-right">'.evaluar($cortesias_empleados).'</td></tr>';
+<tr><td>CORTESIA Y COMIDA DE EMPLEADOS</td><td class="text-right">'.evaluar($cortesias_empleados).'</td></tr>
+<tr><td>ABONOS CXR (recuperaciones)</td><td class="text-right">'.evaluar($abonosCXR).'</td></tr>';
 
-$TotalFormasPago = $Efec + $TC + $cxcOtros + $Anticipos + $cxcHab + $cortesias_empleados;
+$TotalFormasPago = $Efec + $TC + $cxcOtros + $Anticipos + $cxcHab + $cortesias_empleados + $abonosCXR;
 $formas_pago .='
 </tbody>
 <tfoot>
